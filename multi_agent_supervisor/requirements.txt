@@ -1,0 +1,9 @@
+langgraph
+langchain
+langchain-google-genai
+langchain-community
+tavily-python
+python-dotenv
+defusedxml
+langchain-experimental
+matplotlib
