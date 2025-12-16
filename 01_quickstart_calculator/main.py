@@ -31,8 +31,21 @@ from langgraph.graph.message import add_messages
 from langchain_core.messages import ToolMessage, HumanMessage
 from langchain_core.tools import tool
 
-# 환경 변수 로드 (.env 파일에서 GOOGLE_API_KEY 등을 읽어옴)
-dotenv.load_dotenv()
+# 환경 변수 로드
+# .env 파일을 스크립트 위치 기준 또는 프로젝트 루트에서 찾음
+from pathlib import Path
+
+# 1) 현재 스크립트의 부모 디렉토리 (01_quickstart_calculator/)
+script_dir = Path(__file__).parent
+# 2) 프로젝트 루트 (LangGraph_PJT/)
+project_root = script_dir.parent
+
+# .env 파일 찾기: 프로젝트 루트 우선, 없으면 스크립트 폴더
+env_file = project_root / ".env"
+if not env_file.exists():
+    env_file = script_dir / ".env"
+
+dotenv.load_dotenv(env_file)
 
 # =============================================================================
 # LangSmith 추적 설정 (선택사항)
