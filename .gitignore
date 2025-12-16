@@ -5,6 +5,8 @@
 # LangGraph
 .langgraph_api/
 .venv
+venv
 __pycache__
 .env
 graph_diagram.png
+langgraph_examples.egg-info
