@@ -1,33 +1,49 @@
 import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import { streamChat } from '../services/api'
 
 export interface Message {
     id: number;
     role: 'user' | 'ai';
     content: string;
+    thoughts?: string[]; // Log of active nodes
+    activeNode?: string | null; // Currently executing node
     timestamp: number;
-}
-
-export interface NodeStatus {
-    name: string;
-    status: 'idle' | 'running' | 'done';
 }
 
 export const useChatStore = defineStore('chat', () => {
     const messages = ref<Message[]>([]);
     const isLoading = ref(false);
     const threadId = ref(`thread_${Date.now()}`);
-    const activeNode = ref<string | null>(null);
 
-    // Helper to add message
-    const addMessage = (role: 'user' | 'ai', content: string) => {
+    // Add message and return ID
+    const addMessage = (role: 'user' | 'ai', content: string): number => {
+        const id = Date.now();
         messages.value.push({
-            id: Date.now(),
+            id,
             role,
             content,
+            thoughts: [],
             timestamp: Date.now(),
         });
+        return id;
+    };
+
+    const updateMessageContent = (id: number, content: string) => {
+        const msg = messages.value.find(m => m.id === id);
+        if (msg) msg.content += content;
+    };
+
+    const updateMessageNode = (id: number, node: string, isStart: boolean) => {
+        const msg = messages.value.find(m => m.id === id);
+        if (msg) {
+            if (isStart) {
+                msg.activeNode = node;
+                msg.thoughts?.push(`${node}...`); // Log thought
+            } else {
+                msg.activeNode = null;
+            }
+        }
     };
 
     const sendMessage = async (text: string) => {
@@ -36,37 +52,29 @@ export const useChatStore = defineStore('chat', () => {
         addMessage('user', text);
         isLoading.value = true;
 
-        // Create placeholder for AI response
-        const aiMsgId = Date.now() + 1;
-        messages.value.push({
-            id: aiMsgId,
-            role: 'ai',
-            content: "", // streaming buffer
-            timestamp: Date.now(),
-        });
-
-        const aiMsgIndex = messages.value.findIndex(m => m.id === aiMsgId);
+        // Create AI message placeholder
+        const aiMsgId = addMessage('ai', "");
 
         await streamChat(
             { message: text, thread_id: threadId.value },
             (event) => {
                 if (event.type === 'token') {
-                    messages.value[aiMsgIndex].content += event.content;
+                    updateMessageContent(aiMsgId, event.content);
                 } else if (event.type === 'node_start') {
-                    activeNode.value = event.node;
+                    updateMessageNode(aiMsgId, event.node, true);
                 } else if (event.type === 'node_end') {
-                    activeNode.value = null;
+                    updateMessageNode(aiMsgId, event.node, false);
+                } else if (event.type === 'error') {
+                    updateMessageContent(aiMsgId, `\n[Error: ${event.content}]`);
                 }
             },
             (err) => {
                 console.error("Stream error", err);
                 isLoading.value = false;
-                activeNode.value = null;
-                addMessage('ai', `Error: ${err}`);
+                updateMessageContent(aiMsgId, `\n[System Error: ${err}]`);
             },
             () => {
                 isLoading.value = false;
-                activeNode.value = null;
             }
         );
     };
@@ -75,7 +83,6 @@ export const useChatStore = defineStore('chat', () => {
         messages,
         isLoading,
         threadId,
-        activeNode,
         sendMessage
     }
 })

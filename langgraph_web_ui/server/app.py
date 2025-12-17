@@ -62,37 +62,39 @@ async def event_generator(user_input: str, thread_id: str) -> AsyncGenerator[str
     try:
         async for event in graph.astream_events(inputs, config=config, version="v2"):
             event_type = event["event"]
-            data = "{}"
             
             # Filter and format events
+            payload = None
+            
             if event_type == "on_chat_model_stream":
                 # Stream Tokens
                 chunk = event["data"]["chunk"]
                 if hasattr(chunk, "content") and chunk.content:
                     payload = {"type": "token", "content": chunk.content}
-                    yield f"data: {json.dumps(payload)}\n\n"
                     
             elif event_type == "on_chain_start":
-                # Node Entry (Supervisor, Researcher, etc)
+                # Node Entry
                 name = event["name"]
                 if name in ["Supervisor", "Researcher", "Writer"]:
                     payload = {"type": "node_start", "node": name}
-                    yield f"data: {json.dumps(payload)}\n\n"
                     
             elif event_type == "on_chain_end":
                 # Node Exit
                 name = event["name"]
                 if name in ["Supervisor", "Researcher", "Writer"]:
                     payload = {"type": "node_end", "node": name}
-                    yield f"data: {json.dumps(payload)}\n\n"
             
-            # Keep-alive or other events could be added
+            if payload:
+                yield f"data: {json.dumps(payload, ensure_ascii=False)}\n\n"
             
-        yield "data: {\"type\": \"end\"}\n\n"
-        
     except Exception as e:
-        print(f"Error: {e}")
-        yield f"data: {{\"type\": \"error\", \"content\": \"{str(e)}\"}}\n\n"
+        print(f"Error during streaming: {e}")
+        error_payload = {"type": "error", "content": str(e)}
+        yield f"data: {json.dumps(error_payload, ensure_ascii=False)}\n\n"
+    finally:
+        # Always send end event
+        end_payload = {"type": "end"}
+        yield f"data: {json.dumps(end_payload, ensure_ascii=False)}\n\n"
 
 from pydantic import BaseModel
 

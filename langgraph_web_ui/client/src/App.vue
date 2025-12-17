@@ -1,79 +1,203 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import { useChatStore } from '@/stores/chat';
+import { ref, watch, nextTick, computed } from 'vue';
+import { useChatStore } from './stores/chat';
 import { storeToRefs } from 'pinia';
-import ChatBubble from '@/components/ChatBubble.vue';
-import GraphCanvas from '@/components/GraphCanvas.vue';
+import ChatMessage from './components/chat/ChatMessage.vue';
+import GraphCanvas from './components/GraphCanvas.vue';
+import { SendIcon, MenuIcon, XIcon, PlusIcon, SettingsIcon, SparklesIcon } from 'lucide-vue-next';
 
+// Store
 const chatStore = useChatStore();
-const { messages, isLoading, activeNode } = storeToRefs(chatStore);
-const input = ref("");
+const { messages, isLoading } = storeToRefs(chatStore);
 
-const handleSubmit = () => {
-    if (!input.value.trim() || isLoading.value) return;
-    chatStore.sendMessage(input.value);
-    input.value = "";
+// Local state
+const input = ref('');
+const messagesEndRef = ref<HTMLElement | null>(null);
+const isSidebarOpen = ref(true);
+
+// Computed
+const activeNode = computed(() => {
+  if (messages.value.length === 0) return null;
+  const lastMsg = messages.value[messages.value.length - 1];
+  return lastMsg?.activeNode || null;
+});
+
+const hasInput = computed(() => input.value.trim().length > 0);
+
+// Methods
+const handleSend = async () => {
+  if (!input.value.trim() || isLoading.value) return;
+  const text = input.value;
+  input.value = '';
+  await chatStore.sendMessage(text);
 };
 
+const handleSuggestion = (topic: string) => {
+  input.value = topic;
+  handleSend();
+};
+
+const scrollToBottom = () => {
+  nextTick(() => {
+    messagesEndRef.value?.scrollIntoView({ behavior: 'smooth' });
+  });
+};
+
+// Watchers
+watch(() => messages.value.length, scrollToBottom);
+watch(() => messages.value[messages.value.length - 1]?.content, scrollToBottom);
+
+// Suggestion topics
+const suggestions = [
+  '2024년 AI 에이전트 트렌드 분석',
+  'LangGraph의 핵심 패턴 설명',
+  'FastAPI SSE 스트리밍 구현 방법'
+];
 </script>
 
 <template>
-  <div class="flex h-screen w-screen bg-background text-foreground overflow-hidden">
+  <div class="flex h-screen overflow-hidden">
     
-    <!-- Left: Graph Visualization & Status -->
-    <div class="w-1/3 border-r p-4 flex flex-col gap-4 bg-muted/10">
-      <h2 class="text-xl font-bold tracking-tight">Agentic Insight</h2>
-      <div class="flex-1 min-h-0">
-         <GraphCanvas :active-node="activeNode" />
+    <!-- ========== SIDEBAR ========== -->
+    <aside 
+      class="gemini-sidebar fixed inset-y-0 left-0 z-30 flex flex-col transition-transform duration-300"
+      :class="isSidebarOpen ? 'translate-x-0' : '-translate-x-full'"
+    >
+      <!-- Sidebar Header -->
+      <div class="h-16 flex items-center px-4">
+        <button 
+          @click="isSidebarOpen = false"
+          class="p-2 rounded-full hover:bg-[hsl(var(--gemini-bg-hover))] transition-colors"
+        >
+          <MenuIcon class="w-5 h-5" />
+        </button>
       </div>
-      <div class="h-1/3 border rounded-lg p-4 bg-card">
-        <h3 class="font-semibold mb-2">System Log</h3>
-        <div class="text-xs text-muted-foreground space-y-1 font-mono">
-            <div v-if="activeNode">Running: <span class="text-primary font-bold">{{ activeNode }}</span></div>
-            <div v-else>Status: <span class="text-green-500">Idle</span></div>
-        </div>
+      
+      <!-- New Chat Button -->
+      <div class="px-3 mb-4">
+        <button class="gemini-sidebar-item flex items-center gap-3 w-full bg-[hsl(var(--gemini-bg-hover))]">
+          <PlusIcon class="w-5 h-5" />
+          <span class="text-sm font-medium">새 채팅</span>
+        </button>
       </div>
-    </div>
+      
+      <!-- Chat History (Placeholder) -->
+      <div class="flex-1 overflow-y-auto px-2">
+        <div class="text-xs text-[hsl(var(--gemini-text-secondary))] px-4 py-2">최근</div>
+        <div class="gemini-sidebar-item text-sm truncate">AI 에이전트 연구</div>
+        <div class="gemini-sidebar-item text-sm truncate">LangGraph 패턴 분석</div>
+      </div>
+      
+      <!-- Graph Visualization (Hidden in Sidebar) -->
+      <div class="h-48 mx-3 mb-3 rounded-xl overflow-hidden border border-[hsl(var(--gemini-border))] bg-[hsl(var(--gemini-bg-primary))]">
+        <div class="text-xs text-[hsl(var(--gemini-text-secondary))] p-2">Live Graph</div>
+        <GraphCanvas :activeNode="activeNode" />
+      </div>
+      
+      <!-- Sidebar Footer -->
+      <div class="p-4 border-t border-[hsl(var(--gemini-border))]">
+        <button class="gemini-sidebar-item flex items-center gap-3 w-full">
+          <SettingsIcon class="w-5 h-5" />
+          <span class="text-sm">설정</span>
+        </button>
+      </div>
+    </aside>
 
-    <!-- Right: Chat Interface -->
-    <div class="flex-1 flex flex-col">
-        <!-- Messages Area -->
-        <div class="flex-1 overflow-y-auto p-6 space-y-4">
-            <template v-if="messages.length === 0">
-                <div class="h-full flex flex-col items-center justify-center text-muted-foreground opacity-50">
-                    <p class="text-lg font-medium">Ask me to research something.</p>
-                </div>
-            </template>
-            <ChatBubble 
-                v-for="msg in messages" 
-                :key="msg.id" 
-                :role="msg.role" 
-                :content="msg.content" 
-            />
-             <div v-if="isLoading && messages[messages.length-1].role !== 'ai'" class="text-sm text-muted-foreground animate-pulse">
-                Thinking...
+    <!-- ========== MAIN CONTENT ========== -->
+    <div 
+      class="flex-1 flex flex-col h-screen transition-all duration-300"
+      :class="isSidebarOpen ? 'ml-[280px]' : 'ml-0'"
+    >
+      <!-- Header -->
+      <header class="h-16 flex items-center justify-between px-6 flex-shrink-0">
+        <div class="flex items-center gap-3">
+          <button 
+            v-if="!isSidebarOpen"
+            @click="isSidebarOpen = true"
+            class="p-2 rounded-full hover:bg-[hsl(var(--gemini-bg-hover))] transition-colors"
+          >
+            <MenuIcon class="w-5 h-5" />
+          </button>
+          <div class="flex items-center gap-2">
+            <div class="gemini-ai-avatar w-8 h-8">
+              <SparklesIcon class="w-4 h-4 text-white" />
             </div>
+            <span class="font-medium text-lg">Gemini</span>
+            <span class="text-xs text-[hsl(var(--gemini-text-secondary))] bg-[hsl(var(--gemini-bg-surface))] px-2 py-0.5 rounded">1.5 Flash</span>
+          </div>
         </div>
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-500"></div>
+        </div>
+      </header>
 
-        <!-- Input Area -->
-        <div class="p-4 border-t bg-background">
-            <form @submit.prevent="handleSubmit" class="flex gap-2">
-                <input 
-                    v-model="input"
-                    type="text" 
-                    placeholder="Example: Research the future of AI agents..." 
-                    class="flex-1 min-w-0 rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
-                    :disabled="isLoading"
-                />
-                <button 
-                    type="submit"
-                    class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground shadow hover:bg-primary/90 h-9 px-4 py-2"
-                    :disabled="isLoading"
-                >
-                    Send
-                </button>
-            </form>
+      <!-- Chat Area -->
+      <main class="flex-1 overflow-y-auto">
+        <div class="max-w-[768px] mx-auto px-4 py-6 min-h-full flex flex-col">
+          
+          <!-- Welcome Screen (Empty State) -->
+          <div 
+            v-if="messages.length === 0" 
+            class="gemini-welcome flex-1 animate-fade-in-up"
+          >
+            <h1 class="gemini-welcome-title">
+              <span class="gemini-gradient-text">안녕하세요. 저는 Gemini입니다.</span>
+            </h1>
+            <p class="gemini-welcome-subtitle">
+              무엇을 도와드릴까요?
+            </p>
+            
+            <!-- Suggestion Chips -->
+            <div class="gemini-suggestion-chips">
+              <button 
+                v-for="topic in suggestions" 
+                :key="topic"
+                @click="handleSuggestion(topic)"
+                class="gemini-chip"
+              >
+                {{ topic }}
+              </button>
+            </div>
+          </div>
+
+          <!-- Messages -->
+          <div v-else class="flex-1">
+            <ChatMessage 
+              v-for="msg in messages" 
+              :key="msg.id" 
+              :message="msg" 
+            />
+            <div ref="messagesEndRef" class="h-8"></div>
+          </div>
         </div>
+      </main>
+
+      <!-- Fixed Bottom Input Area -->
+      <div class="flex-shrink-0 p-4 pb-6">
+        <div class="max-w-[768px] mx-auto">
+          <form @submit.prevent="handleSend" class="gemini-input-container flex items-center">
+            <input 
+              v-model="input"
+              type="text"
+              class="gemini-input"
+              placeholder="여기에 프롬프트를 입력하세요"
+              :disabled="isLoading"
+            />
+            <button 
+              type="submit"
+              class="gemini-send-button"
+              :class="{ 'active': hasInput && !isLoading }"
+              :disabled="!hasInput || isLoading"
+            >
+              <SendIcon v-if="!isLoading" class="w-5 h-5" />
+              <div v-else class="w-5 h-5 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
+            </button>
+          </form>
+          <p class="text-center text-xs text-[hsl(var(--gemini-text-secondary))] mt-3">
+            Gemini는 실수를 할 수 있으므로 답변을 다시 확인해 보세요.
+          </p>
+        </div>
+      </div>
     </div>
   </div>
 </template>

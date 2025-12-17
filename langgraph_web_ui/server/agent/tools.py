@@ -1,9 +1,9 @@
-from langchain_community.tools.tavily_search import TavilySearchResults
+from langchain_tavily import TavilySearch
 from langchain_core.tools import tool
 
 # Initialize Tavily Search Tool
 # Ensure TAVILY_API_KEY is set in environment
-tavily_tool = TavilySearchResults(max_results=3)
+tavily_tool = TavilySearch(max_results=3)
 
 @tool
 def read_chart_data():

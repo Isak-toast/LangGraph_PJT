@@ -49,12 +49,17 @@ export async function streamChat(
                     }
                     try {
                         const data = JSON.parse(jsonStr);
+                        // Backend strict schema: {type: '...'}
                         if (data.type === "end") {
                             onFinish();
+                            // Don't return, process potentially remaining lines? 
+                            // Usually end is the last, but let's be safe.
                             return;
                         }
                         if (data.type === "error") {
-                            onError(data.content);
+                            // Backend sent an error event
+                            // treating it as an event so UI can display it inline if needed
+                            onEvent(data);
                             return;
                         }
                         onEvent(data);
