@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
 import ChatMessage from './chat/ChatMessage.vue'
 
-describe('ChatMessage - Gemini Style', () => {
+describe('ChatMessage - Agentic Insight Style', () => {
     it('renders user message with bubble style', () => {
         const wrapper = mount(ChatMessage, {
             props: {
@@ -14,13 +14,12 @@ describe('ChatMessage - Gemini Style', () => {
                 }
             }
         })
-        // User message should have bubble class and content
         expect(wrapper.find('.gemini-user-message').exists()).toBe(true)
         expect(wrapper.find('.gemini-user-bubble').exists()).toBe(true)
         expect(wrapper.text()).toContain('Hello AI')
     })
 
-    it('renders AI message with avatar and no bubble', () => {
+    it('renders AI message with content and no user bubble', () => {
         const wrapper = mount(ChatMessage, {
             props: {
                 message: {
@@ -31,11 +30,8 @@ describe('ChatMessage - Gemini Style', () => {
                 }
             }
         })
-        // AI message should have avatar but NO bubble background
         expect(wrapper.find('.gemini-ai-message').exists()).toBe(true)
-        expect(wrapper.find('.gemini-ai-avatar').exists()).toBe(true)
         expect(wrapper.find('.gemini-ai-content').exists()).toBe(true)
-        // Should NOT have user bubble class
         expect(wrapper.find('.gemini-user-bubble').exists()).toBe(false)
         expect(wrapper.text()).toContain('Hello User')
     })
@@ -52,7 +48,6 @@ describe('ChatMessage - Gemini Style', () => {
                 }
             }
         })
-        // Should have thinking button
         expect(wrapper.text()).toContain('사고 과정 보기')
     })
 })

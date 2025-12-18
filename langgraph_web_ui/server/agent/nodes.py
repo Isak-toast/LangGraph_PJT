@@ -59,39 +59,57 @@ class Router(dict):
 def supervisor_node(state: AgentState):
     """
     Decides which agent to call next.
+    - Routes to Researcher for information gathering
+    - Routes to Writer for content creation
+    - Routes to FINISH when the task is complete
     """
     messages = state["messages"]
     
-    # We ask the LLM to pick the next step
-    supervisor_chain = (
-        llm.bind(functions=[
-            {
-                "name": "route",
-                "description": "Select the next role.",
-                "parameters": {
-                    "type": "object",
-                    "properties": {
-                        "next": {
-                            "type": "string",
-                            "enum": options,
-                        }
-                    },
-                    "required": ["next"],
-                },
-            }
-        ], function_call={"name": "route"}) 
-    )
-    # Or simpler: structured output
-    # Since gemini-2.0 supports structured output well:
-    structured_llm = llm.with_structured_output({"type": "object", "properties": {"next": {"type": "string", "enum": options}}, "required": ["next"]})
+    # Check if we already have a worker response (to avoid infinite loops)
+    worker_responded = False
+    for msg in reversed(messages):
+        if hasattr(msg, 'name') and msg.name in members:
+            worker_responded = True
+            break
     
-    # Construct prompt
-    prompt = f"{system_prompt.format(members=members)}\n\nConversation history:\n{messages}"
+    # Improved system prompt with clear termination conditions
+    supervisor_prompt = f"""You are a supervisor managing workers: {members}.
+
+RULES:
+1. If the user asks a QUESTION that needs research -> route to "Researcher"
+2. If you need content to be written/summarized -> route to "Writer"  
+3. If a worker has ALREADY responded with useful information -> route to "FINISH"
+4. If the conversation is complete or no action needed -> route to "FINISH"
+5. NEVER route to the same worker twice in a row without FINISH
+
+Current worker already responded: {worker_responded}
+
+Respond with ONLY the next action: {options}"""
+
+    # Use structured output
+    structured_llm = llm.with_structured_output({
+        "type": "object", 
+        "properties": {"next": {"type": "string", "enum": options}}, 
+        "required": ["next"]
+    })
     
-    response = structured_llm.invoke(prompt)
-    next_agent = response.get("next")
+    # Build prompt with conversation
+    prompt = f"{supervisor_prompt}\n\nConversation:\n{messages[-5:]}"  # Only last 5 messages
+    
+    try:
+        response = structured_llm.invoke(prompt)
+        next_agent = response.get("next")
+    except Exception as e:
+        print(f"Supervisor error: {e}")
+        next_agent = "FINISH"
+    
+    # Force FINISH if worker already responded (safety net)
+    if worker_responded and next_agent in members:
+        print(f"⚠️ Forcing FINISH: worker already responded")
+        next_agent = "FINISH"
     
     if not next_agent or next_agent not in options:
         next_agent = "FINISH"
         
     return {"next": next_agent}
+

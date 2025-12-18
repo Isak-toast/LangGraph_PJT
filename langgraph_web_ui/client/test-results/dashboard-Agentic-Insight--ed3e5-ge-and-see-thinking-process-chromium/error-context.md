@@ -1,0 +1,63 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - generic [ref=e5]:
+      - button [ref=e6]:
+        - img [ref=e7]
+      - generic [ref=e8]:
+        - img [ref=e10]
+        - generic [ref=e13]: Agentic Insight
+    - button "새 채팅" [ref=e15]:
+      - img [ref=e16]
+      - generic [ref=e17]: 새 채팅
+    - generic [ref=e18]:
+      - generic [ref=e19]: 최근 채팅
+      - button "안녕하세요 테스트입니다 오늘" [ref=e21]:
+        - img [ref=e22]
+        - generic [ref=e24]:
+          - generic [ref=e25]: 안녕하세요 테스트입니다
+          - generic [ref=e26]: 오늘
+        - button [ref=e27]:
+          - img [ref=e28]
+    - button "설정" [ref=e32]:
+      - img [ref=e33]
+      - generic [ref=e36]: 설정
+  - generic [ref=e37]:
+    - banner [ref=e38]:
+      - generic [ref=e40]:
+        - img [ref=e42]
+        - generic [ref=e47]: Agentic Insight
+        - generic [ref=e48]: Multi-Agent
+    - generic [ref=e49]:
+      - button "Live Graph Execution" [ref=e50]:
+        - generic [ref=e51]:
+          - img [ref=e53]
+          - generic [ref=e65]: Live Graph Execution
+        - img [ref=e66]
+      - document [ref=e71]:
+        - generic [ref=e73]:
+          - generic [ref=e80]:
+            - paragraph [ref=e88]: next=Researcher
+            - paragraph [ref=e94]: next=Writer
+            - paragraph [ref=e104]: next=FINISH
+          - generic [ref=e105]:
+            - paragraph [ref=e112]: Start
+            - paragraph [ref=e119]: Supervisor
+            - paragraph [ref=e126]: Researcher
+            - paragraph [ref=e133]: Writer
+            - paragraph [ref=e140]: End
+    - main [ref=e141]:
+      - generic [ref=e143]:
+        - generic [ref=e145]: "안녕하세요 테스트입니다{ \"next\": \"Researcher\" }안녕하세요! 무엇을 도와드릴까요?{ \"next\": \"FINISH\" }"
+        - generic [ref=e146]:
+          - img [ref=e148]
+          - generic [ref=e154]: 오후 09:49
+    - generic [ref=e156]:
+      - generic [ref=e157]:
+        - textbox "여기에 프롬프트를 입력하세요" [ref=e158]
+        - button [disabled] [ref=e159]:
+          - img [ref=e160]
+      - paragraph [ref=e163]: AI 에이전트들이 협력하여 답변을 생성합니다. 결과를 검토해 주세요.
+```

@@ -4,236 +4,223 @@
 
 /*
   ============================================
-  GEMINI UI CLONE - Design System
-  Based on: https://gemini.google.com/app
+  AGENTIC INSIGHT - Bright Theme
+  Inspired by: Google Gemini Light Mode
   ============================================
 */
 
 @layer base {
     :root {
-        /* === GEMINI EXACT COLOR PALETTE === */
-        --gemini-bg-primary: 240 6% 7%;
-        /* #131314 - Main background */
-        --gemini-bg-surface: 240 3% 12%;
-        /* #1e1e1f - Cards, sidebar */
-        --gemini-bg-elevated: 220 5% 19%;
-        /* #303134 - User bubble */
-        --gemini-bg-hover: 220 5% 24%;
-        /* #3c4043 - Hover states */
+        /* === GEMINI LIGHT THEME PALETTE === */
+        --ai-bg-primary: 0 0% 100%;
+        /* #ffffff - Pure white */
+        --ai-bg-secondary: 220 14% 96%;
+        /* #f4f4f5 - Light gray */
+        --ai-bg-surface: 240 5% 96%;
+        /* #f5f5f6 - Card background */
+        --ai-bg-hover: 240 5% 92%;
+        /* #eaeaeb - Hover state */
+        --ai-bg-elevated: 240 4% 88%;
+        /* #e0e0e2 - User bubble */
 
-        --gemini-text-primary: 240 10% 90%;
-        /* #e3e3e8 - Primary text */
-        --gemini-text-secondary: 240 3% 57%;
-        /* #8e8e93 - Muted text */
-        --gemini-text-disabled: 240 3% 40%;
-        /* #5f6368 - Disabled */
+        --ai-text-primary: 240 10% 15%;
+        /* #232326 - Dark text */
+        --ai-text-secondary: 240 5% 45%;
+        /* #6e6e76 - Muted text */
+        --ai-text-disabled: 240 4% 65%;
+        /* #a0a0a6 - Disabled */
 
-        --gemini-border: 220 5% 25%;
-        /* #3c4043 - Borders */
-        --gemini-border-hover: 220 3% 35%;
-        /* #5f6368 - Border hover */
+        --ai-border: 240 5% 88%;
+        /* #e0e0e2 - Borders */
+        --ai-border-hover: 240 5% 80%;
+        /* #c8c8cc - Border hover */
 
-        --gemini-accent-blue: 213 89% 75%;
-        /* #8ab4f8 - Links, active */
-        --gemini-accent-gradient-start: 217 89% 60%;
-        /* #4285f4 */
-        --gemini-accent-gradient-mid: 270 78% 65%;
-        /* #a66ff0 */
-        --gemini-accent-gradient-end: 8 80% 56%;
-        /* #ea4335 */
+        /* Accent colors - Vibrant violet/purple */
+        --ai-accent: 258 90% 55%;
+        /* #7c3aed - Primary violet */
+        --ai-accent-light: 258 80% 95%;
+        /* #f3e8ff - Light violet bg */
+        --ai-accent-gradient-start: 258 90% 55%;
+        /* Violet */
+        --ai-accent-gradient-end: 280 80% 50%;
+        /* Purple */
 
-        /* === SHADCN VARIABLE MAPPING === */
-        --background: var(--gemini-bg-primary);
-        --foreground: var(--gemini-text-primary);
-        --card: var(--gemini-bg-surface);
-        --card-foreground: var(--gemini-text-primary);
-        --popover: var(--gemini-bg-surface);
-        --popover-foreground: var(--gemini-text-primary);
-        --primary: var(--gemini-accent-blue);
-        --primary-foreground: 0 0% 100%;
-        --secondary: var(--gemini-bg-elevated);
-        --secondary-foreground: var(--gemini-text-primary);
-        --muted: var(--gemini-bg-surface);
-        --muted-foreground: var(--gemini-text-secondary);
-        --accent: var(--gemini-bg-hover);
-        --accent-foreground: var(--gemini-text-primary);
-        --destructive: 0 62.8% 30.6%;
-        --destructive-foreground: var(--gemini-text-primary);
-        --border: var(--gemini-border);
-        --input: var(--gemini-bg-surface);
-        --ring: var(--gemini-accent-blue);
-        --radius: 1.5rem;
+        /* Radius - Softer, rounder */
+        --radius-sm: 8px;
+        --radius-md: 12px;
+        --radius-lg: 16px;
+        --radius-xl: 24px;
+        --radius-full: 9999px;
 
-        /* === LAYOUT DIMENSIONS === */
-        --sidebar-width: 280px;
-        --header-height: 64px;
-        --chat-max-width: 768px;
-        --input-height: 56px;
+        /* Shadows - Subtle */
+        --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.03);
+        --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+        --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.05);
     }
 }
 
 @layer base {
     * {
-        @apply border-border;
+        border-color: hsl(var(--ai-border));
     }
 
     html {
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        font-family: 'Google Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
     }
 
     body {
-        background-color: hsl(var(--gemini-bg-primary));
-        color: hsl(var(--gemini-text-primary));
+        background-color: hsl(var(--ai-bg-primary));
+        color: hsl(var(--ai-text-primary));
         line-height: 1.6;
+        margin: 0;
+        padding: 0;
     }
 }
 
 @layer components {
 
-    /* === GEMINI SIDEBAR === */
-    .gemini-sidebar {
-        width: var(--sidebar-width);
-        background-color: hsl(var(--gemini-bg-surface));
-        border-right: 1px solid hsl(var(--gemini-border));
+    /* === SIDEBAR === */
+    .sidebar-container {
+        background: linear-gradient(180deg, hsl(var(--ai-bg-surface)) 0%, hsl(var(--ai-bg-secondary)) 100%);
+        border-right: 1px solid hsl(var(--ai-border));
     }
 
-    .gemini-sidebar-item {
-        @apply px-4 py-3 rounded-full mx-2 my-1 cursor-pointer transition-colors;
-        color: hsl(var(--gemini-text-primary));
+    .sidebar-item {
+        padding: 10px 16px;
+        border-radius: var(--radius-lg);
+        margin: 4px 8px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        color: hsl(var(--ai-text-secondary));
     }
 
-    .gemini-sidebar-item:hover {
-        background-color: hsl(var(--gemini-bg-hover));
+    .sidebar-item:hover {
+        background-color: hsl(var(--ai-bg-hover));
+        color: hsl(var(--ai-text-primary));
     }
 
-    /* === GEMINI CHAT MESSAGE STYLES === */
+    .sidebar-item.active {
+        background-color: hsl(var(--ai-accent-light));
+        color: hsl(var(--ai-accent));
+    }
+
+    /* === CHAT MESSAGE STYLES === */
     .gemini-user-message {
         display: flex;
         justify-content: flex-end;
         margin-bottom: 16px;
+        animation: fadeInUp 0.3s ease-out;
     }
 
     .gemini-user-bubble {
-        background-color: hsl(var(--gemini-bg-elevated));
-        color: hsl(var(--gemini-text-primary));
-        padding: 12px 20px;
-        border-radius: 24px;
-        border-top-right-radius: 4px;
-        max-width: 80%;
-        font-size: 16px;
-        line-height: 1.5;
+        background: linear-gradient(135deg, hsl(var(--ai-bg-elevated)) 0%, hsl(var(--ai-bg-hover)) 100%);
+        color: hsl(var(--ai-text-primary));
+        padding: 14px 20px;
+        border-radius: var(--radius-xl);
+        border-top-right-radius: var(--radius-sm);
+        max-width: 75%;
+        font-size: 15px;
+        line-height: 1.6;
+        box-shadow: var(--shadow-sm);
     }
 
     .gemini-ai-message {
         display: flex;
         align-items: flex-start;
-        gap: 16px;
+        gap: 14px;
         margin-bottom: 24px;
-    }
-
-    .gemini-ai-avatar {
-        width: 32px;
-        height: 32px;
-        border-radius: 50%;
-        background: linear-gradient(135deg,
-                hsl(var(--gemini-accent-gradient-start)),
-                hsl(var(--gemini-accent-gradient-mid)),
-                hsl(var(--gemini-accent-gradient-end)));
-        flex-shrink: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        animation: fadeInUp 0.3s ease-out;
     }
 
     .gemini-ai-content {
-        /* NO BACKGROUND - Clean text only */
-        color: hsl(var(--gemini-text-primary));
-        font-size: 16px;
+        color: hsl(var(--ai-text-primary));
+        font-size: 15px;
         line-height: 1.75;
         max-width: 100%;
     }
 
-    /* === GEMINI INPUT FIELD === */
-    .gemini-input-container {
+    /* === INPUT FIELD === */
+    .chat-input-container {
         position: relative;
-        background-color: hsl(var(--gemini-bg-surface));
-        border: 1px solid hsl(var(--gemini-border));
-        border-radius: 28px;
-        height: var(--input-height);
-        transition: border-color 0.2s ease;
+        background: hsl(var(--ai-bg-surface));
+        border: 2px solid hsl(var(--ai-border));
+        border-radius: var(--radius-xl);
+        transition: all 0.2s ease;
+        box-shadow: var(--shadow-md);
     }
 
-    .gemini-input-container:hover {
-        border-color: hsl(var(--gemini-border-hover));
+    .chat-input-container:hover {
+        border-color: hsl(var(--ai-border-hover));
     }
 
-    .gemini-input-container:focus-within {
-        border-color: hsl(var(--gemini-accent-blue));
-        box-shadow: 0 0 0 1px hsl(var(--gemini-accent-blue) / 0.3);
+    .chat-input-container:focus-within {
+        border-color: hsl(var(--ai-accent));
+        box-shadow: 0 0 0 3px hsl(var(--ai-accent) / 0.15);
     }
 
-    .gemini-input {
+    .chat-input {
         width: 100%;
-        height: 100%;
+        height: 56px;
         background: transparent;
         border: none;
         padding: 0 56px 0 24px;
         font-size: 16px;
-        color: hsl(var(--gemini-text-primary));
+        color: hsl(var(--ai-text-primary));
         outline: none;
     }
 
-    .gemini-input::placeholder {
-        color: hsl(var(--gemini-text-secondary));
+    .chat-input::placeholder {
+        color: hsl(var(--ai-text-disabled));
     }
 
-    .gemini-send-button {
-        position: absolute;
-        right: 8px;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        background-color: transparent;
-        color: hsl(var(--gemini-text-secondary));
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.2s ease;
+    /* === BUTTONS === */
+    .btn-primary {
+        background: linear-gradient(135deg, hsl(var(--ai-accent-gradient-start)), hsl(var(--ai-accent-gradient-end)));
+        color: white;
+        padding: 12px 24px;
+        border-radius: var(--radius-lg);
+        font-weight: 500;
         border: none;
         cursor: pointer;
+        transition: all 0.2s ease;
+        box-shadow: var(--shadow-md);
     }
 
-    .gemini-send-button:hover:not(:disabled) {
-        background-color: hsl(var(--gemini-bg-hover));
-        color: hsl(var(--gemini-text-primary));
+    .btn-primary:hover {
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-lg);
     }
 
-    .gemini-send-button:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
+    .btn-ghost {
+        background: transparent;
+        color: hsl(var(--ai-text-secondary));
+        padding: 10px 16px;
+        border-radius: var(--radius-lg);
+        font-weight: 500;
+        border: none;
+        cursor: pointer;
+        transition: all 0.2s ease;
     }
 
-    .gemini-send-button.active {
-        background-color: hsl(var(--gemini-accent-blue));
-        color: white;
+    .btn-ghost:hover {
+        background: hsl(var(--ai-bg-hover));
+        color: hsl(var(--ai-text-primary));
     }
 
-    /* === GEMINI GRADIENT TEXT === */
+    /* === GRADIENT TEXT === */
     .gemini-gradient-text {
         background: linear-gradient(135deg,
-                hsl(var(--gemini-accent-gradient-start)),
-                hsl(var(--gemini-accent-gradient-mid)),
-                hsl(var(--gemini-accent-gradient-end)));
+                hsl(var(--ai-accent-gradient-start)),
+                hsl(var(--ai-accent-gradient-end)));
         -webkit-background-clip: text;
         background-clip: text;
         -webkit-text-fill-color: transparent;
+        font-weight: 500;
     }
 
-    /* === GEMINI WELCOME SCREEN === */
+    /* === WELCOME SCREEN === */
     .gemini-welcome {
         display: flex;
         flex-direction: column;
@@ -244,59 +231,44 @@
         padding: 48px;
     }
 
-    .gemini-welcome-title {
-        font-size: 48px;
-        font-weight: 400;
-        margin-bottom: 16px;
-    }
-
-    .gemini-welcome-subtitle {
-        font-size: 20px;
-        color: hsl(var(--gemini-text-secondary));
-        margin-bottom: 48px;
-    }
-
-    .gemini-suggestion-chips {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 12px;
-        justify-content: center;
-    }
-
-    .gemini-chip {
-        background-color: hsl(var(--gemini-bg-surface));
-        border: 1px solid hsl(var(--gemini-border));
-        border-radius: 24px;
-        padding: 12px 20px;
+    /* === CHIPS === */
+    .suggestion-chip {
+        background: hsl(var(--ai-bg-surface));
+        border: 1px solid hsl(var(--ai-border));
+        border-radius: var(--radius-full);
+        padding: 10px 18px;
         font-size: 14px;
-        color: hsl(var(--gemini-text-primary));
+        color: hsl(var(--ai-text-secondary));
         cursor: pointer;
         transition: all 0.2s ease;
     }
 
-    .gemini-chip:hover {
-        background-color: hsl(var(--gemini-bg-hover));
-        border-color: hsl(var(--gemini-border-hover));
+    .suggestion-chip:hover {
+        background: hsl(var(--ai-accent-light));
+        border-color: hsl(var(--ai-accent) / 0.3);
+        color: hsl(var(--ai-accent));
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
+    }
+
+    /* === GRAPH PANEL === */
+    .graph-panel {
+        background: hsl(var(--ai-bg-surface));
+        border: 1px solid hsl(var(--ai-border));
+        border-radius: var(--radius-lg);
+    }
+
+    .graph-canvas {
+        background: linear-gradient(135deg, hsl(var(--ai-bg-surface)) 0%, hsl(var(--ai-bg-primary)) 100%);
+        border-radius: var(--radius-md);
     }
 }
 
 /* === ANIMATIONS === */
-@keyframes gemini-sparkle {
-
-    0%,
-    100% {
-        opacity: 1;
-    }
-
-    50% {
-        opacity: 0.6;
-    }
-}
-
-@keyframes fade-in-up {
+@keyframes fadeInUp {
     from {
         opacity: 0;
-        transform: translateY(20px);
+        transform: translateY(12px);
     }
 
     to {
@@ -305,13 +277,25 @@
     }
 }
 
-.animate-fade-in-up {
-    animation: fade-in-up 0.5s ease-out forwards;
+@keyframes pulse-soft {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.7;
+    }
 }
 
-/* === SCROLLBAR STYLING === */
+.animate-pulse-soft {
+    animation: pulse-soft 2s ease-in-out infinite;
+}
+
+/* === SCROLLBAR - Light Theme === */
 ::-webkit-scrollbar {
-    width: 8px;
+    width: 6px;
 }
 
 ::-webkit-scrollbar-track {
@@ -319,10 +303,10 @@
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: hsl(var(--gemini-bg-hover));
-    border-radius: 4px;
+    background-color: hsl(var(--ai-bg-hover));
+    border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background-color: hsl(var(--gemini-border-hover));
+    background-color: hsl(var(--ai-border-hover));
 }
