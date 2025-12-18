@@ -10,3 +10,4 @@ __pycache__
 .env
 graph_diagram.png
 langgraph_examples.egg-info
+langgraph_server.egg-info
