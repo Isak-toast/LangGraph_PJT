@@ -1,269 +1,396 @@
 """
-nodes.py - 노드 구현
-======================
+nodes.py - Deep Research 노드 구현
+===================================
 
-이 파일은 그래프의 각 노드(Node)를 구현합니다.
-노드는 그래프에서 실행되는 함수 단위입니다.
+5개 노드로 구성된 Deep Research 시스템:
+1. Planner: 리서치 계획 수립
+2. Searcher: 웹 검색 (Tavily)
+3. ContentReader: URL 내용 읽기
+4. Analyzer: 정보 분석 + 추가 검색 판단
+5. Writer: 최종 응답 작성
 
-노드 구조:
-┌─────────────┐
-│  Supervisor │ ← 라우터 역할 (어디로 보낼지 결정)
-└─────────────┘
-      │
-      ├──────────────┬───────────────┐
-      ▼              ▼               │
-┌──────────┐   ┌──────────┐          │
-│Researcher│   │  Writer  │ ─────────┘
-└──────────┘   └──────────┘
-    │              │
- 웹 검색        글 작성
+그래프 구조:
+  Planner → Searcher → ContentReader → Analyzer → Writer
+                 ↑                          │
+                 └──────────────────────────┘
+                      (추가 검색 필요시)
 """
 
-from langchain_core.messages import AIMessage, HumanMessage
+from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
 from langchain_google_genai import ChatGoogleGenerativeAI
-from langgraph.prebuilt import create_react_agent
-from src.agent.state import AgentState
-from src.agent.tools import tavily_tool
+from src.agent.state import DeepResearchState
+from src.agent.tools import tavily_tool, read_url_tool
 
 
 # ================================================================
-# LLM 초기화 (모든 노드가 공유)
+# LLM 초기화
 # ================================================================
-# 
-# Gemini 2.0 Flash 모델 사용
-# temperature=0: 일관된 응답을 위해 랜덤성 제거
 
 llm = ChatGoogleGenerativeAI(
-    model="gemini-2.0-flash",
-    temperature=0  # 결정론적 응답 (매번 같은 입력에 같은 출력)
+    model="gemini-2.0-flash-exp",
+    temperature=0.3
 )
 
 
 # ================================================================
-# Worker 에이전트 목록
+# 1. Planner 노드 - 리서치 계획 수립
 # ================================================================
-# 
-# Supervisor가 라우팅할 수 있는 대상들
-# FINISH는 종료를 의미 (END 노드로 이동)
 
-members = ["Researcher", "Writer"]  # 워커 노드 이름들
-options = ["FINISH"] + members       # Supervisor의 선택지: FINISH, Researcher, Writer
+PLANNER_PROMPT = """You are a RESEARCH PLANNER. Your job is to create a research strategy.
 
+Analyze the user's question and create a research plan with:
+1. Multiple search queries (in English for better results)
+2. Focus areas to explore
+3. Depth level (1=quick, 2=medium, 3=deep)
 
-# ================================================================
-# Researcher 에이전트 (ReAct 패턴)
-# ================================================================
-# 
-# ReAct = Reasoning + Acting
-# LLM이 "생각 → 행동 → 관찰" 사이클을 반복하며 도구를 사용
-#
-# 예시 실행 흐름:
-#   1. 생각: "AI 트렌드를 검색해야겠다"
-#   2. 행동: tavily_tool.invoke("2024 AI trends")
-#   3. 관찰: 검색 결과 확인
-#   4. 생각: "충분한 정보를 얻었다"
-#   5. 최종 응답 생성
+OUTPUT FORMAT (JSON):
+{
+    "search_queries": ["query1", "query2", "query3"],
+    "focus_areas": ["area1", "area2"],
+    "depth_level": 2
+}
 
-# Researcher 시스템 프롬프트 - 반드시 검색하도록 강제!
-RESEARCHER_PROMPT = """You are a professional researcher agent.
+EXAMPLES:
+- "LangGraph Vision AI papers" → queries: ["LangGraph Vision AI paper", "LangGraph computer vision", "LangGraph image processing agent"]
+- "AI trends 2024" → queries: ["AI trends 2024", "machine learning trends 2024", "generative AI advances 2024"]
 
-YOUR TASK:
-1. ALWAYS use the tavily_search tool to find information
-2. NEVER ask for clarification - just search for what the user asked
-3. Search in English for better results, then respond in Korean
-4. Provide comprehensive, factual information from search results
-
-IMPORTANT: You MUST use the search tool. Do NOT respond without searching first.
-절대로 검색 없이 응답하지 마세요. 반드시 tavily_search 도구를 사용하세요.
+Create 2-4 diverse search queries to get comprehensive results.
 """
 
-# ReAct 에이전트 생성 (도구만 주입, 프롬프트는 노드에서 추가)
-research_agent = create_react_agent(
-    llm, 
-    tools=[tavily_tool]  # Researcher는 Tavily 검색 도구 사용 가능
-)
-
-
-def research_node(state: AgentState) -> dict:
-    """
-    Researcher 노드 - 웹에서 정보를 검색하고 수집
+def planner_node(state: DeepResearchState) -> dict:
+    """리서치 계획을 수립하는 Planner 노드"""
     
-    이 노드는 사용자의 질문에 답하기 위해 필요한 정보를
-    Tavily 검색 API를 통해 웹에서 수집합니다.
-    
-    Args:
-        state: 현재 그래프 상태 (messages 포함)
-    
-    Returns:
-        상태 업데이트 딕셔너리 {"messages": [...]}
-        → 검색 결과가 담긴 AIMessage가 messages에 추가됨
-    """
-    from langchain_core.messages import SystemMessage
-    
-    # 시스템 메시지를 맨 앞에 추가하여 검색 강제
-    messages_with_prompt = [
-        SystemMessage(content=RESEARCHER_PROMPT)
-    ] + list(state["messages"])
-    
-    # 수정된 상태로 에이전트 실행
-    modified_state = {"messages": messages_with_prompt}
-    result = research_agent.invoke(modified_state)
-    
-    # 마지막 메시지 추출 (에이전트의 최종 응답)
-    last_msg = result["messages"][-1]
-    
-    # 상태 업데이트: Researcher가 응답했음을 표시
-    return {
-        "messages": [AIMessage(
-            content=last_msg.content,
-            name="Researcher"  # 누가 응답했는지 표시 (추적용)
-        )]
-    }
-
-
-# ================================================================
-# Writer 노드 (단순 LLM 호출)
-# ================================================================
-
-def writer_node(state: AgentState) -> dict:
-    """
-    Writer 노드 - 수집된 정보를 기반으로 글 작성
-    
-    이 노드는 도구 없이 순수하게 LLM의 글쓰기 능력만 사용합니다.
-    주로 요약, 보고서 작성, 정리 등의 작업을 수행합니다.
-    
-    Args:
-        state: 현재 그래프 상태 (messages 포함)
-    
-    Returns:
-        상태 업데이트 딕셔너리 {"messages": [...]}
-        → 작성된 글이 담긴 AIMessage가 messages에 추가됨
-    """
-    # 대화 히스토리를 기반으로 LLM이 응답 생성
-    response = llm.invoke(state["messages"])
-    
-    return {
-        "messages": [AIMessage(
-            content=response.content,
-            name="Writer"  # 누가 응답했는지 표시
-        )]
-    }
-
-
-# ================================================================
-# Supervisor 노드 (라우터/오케스트레이터)
-# ================================================================
-
-def supervisor_node(state: AgentState) -> dict:
-    """
-    Supervisor 노드 - 다음에 실행할 노드를 결정하는 라우터
-    
-    Supervisor는 대화 상황을 분석하고 어떤 Worker를 호출할지,
-    아니면 작업을 종료할지를 결정합니다.
-    
-    결정 로직:
-        1. 정보 검색이 필요하면 → "Researcher"
-        2. 글 작성이 필요하면 → "Writer"
-        3. 작업 완료 또는 Worker가 이미 응답했으면 → "FINISH"
-    
-    Args:
-        state: 현재 그래프 상태
-    
-    Returns:
-        {"next": "Researcher" | "Writer" | "FINISH"}
-    
-    무한 루프 방지:
-        Worker가 이미 응답한 경우 강제로 FINISH로 라우팅하여
-        재귀 제한(recursion limit) 에러를 방지합니다.
-    """
     messages = state["messages"]
+    user_query = ""
     
-    # ========================================
-    # 무한 루프 방지 체크 (개선됨)
-    # ========================================
-    # "마지막 Human 메시지 이후에" Worker가 응답했는지 확인
-    # 전체 히스토리가 아닌 현재 턴만 체크해야 함!
+    # 마지막 사용자 메시지 찾기
+    for msg in reversed(messages):
+        if isinstance(msg, HumanMessage) or (hasattr(msg, 'type') and msg.type == 'human'):
+            user_query = msg.content
+            break
     
-    worker_responded_this_turn = False
-    last_human_idx = -1
+    print(f"📋 Planner: Creating research plan for: {user_query[:50]}...")
     
-    # 마지막 Human 메시지 위치 찾기
-    for i, msg in enumerate(messages):
-        if hasattr(msg, 'type') and msg.type == 'human':
-            last_human_idx = i
-        elif isinstance(msg, HumanMessage):
-            last_human_idx = i
-    
-    # 마지막 Human 메시지 이후의 Worker 응답 확인
-    if last_human_idx >= 0:
-        for msg in messages[last_human_idx + 1:]:
-            if hasattr(msg, 'name') and msg.name in members:
-                worker_responded_this_turn = True
-                break
-    
-    # ========================================
-    # Supervisor 프롬프트 (LLM 지시)
-    # ========================================
-    # LLM에게 명확한 규칙을 제시하여 올바른 결정을 유도
-    
-    supervisor_prompt = f"""You are a supervisor managing workers: {members}.
-
-RULES (규칙):
-1. If the user asks a QUESTION that needs research -> route to "Researcher"
-   (사용자가 검색이 필요한 질문을 하면 Researcher로)
-2. If you need content written/summarized -> route to "Writer"
-   (글 작성이나 요약이 필요하면 Writer로)
-3. If a worker has ALREADY responded with useful information -> route to "FINISH"
-   (Worker가 이미 응답했으면 FINISH로)
-4. If the conversation is complete or no action needed -> route to "FINISH"
-   (대화가 완료되었거나 할 일이 없으면 FINISH로)
-5. NEVER route to the same worker twice in a row
-   (같은 Worker를 연속으로 두 번 호출하지 마세요)
-
-Worker already responded this turn: {worker_responded_this_turn}
-(현재 턴에서 Worker가 이미 응답했나요: {worker_responded_this_turn})
-
-Respond with ONLY the next action: {options}"""
-
-    # ========================================
-    # 구조화된 출력 (Structured Output)
-    # ========================================
-    # LLM이 반드시 정해진 형식으로 응답하도록 강제
-    # 자유 텍스트가 아닌 {"next": "..."} 형태로만 응답
-    
+    # LLM에게 계획 생성 요청
     structured_llm = llm.with_structured_output({
-        "type": "object", 
+        "type": "object",
         "properties": {
-            "next": {
-                "type": "string", 
-                "enum": options  # FINISH, Researcher, Writer 중 하나만 가능
-            }
-        }, 
-        "required": ["next"]
+            "search_queries": {"type": "array", "items": {"type": "string"}},
+            "focus_areas": {"type": "array", "items": {"type": "string"}},
+            "depth_level": {"type": "integer", "minimum": 1, "maximum": 3}
+        },
+        "required": ["search_queries", "focus_areas", "depth_level"]
     })
     
-    # 최근 5개 메시지만 사용 (토큰 절약)
-    prompt = f"{supervisor_prompt}\n\nConversation:\n{messages[-5:]}"
+    try:
+        plan = structured_llm.invoke(f"{PLANNER_PROMPT}\n\nUser Question: {user_query}")
+        print(f"📋 Planner: Generated {len(plan.get('search_queries', []))} queries")
+    except Exception as e:
+        print(f"❌ Planner error: {e}")
+        plan = {
+            "search_queries": [user_query],
+            "focus_areas": ["general"],
+            "depth_level": 2
+        }
+    
+    return {
+        "research_plan": plan,
+        "current_query_index": 0,
+        "research_iteration": 1,
+        "search_results": [],
+        "urls_to_read": [],
+        "read_contents": [],
+        "findings": []
+    }
+
+
+# ================================================================
+# 2. Searcher 노드 - 웹 검색
+# ================================================================
+
+def searcher_node(state: DeepResearchState) -> dict:
+    """Tavily 검색을 수행하는 Searcher 노드"""
+    
+    plan = state.get("research_plan", {})
+    queries = plan.get("search_queries", [])
+    current_idx = state.get("current_query_index", 0)
+    iteration = state.get("research_iteration", 1)
+    
+    # 추가 검색 쿼리가 있으면 사용
+    next_query = state.get("next_search_query")
+    if next_query:
+        query = next_query
+        print(f"🔍 Searcher [{iteration}]: Follow-up search for: {query}")
+    elif current_idx < len(queries):
+        query = queries[current_idx]
+        print(f"🔍 Searcher [{iteration}]: Searching for: {query}")
+    else:
+        return {"search_results": [], "urls_to_read": []}
     
     try:
-        response = structured_llm.invoke(prompt)
-        next_agent = response.get("next")
-    except Exception as e:
-        # 에러 발생 시 안전하게 종료
-        print(f"Supervisor error: {e}")
-        next_agent = "FINISH"
-    
-    # ========================================
-    # 안전 장치: 강제 FINISH
-    # ========================================
-    # Worker가 이미 응답했는데 또 Worker를 호출하려 하면 강제 종료
-    
-    if worker_responded_this_turn and next_agent in members:
-        print("⚠️ Forcing FINISH: worker already responded this turn")
-        next_agent = "FINISH"
-    
-    # 유효하지 않은 응답 처리
-    if not next_agent or next_agent not in options:
-        next_agent = "FINISH"
+        results = tavily_tool.invoke(query)
+        urls = [r.get("url", "") for r in results if r.get("url")]
         
-    return {"next": next_agent}
+        print(f"🔍 Searcher: Found {len(results)} results, {len(urls)} URLs")
+        
+        return {
+            "search_results": results,
+            "urls_to_read": urls[:5],  # 상위 5개 URL
+            "current_query_index": current_idx + 1,
+            "next_search_query": None  # 사용 후 리셋
+        }
+    except Exception as e:
+        print(f"❌ Searcher error: {e}")
+        return {"search_results": [], "urls_to_read": []}
+
+
+# ================================================================
+# 3. ContentReader 노드 - URL 내용 읽기
+# ================================================================
+
+def content_reader_node(state: DeepResearchState) -> dict:
+    """URL 내용을 읽는 ContentReader 노드"""
+    
+    urls = state.get("urls_to_read", [])
+    existing_contents = state.get("read_contents", [])
+    
+    if not urls:
+        print("📖 ContentReader: No URLs to read")
+        return {"read_contents": existing_contents}
+    
+    print(f"📖 ContentReader: Reading {len(urls)} URLs...")
+    
+    new_contents = []
+    for url in urls[:3]:  # 상위 3개만 읽기 (토큰 절약)
+        try:
+            content = read_url_tool.invoke(url)
+            new_contents.append({
+                "url": url,
+                "content": content[:4000],  # 각 URL 4000자 제한
+                "title": url.split("/")[-1]
+            })
+            print(f"  ✓ Read: {url[:60]}...")
+        except Exception as e:
+            print(f"  ✗ Failed: {url[:40]}... ({e})")
+    
+    # 기존 내용 + 새 내용
+    all_contents = existing_contents + new_contents
+    
+    return {"read_contents": all_contents, "urls_to_read": []}
+
+
+# ================================================================
+# 4. Analyzer 노드 - 정보 분석 + 추가 검색 판단
+# ================================================================
+
+ANALYZER_PROMPT = """You are a RESEARCH ANALYZER. Analyze the collected information.
+
+YOUR TASKS:
+1. Extract key findings from the search results and read contents
+2. Determine if the information is sufficient to answer the user's question
+3. If more research is needed, suggest a specific search query
+
+CONSIDER:
+- Have we found specific papers/articles about the topic?
+- Is the information detailed enough?
+- Are there gaps in our knowledge?
+
+OUTPUT FORMAT (JSON):
+{
+    "findings": ["finding1", "finding2", ...],
+    "needs_more_research": true/false,
+    "next_search_query": "specific query if more research needed"
+}
+"""
+
+def analyzer_node(state: DeepResearchState) -> dict:
+    """수집된 정보를 분석하는 Analyzer 노드"""
+    
+    search_results = state.get("search_results", [])
+    read_contents = state.get("read_contents", [])
+    iteration = state.get("research_iteration", 1)
+    existing_findings = state.get("findings", [])
+    
+    print(f"🔬 Analyzer [{iteration}]: Analyzing {len(search_results)} results, {len(read_contents)} contents")
+    
+    # 분석할 내용 준비
+    content_summary = ""
+    for r in search_results[:5]:
+        content_summary += f"- {r.get('content', '')[:500]}\n"
+    for c in read_contents:
+        content_summary += f"- [URL: {c.get('url', '')}] {c.get('content', '')[:800]}\n"
+    
+    # 사용자 질문 가져오기
+    user_query = ""
+    for msg in reversed(state["messages"]):
+        if isinstance(msg, HumanMessage):
+            user_query = msg.content
+            break
+    
+    # LLM 분석
+    structured_llm = llm.with_structured_output({
+        "type": "object",
+        "properties": {
+            "findings": {"type": "array", "items": {"type": "string"}},
+            "needs_more_research": {"type": "boolean"},
+            "next_search_query": {"type": "string"}
+        },
+        "required": ["findings", "needs_more_research"]
+    })
+    
+    try:
+        prompt = f"""{ANALYZER_PROMPT}
+
+User Question: {user_query}
+Research Iteration: {iteration}/3
+
+Collected Information:
+{content_summary[:6000]}
+
+Existing Findings: {existing_findings}
+"""
+        analysis = structured_llm.invoke(prompt)
+        
+        new_findings = existing_findings + analysis.get("findings", [])
+        needs_more = analysis.get("needs_more_research", False)
+        next_query = analysis.get("next_search_query", "")
+        
+        # 최대 3회 반복 제한
+        if iteration >= 3:
+            needs_more = False
+            print("🔬 Analyzer: Max iterations reached, proceeding to Writer")
+        
+        if needs_more:
+            print(f"🔬 Analyzer: More research needed - {next_query}")
+        else:
+            print(f"🔬 Analyzer: Research complete with {len(new_findings)} findings")
+        
+        return {
+            "findings": new_findings,
+            "needs_more_research": needs_more,
+            "next_search_query": next_query if needs_more else None,
+            "research_iteration": iteration + 1 if needs_more else iteration
+        }
+        
+    except Exception as e:
+        print(f"❌ Analyzer error: {e}")
+        return {
+            "findings": existing_findings,
+            "needs_more_research": False,
+            "next_search_query": None
+        }
+
+
+# ================================================================
+# 5. Writer 노드 - 최종 응답 작성
+# ================================================================
+
+WRITER_PROMPT = """You are a PROFESSIONAL WRITER. Write the FINAL RESPONSE based on research.
+
+INSTRUCTIONS:
+1. Synthesize ALL findings into a comprehensive response
+2. Write in Korean (한국어)
+3. Use proper markdown formatting
+4. Include analysis and insights
+5. Reference key sources
+
+STRUCTURE:
+## 핵심 요약
+(1-2 sentences overview)
+
+## 주요 발견 사항
+(Key findings from research)
+
+## 상세 분석
+(Detailed analysis with structure)
+
+## 관련 자료 및 출처
+(List of relevant sources)
+
+## 결론 및 평가
+(Conclusion and your assessment)
+
+IMPORTANT:
+- Write clear, professional Korean
+- DO NOT just copy findings - synthesize and analyze
+- Provide valuable insights
+"""
+
+def writer_node(state: DeepResearchState) -> dict:
+    """최종 응답을 작성하는 Writer 노드"""
+    
+    findings = state.get("findings", [])
+    read_contents = state.get("read_contents", [])
+    search_results = state.get("search_results", [])
+    
+    print(f"✍️ Writer: Composing response from {len(findings)} findings")
+    
+    # 사용자 질문 가져오기
+    user_query = ""
+    for msg in reversed(state["messages"]):
+        if isinstance(msg, HumanMessage):
+            user_query = msg.content
+            break
+    
+    # 소스 URL 목록
+    source_urls = list(set([c.get("url", "") for c in read_contents if c.get("url")]))
+    
+    # 프롬프트 구성
+    content_details = ""
+    for c in read_contents[:5]:
+        content_details += f"\n### Source: {c.get('url', '')}\n{c.get('content', '')[:1500]}\n"
+    
+    prompt = f"""{WRITER_PROMPT}
+
+USER QUESTION: {user_query}
+
+RESEARCH FINDINGS:
+{chr(10).join(f'- {f}' for f in findings)}
+
+DETAILED CONTENT FROM SOURCES:
+{content_details}
+
+SOURCE URLs:
+{chr(10).join(f'- {url}' for url in source_urls)}
+
+Now write the final response in Korean:
+"""
+    
+    try:
+        response = llm.invoke([SystemMessage(content=prompt)])
+        content = response.content
+        
+        if not content or len(content.strip()) < 50:
+            content = f"""## 검색 결과 요약
+
+{chr(10).join(f'- {f}' for f in findings)}
+
+### 출처
+{chr(10).join(f'- {url}' for url in source_urls)}
+"""
+        
+        print(f"✍️ Writer: Generated {len(content)} chars")
+        
+    except Exception as e:
+        print(f"❌ Writer error: {e}")
+        content = f"응답 생성 중 오류: {e}"
+    
+    return {
+        "messages": [AIMessage(content=content, name="Writer")]
+    }
+
+
+# ================================================================
+# 라우팅 함수
+# ================================================================
+
+def should_continue_research(state: DeepResearchState) -> str:
+    """Analyzer 후 추가 검색 여부 판단"""
+    if state.get("needs_more_research", False):
+        return "continue"
+    return "finish"
+
+
+def route_after_planner(state: DeepResearchState) -> str:
+    """Planner 후 Searcher로 이동"""
+    return "Searcher"

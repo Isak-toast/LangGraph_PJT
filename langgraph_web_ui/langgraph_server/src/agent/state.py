@@ -1,47 +1,111 @@
 """
-state.py - 에이전트 상태 정의
-=================================
+state.py - Deep Research 상태 정의
+=====================================
 
-이 파일은 LangGraph에서 모든 노드가 공유하는 상태(State)를 정의합니다.
-상태는 그래프 실행 중 노드 간에 전달되는 데이터 구조입니다.
+이 파일은 Deep Research 아키텍처를 위한 확장된 상태를 정의합니다.
 
-핵심 개념:
-- TypedDict: Python의 타입 힌팅을 위한 딕셔너리 타입
-- Annotated: 타입에 추가 메타데이터를 붙이는 문법
-- add_messages: LangGraph의 메시지 축적 리듀서 (새 메시지를 기존에 추가)
+노드 구조:
+  Planner → Searcher → ContentReader → Analyzer → Writer
+                 ↑                          │
+                 └──────────────────────────┘
+                      (추가 검색 필요시)
 """
 
-from typing import Annotated, Sequence
+from typing import Annotated, Sequence, Optional, List
 from typing_extensions import TypedDict
 from langchain_core.messages import BaseMessage
 from langgraph.graph.message import add_messages
 
 
-class AgentState(TypedDict):
+class ResearchPlan(TypedDict):
+    """리서치 계획"""
+    search_queries: List[str]     # 검색할 쿼리 목록
+    depth_level: int              # 리서치 깊이 (1-3)
+    focus_areas: List[str]        # 집중할 영역
+
+
+class ReadContent(TypedDict):
+    """읽은 URL 내용"""
+    url: str
+    content: str
+    title: Optional[str]
+
+
+class DeepResearchState(TypedDict):
     """
-    에이전트 간 공유 상태 (State)
+    Deep Research 시스템 상태
     
-    그래프의 모든 노드는 이 상태를 읽고 수정할 수 있습니다.
-    각 노드는 상태의 일부를 업데이트하여 반환합니다.
-    
-    Attributes:
-        messages: 대화 히스토리. add_messages 리듀서 덕분에 새 메시지가
-                  기존 메시지 리스트에 자동으로 추가됩니다.
-                  (예: [기존메시지1, 기존메시지2] + [새메시지] = [모든메시지])
-        
-        next: 다음에 실행할 노드의 이름. Supervisor가 이 값을 설정하여
-              라우팅을 제어합니다.
-              가능한 값: "Researcher", "Writer", "FINISH"
-    
-    예시:
-        {
-            "messages": [HumanMessage("AI 트렌드 알려줘"), AIMessage("검색 결과...")],
-            "next": "FINISH"
-        }
+    이 상태는 5개 노드(Planner, Searcher, ContentReader, Analyzer, Writer)가
+    공유하며, 깊이 있는 리서치를 수행하기 위한 모든 정보를 담습니다.
     """
     
-    # 메시지 히스토리 - add_messages 리듀서로 자동 축적
+    # ========================================
+    # 기본 필드 (기존)
+    # ========================================
+    
+    # 메시지 히스토리
     messages: Annotated[Sequence[BaseMessage], add_messages]
     
-    # 다음 노드 이름 - Supervisor가 결정
+    # 다음 노드 결정
     next: str
+    
+    # ========================================
+    # Research Planning (Planner)
+    # ========================================
+    
+    # 리서치 계획 (Planner가 생성)
+    research_plan: Optional[ResearchPlan]
+    
+    # 현재 처리 중인 검색 쿼리 인덱스
+    current_query_index: int
+    
+    # ========================================
+    # Search Results (Searcher)
+    # ========================================
+    
+    # 검색 결과 목록
+    search_results: List[dict]
+    
+    # 읽어야 할 URL 목록
+    urls_to_read: List[str]
+    
+    # ========================================
+    # Content Reading (ContentReader)
+    # ========================================
+    
+    # 읽은 URL 내용들
+    read_contents: List[ReadContent]
+    
+    # ========================================
+    # Analysis (Analyzer)
+    # ========================================
+    
+    # 발견된 주요 사실들
+    findings: List[str]
+    
+    # 추가 검색 필요 여부
+    needs_more_research: bool
+    
+    # 추가 검색 쿼리 (필요시)
+    next_search_query: Optional[str]
+    
+    # 리서치 반복 횟수 (최대 3회)
+    research_iteration: int
+
+
+# 초기 상태 생성 헬퍼
+def create_initial_state() -> dict:
+    """새 대화 시작 시 초기 상태 생성"""
+    return {
+        "messages": [],
+        "next": "",
+        "research_plan": None,
+        "current_query_index": 0,
+        "search_results": [],
+        "urls_to_read": [],
+        "read_contents": [],
+        "findings": [],
+        "needs_more_research": False,
+        "next_search_query": None,
+        "research_iteration": 0,
+    }
