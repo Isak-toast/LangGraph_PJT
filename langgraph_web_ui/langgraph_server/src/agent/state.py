@@ -91,6 +91,13 @@ class DeepResearchState(TypedDict):
     
     # 리서치 반복 횟수 (최대 3회)
     research_iteration: int
+    
+    # ========================================
+    # Compression (Compress) - Phase 1
+    # ========================================
+    
+    # 압축된 연구 노트 (중복 제거, 정리된 findings)
+    compressed_notes: Optional[str]
 
 
 # 초기 상태 생성 헬퍼

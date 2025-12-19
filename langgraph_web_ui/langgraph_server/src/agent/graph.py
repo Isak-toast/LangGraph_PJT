@@ -2,7 +2,7 @@
 graph.py - Deep Research 그래프 정의
 =====================================
 
-5노드 Deep Research 아키텍처 그래프:
+6노드 Deep Research 아키텍처 그래프 (Phase 1: Compress 추가):
 
   ┌─────────┐
   │ Planner │ ← 리서치 계획 수립
@@ -24,6 +24,11 @@ graph.py - Deep Research 그래프 정의
   └────┬─────┘    └──────────┘
        │
        ▼ (충분하면)
+  ┌──────────┐
+  │ Compress │ ← 연구 결과 압축 + 인용 (Phase 1)
+  └────┬─────┘
+       │
+       ▼
   ┌────────┐
   │ Writer │ ← 최종 응답 작성
   └────┬───┘
@@ -39,6 +44,7 @@ from src.agent.nodes import (
     searcher_node, 
     content_reader_node,
     analyzer_node,
+    compress_node,     # Phase 1
     writer_node,
     should_continue_research
 )
@@ -58,6 +64,7 @@ def build_graph():
     workflow.add_node("Searcher", searcher_node)
     workflow.add_node("ContentReader", content_reader_node)
     workflow.add_node("Analyzer", analyzer_node)
+    workflow.add_node("Compress", compress_node)  # Phase 1
     workflow.add_node("Writer", writer_node)
     
     # ========================================
@@ -72,15 +79,18 @@ def build_graph():
     workflow.add_edge("Searcher", "ContentReader")
     workflow.add_edge("ContentReader", "Analyzer")
     
-    # 조건부 엣지: Analyzer → Writer 또는 Searcher
+    # 조건부 엣지: Analyzer → Compress 또는 Searcher (Phase 1 수정)
     workflow.add_conditional_edges(
         "Analyzer",
         should_continue_research,
         {
-            "continue": "Searcher",   # 추가 검색 필요
-            "finish": "Writer"        # 작성 시작
+            "continue": "Searcher",    # 추가 검색 필요
+            "finish": "Compress"       # Phase 1: Compress로 이동
         }
     )
+    
+    # Compress → Writer (Phase 1)
+    workflow.add_edge("Compress", "Writer")
     
     # Writer → 종료
     workflow.add_edge("Writer", END)

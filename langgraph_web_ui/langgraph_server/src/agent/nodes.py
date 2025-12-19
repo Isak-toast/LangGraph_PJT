@@ -306,7 +306,108 @@ Existing Findings: {existing_findings}
 
 
 # ================================================================
-# 5. Writer 노드 - 최종 응답 작성
+# 5. Compress 노드 - 연구 결과 압축 (Phase 1)
+# ================================================================
+
+COMPRESS_PROMPT = """You are a RESEARCH COMPRESSOR. Your job is to clean up and compress research findings.
+
+<Task>
+Clean up information gathered from research. Remove duplicates, preserve key facts with citations.
+All relevant information should be preserved but in a cleaner, more organized format.
+</Task>
+
+<Guidelines>
+1. Remove duplicate or redundant information
+2. Preserve ALL key facts, statistics, and insights
+3. Group related findings together
+4. Add inline citations [1], [2], etc. for each source
+5. Include a Sources section at the end
+</Guidelines>
+
+<Output Format>
+## Key Findings
+- Finding 1 [1]
+- Finding 2 [2]
+- ...
+
+## Detailed Information
+(Organized, deduplicated content with citations)
+
+## Sources
+[1] URL or source name
+[2] URL or source name
+...
+</Output Format>
+
+<Citation Rules>
+- Assign each unique URL a citation number [1], [2], [3]...
+- Use citations inline after each fact
+- List all sources at the end with corresponding numbers
+- Number sources sequentially without gaps
+</Citation Rules>
+"""
+
+def compress_node(state: DeepResearchState) -> dict:
+    """연구 결과를 압축하고 정리하는 Compress 노드"""
+    
+    findings = state.get("findings", [])
+    read_contents = state.get("read_contents", [])
+    search_results = state.get("search_results", [])
+    
+    print(f"\n📦 Compress: Compressing {len(findings)} findings, {len(read_contents)} contents")
+    
+    # 소스 URL 수집
+    source_urls = list(set([c.get("url", "") for c in read_contents if c.get("url")]))
+    
+    # 압축할 내용 준비
+    content_to_compress = ""
+    
+    # Findings
+    content_to_compress += "=== FINDINGS ===\n"
+    for i, finding in enumerate(findings, 1):
+        content_to_compress += f"[{i}] {finding}\n"
+    
+    # Read contents (일부)
+    content_to_compress += "\n=== SOURCE CONTENTS ===\n"
+    for c in read_contents[:5]:
+        url = c.get("url", "Unknown")
+        text = c.get("content", "")[:800]
+        content_to_compress += f"\n[Source: {url}]\n{text}\n"
+    
+    # 소스 URL 목록
+    content_to_compress += "\n=== SOURCE URLS ===\n"
+    for i, url in enumerate(source_urls, 1):
+        content_to_compress += f"[{i}] {url}\n"
+    
+    try:
+        prompt = f"""{COMPRESS_PROMPT}
+
+Here is the raw research data to compress:
+
+{content_to_compress[:8000]}
+
+Now compress and organize this information with proper citations:
+"""
+        response = llm.invoke([HumanMessage(content=prompt)])
+        compressed = response.content
+        
+        # 상세 로그 출력
+        print(f"   └─ Compressed to {len(compressed)} chars (from ~{len(content_to_compress)} raw chars)")
+        print(f"   └─ Sources cited: {len(source_urls)}")
+        preview = compressed[:400].replace('\n', '\n      ')
+        print(f"   └─ Preview:\n      {preview}...")
+        
+        return {"compressed_notes": compressed}
+        
+    except Exception as e:
+        print(f"❌ Compress error: {e}")
+        # 에러 시 원본 findings 반환
+        fallback = "\n".join(f"- {f}" for f in findings)
+        return {"compressed_notes": fallback}
+
+
+# ================================================================
+# 6. Writer 노드 - 최종 응답 작성
 # ================================================================
 
 WRITER_PROMPT = """You are a PROFESSIONAL WRITER. Write the FINAL RESPONSE based on research.
@@ -346,8 +447,9 @@ def writer_node(state: DeepResearchState) -> dict:
     findings = state.get("findings", [])
     read_contents = state.get("read_contents", [])
     search_results = state.get("search_results", [])
+    compressed_notes = state.get("compressed_notes", "")  # Phase 1: 압축된 노트 사용
     
-    print(f"✍️ Writer: Composing response from {len(findings)} findings, {len(read_contents)} contents")
+    print(f"\n✍️ Writer: Composing response from {len(findings)} findings")
     
     # 사용자 질문 가져오기
     user_query = ""
@@ -360,22 +462,15 @@ def writer_node(state: DeepResearchState) -> dict:
     # 소스 URL 목록
     source_urls = list(set([c.get("url", "") for c in read_contents if c.get("url")]))
     
-    # findings가 비어있으면 search_results에서 추출
-    if not findings:
-        for r in search_results:
-            if r.get("content"):
-                findings.append(r.get("content", "")[:200])
-    
-    # 프롬프트 구성
-    content_details = ""
-    for c in read_contents[:5]:
-        url = c.get('url', 'Unknown')
-        text = c.get('content', '')[:1500]
-        if text and not text.startswith("Error"):
-            content_details += f"\n### Source: {url}\n{text}\n"
-    
-    # findings 문자열
-    findings_str = "\n".join(f"- {f}" for f in findings) if findings else "- No specific findings available"
+    # Phase 1: compressed_notes가 있으면 사용, 없으면 기존 방식
+    if compressed_notes:
+        print(f"   └─ Using compressed notes ({len(compressed_notes)} chars)")
+        research_content = compressed_notes
+    else:
+        # fallback: 원본 findings 사용
+        research_content = "\n".join(f"- {f}" for f in findings) if findings else "No findings available"
+        for c in read_contents[:3]:
+            research_content += f"\n\n[Source: {c.get('url', '')}]\n{c.get('content', '')[:500]}"
     
     # URLs 문자열
     urls_str = "\n".join(f"- {url}" for url in source_urls) if source_urls else "- No source URLs"
@@ -384,16 +479,14 @@ def writer_node(state: DeepResearchState) -> dict:
 
 USER QUESTION: {user_query}
 
-RESEARCH FINDINGS:
-{findings_str}
-
-DETAILED CONTENT FROM SOURCES:
-{content_details if content_details else "No detailed content available."}
+RESEARCH CONTENT (already organized with citations):
+{research_content}
 
 SOURCE URLs:
 {urls_str}
 
-Now write the final comprehensive response in Korean (한국어로 작성하세요):
+Now write the final comprehensive response in Korean (한국어로 작성하세요).
+IMPORTANT: Preserve and include the citations [1], [2], etc. from the research content.
 """
     
     try:

@@ -1,0 +1,44 @@
+[
+  {
+    "phase": "Phase 1",
+    "query": "LangGraph와 CrewAI의 멀티 에이전트 아키텍처를 비교하고 장단점을 분석해줘",
+    "timestamp": "2025-12-20T01:09:59.140398",
+    "total_time_sec": 31.37,
+    "llm_calls": 2,
+    "search_calls": 2,
+    "urls_read": 6,
+    "research_iterations": 2,
+    "estimated_tokens": 1351,
+    "response_quality": null,
+    "has_citations": true,
+    "response_length": 3742
+  },
+  {
+    "phase": "Phase 1",
+    "query": "2024년 발표된 LLM 기반 에이전트 시스템 관련 논문들을 분석하고 주요 트렌드를 설명해줘",
+    "timestamp": "2025-12-20T01:10:38.909501",
+    "total_time_sec": 39.77,
+    "llm_calls": 2,
+    "search_calls": 3,
+    "urls_read": 9,
+    "research_iterations": 3,
+    "estimated_tokens": 1136,
+    "response_quality": null,
+    "has_citations": true,
+    "response_length": 2880
+  },
+  {
+    "phase": "Phase 1",
+    "query": "RAG(Retrieval-Augmented Generation)와 Agent 기반 접근법의 차이점과 각각 언제 사용하면 좋은지 설명해줘",
+    "timestamp": "2025-12-20T01:11:03.125283",
+    "total_time_sec": 24.22,
+    "llm_calls": 2,
+    "search_calls": 1,
+    "urls_read": 3,
+    "research_iterations": 1,
+    "estimated_tokens": 1042,
+    "response_quality": null,
+    "has_citations": true,
+    "response_length": 2620
+  }
+]
