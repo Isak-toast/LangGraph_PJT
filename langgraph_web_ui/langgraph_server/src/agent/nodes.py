@@ -84,7 +84,13 @@ def planner_node(state: DeepResearchState) -> dict:
     
     try:
         plan = structured_llm.invoke(f"{PLANNER_PROMPT}\n\nUser Question: {user_query}")
-        print(f"📋 Planner: Generated {len(plan.get('search_queries', []))} queries")
+        queries = plan.get('search_queries', [])
+        print(f"\n📋 Planner: Generated {len(queries)} queries")
+        print("   └─ Queries:")
+        for i, q in enumerate(queries, 1):
+            print(f"      [{i}] {q}")
+        if plan.get('focus_areas'):
+            print(f"   └─ Focus: {', '.join(plan.get('focus_areas', []))}")
     except Exception as e:
         print(f"❌ Planner error: {e}")
         plan = {
@@ -131,7 +137,14 @@ def searcher_node(state: DeepResearchState) -> dict:
         results = tavily_tool.invoke(query)
         urls = [r.get("url", "") for r in results if r.get("url")]
         
-        print(f"🔍 Searcher: Found {len(results)} results, {len(urls)} URLs")
+        print(f"\n🔍 Searcher: Found {len(results)} results")
+        print("   └─ URLs found:")
+        for i, url in enumerate(urls[:5], 1):
+            print(f"      [{i}] {url}")
+        print("   └─ Snippets:")
+        for r in results[:3]:
+            snippet = r.get('content', '')[:200].replace('\n', ' ')
+            print(f"      • {snippet}...")
         
         return {
             "search_results": results,
@@ -149,7 +162,7 @@ def searcher_node(state: DeepResearchState) -> dict:
 # ================================================================
 
 def content_reader_node(state: DeepResearchState) -> dict:
-    """URL 내용을 읽는 ContentReader 노드"""
+    """본문 내용을 읽는 ContentReader 노드"""
     
     urls = state.get("urls_to_read", [])
     existing_contents = state.get("read_contents", [])
@@ -158,7 +171,7 @@ def content_reader_node(state: DeepResearchState) -> dict:
         print("📖 ContentReader: No URLs to read")
         return {"read_contents": existing_contents}
     
-    print(f"📖 ContentReader: Reading {len(urls)} URLs...")
+    print(f"\n📖 ContentReader: Reading {len(urls[:3])} URLs...")
     
     new_contents = []
     for url in urls[:3]:  # 상위 3개만 읽기 (토큰 절약)
@@ -169,9 +182,11 @@ def content_reader_node(state: DeepResearchState) -> dict:
                 "content": content[:4000],  # 각 URL 4000자 제한
                 "title": url.split("/")[-1]
             })
-            print(f"  ✓ Read: {url[:60]}...")
+            preview = content[:300].replace('\n', ' ')
+            print(f"   └─ [{url[:50]}...]")
+            print(f"      Preview: {preview}...")
         except Exception as e:
-            print(f"  ✗ Failed: {url[:40]}... ({e})")
+            print(f"   ✗ Failed: {url[:40]}... ({e})")
     
     # 기존 내용 + 새 내용
     all_contents = existing_contents + new_contents
@@ -258,12 +273,21 @@ Existing Findings: {existing_findings}
         # 최대 3회 반복 제한
         if iteration >= 3:
             needs_more = False
-            print("🔬 Analyzer: Max iterations reached, proceeding to Writer")
+            print("\n🔬 Analyzer: Max iterations reached, proceeding to Writer")
+        
+        # 상세 로그 출력
+        print(f"\n🔬 Analyzer [{iteration}]: Analyzed {len(search_results)} results, {len(read_contents)} contents")
+        if analysis.get("findings"):
+            print("   └─ New findings:")
+            for i, finding in enumerate(analysis.get("findings", [])[:5], 1):
+                preview = finding[:150].replace('\n', ' ')
+                print(f"      [{i}] {preview}...")
         
         if needs_more:
-            print(f"🔬 Analyzer: More research needed - {next_query}")
+            print(f"   └─ Decision: More research needed")
+            print(f"   └─ Next query: {next_query}")
         else:
-            print(f"🔬 Analyzer: Research complete with {len(new_findings)} findings")
+            print(f"   └─ Decision: Research complete ({len(new_findings)} total findings)")
         
         return {
             "findings": new_findings,
@@ -323,57 +347,93 @@ def writer_node(state: DeepResearchState) -> dict:
     read_contents = state.get("read_contents", [])
     search_results = state.get("search_results", [])
     
-    print(f"✍️ Writer: Composing response from {len(findings)} findings")
+    print(f"✍️ Writer: Composing response from {len(findings)} findings, {len(read_contents)} contents")
     
     # 사용자 질문 가져오기
     user_query = ""
-    for msg in reversed(state["messages"]):
-        if isinstance(msg, HumanMessage):
-            user_query = msg.content
+    messages = state.get("messages", [])
+    for msg in reversed(messages):
+        if isinstance(msg, HumanMessage) or (hasattr(msg, 'type') and msg.type == 'human'):
+            user_query = getattr(msg, 'content', str(msg))
             break
     
     # 소스 URL 목록
     source_urls = list(set([c.get("url", "") for c in read_contents if c.get("url")]))
     
+    # findings가 비어있으면 search_results에서 추출
+    if not findings:
+        for r in search_results:
+            if r.get("content"):
+                findings.append(r.get("content", "")[:200])
+    
     # 프롬프트 구성
     content_details = ""
     for c in read_contents[:5]:
-        content_details += f"\n### Source: {c.get('url', '')}\n{c.get('content', '')[:1500]}\n"
+        url = c.get('url', 'Unknown')
+        text = c.get('content', '')[:1500]
+        if text and not text.startswith("Error"):
+            content_details += f"\n### Source: {url}\n{text}\n"
     
-    prompt = f"""{WRITER_PROMPT}
+    # findings 문자열
+    findings_str = "\n".join(f"- {f}" for f in findings) if findings else "- No specific findings available"
+    
+    # URLs 문자열
+    urls_str = "\n".join(f"- {url}" for url in source_urls) if source_urls else "- No source URLs"
+    
+    full_prompt = f"""{WRITER_PROMPT}
 
 USER QUESTION: {user_query}
 
 RESEARCH FINDINGS:
-{chr(10).join(f'- {f}' for f in findings)}
+{findings_str}
 
 DETAILED CONTENT FROM SOURCES:
-{content_details}
+{content_details if content_details else "No detailed content available."}
 
 SOURCE URLs:
-{chr(10).join(f'- {url}' for url in source_urls)}
+{urls_str}
 
-Now write the final response in Korean:
+Now write the final comprehensive response in Korean (한국어로 작성하세요):
 """
     
     try:
-        response = llm.invoke([SystemMessage(content=prompt)])
+        # HumanMessage로 호출해야 Gemini가 제대로 응답함
+        response = llm.invoke([HumanMessage(content=full_prompt)])
         content = response.content
         
         if not content or len(content.strip()) < 50:
+            # fallback 응답 생성
             content = f"""## 검색 결과 요약
 
-{chr(10).join(f'- {f}' for f in findings)}
+{findings_str}
 
 ### 출처
-{chr(10).join(f'- {url}' for url in source_urls)}
+{urls_str}
 """
         
-        print(f"✍️ Writer: Generated {len(content)} chars")
+        # 상세 로그 출력
+        print(f"\n✍️ Writer: Generated response ({len(content)} chars)")
+        print("   └─ Sources used:")
+        for i, url in enumerate(source_urls[:3], 1):
+            print(f"      [{i}] {url[:60]}...")
+        print(f"   └─ Response preview (500 chars):")
+        preview = content[:500].replace('\n', '\n      ')
+        print(f"      {preview}")
+        if len(content) > 500:
+            print("      ...")
         
     except Exception as e:
         print(f"❌ Writer error: {e}")
-        content = f"응답 생성 중 오류: {e}"
+        # 에러 시에도 의미 있는 내용 반환
+        content = f"""## 검색 결과 요약
+
+{findings_str}
+
+### 참고 자료
+{urls_str}
+
+> 상세 응답 생성 중 오류가 발생했습니다. 위 정보를 참고해 주세요.
+"""
     
     return {
         "messages": [AIMessage(content=content, name="Writer")]

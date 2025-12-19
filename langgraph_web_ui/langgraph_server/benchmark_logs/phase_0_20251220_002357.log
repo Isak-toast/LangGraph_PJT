@@ -1,0 +1,159 @@
+/home/isak/LangGraph_PJT/langgraph_web_ui/langgraph_server/src/agent/tools.py:36: LangChainDeprecationWarning: The class `TavilySearchResults` was deprecated in LangChain 0.3.25 and will be removed in 1.0. An updated version of the class exists in the `langchain-tavily package and should be used instead. To use it run `pip install -U `langchain-tavily` and import as `from `langchain_tavily import TavilySearch``.
+  tavily_tool = TavilySearchResults(
+
+╔═══════════════════════════════════════════════════════════════
+║  Deep Research Benchmark - Phase 0
+╠═══════════════════════════════════════════════════════════════
+║  Test Queries: 3
+╚═══════════════════════════════════════════════════════════════
+
+
+📊 Running benchmark: LangGraph와 CrewAI의 멀티 에이전트 아키텍처를 비교하고 장단점을 분석해줘...
+📋 Planner: Creating research plan for: LangGraph와 CrewAI의 멀티 에이전트 아키텍처를 비교하고 장단점을 분석해줘...
+📋 Planner: Generated 4 queries
+🔍 Searcher [1]: Searching for: LangGraph vs CrewAI multi-agent architecture comparison
+🔍 Searcher: Found 5 results, 5 URLs
+📖 ContentReader: Reading 5 URLs...
+  ✓ Read: https://www.datacamp.com/tutorial/crewai-vs-langgraph-vs-aut...
+  ✓ Read: https://medium.com/@sushmita2310/building-multi-agent-system...
+📖 Read URL: https://developer.ibm.com/articles/awb-comparing-a... (13 chars)
+  ✓ Read: https://developer.ibm.com/articles/awb-comparing-ai-agent-fr...
+🔬 Analyzer [1]: Analyzing 5 results, 3 contents
+🔬 Analyzer: More research needed - detailed comparison of LangGraph and CrewAI multi-agent architecture performance and scalability
+🔍 Searcher [2]: Follow-up search for: detailed comparison of LangGraph and CrewAI multi-agent architecture performance and scalability
+🔍 Searcher: Found 5 results, 5 URLs
+📖 ContentReader: Reading 5 URLs...
+  ✓ Read: https://www.datacamp.com/tutorial/crewai-vs-langgraph-vs-aut...
+📖 Read URL: https://www.zams.com/blog/crewai-vs-langgraph... (8015 chars)
+  ✓ Read: https://www.zams.com/blog/crewai-vs-langgraph...
+  ✓ Read: https://medium.com/@adilmaqsood501/langgraph-vs-crewai-choos...
+🔬 Analyzer [2]: Analyzing 5 results, 6 contents
+🔬 Analyzer: More research needed - LangGraph vs CrewAI performance benchmark
+🔍 Searcher [3]: Follow-up search for: LangGraph vs CrewAI performance benchmark
+🔍 Searcher: Found 5 results, 5 URLs
+📖 ContentReader: Reading 5 URLs...
+📖 Read URL: https://www.zams.com/blog/crewai-vs-langgraph... (8015 chars)
+  ✓ Read: https://www.zams.com/blog/crewai-vs-langgraph...
+  ✓ Read: https://www.datacamp.com/tutorial/crewai-vs-langgraph-vs-aut...
+📖 Read URL: https://www.3pillarglobal.com/insights/blog/compar... (8015 chars)
+  ✓ Read: https://www.3pillarglobal.com/insights/blog/comparison-crewa...
+🔬 Analyzer [3]: Analyzing 5 results, 9 contents
+🔬 Analyzer: Max iterations reached, proceeding to Writer
+🔬 Analyzer: Research complete with 17 findings
+✍️ Writer: Composing response from 17 findings, 9 contents
+✍️ Writer: Generated 3843 chars
+
+┌────────────────────────────────────
+│ Phase 0 Benchmark Result
+├────────────────────────────────────
+│ Query: LangGraph와 CrewAI의 멀티 에이전트 아키텍처를 비교하고 장단...
+│ Time: 31.89s
+│ LLM Calls: 2
+│ Search Calls: 3
+│ URLs Read: 9
+│ Iterations: 3
+│ Est. Tokens: 1434
+│ Response Length: 3843 chars
+│ Has Citations: ❌
+└────────────────────────────────────
+
+
+📊 Running benchmark: 2024년 발표된 LLM 기반 에이전트 시스템 관련 논문들을 분석하고 주요 트렌드를 설명해...
+📋 Planner: Creating research plan for: 2024년 발표된 LLM 기반 에이전트 시스템 관련 논문들을 분석하고 주요 트렌드를 설명해...
+📋 Planner: Generated 4 queries
+🔍 Searcher [1]: Searching for: LLM based agent system papers 2024
+🔍 Searcher: Found 5 results, 5 URLs
+📖 ContentReader: Reading 5 URLs...
+📖 Read URL: https://arxiv.org/html/2408.02479v2... (8015 chars)
+  ✓ Read: https://arxiv.org/html/2408.02479v2...
+📖 Read URL: https://github.com/AGI-Edgerunners/LLM-Agents-Pape... (8015 chars)
+  ✓ Read: https://github.com/AGI-Edgerunners/LLM-Agents-Papers...
+📖 Read URL: https://openreview.net/forum?id=bkiM54QftZ... (3701 chars)
+  ✓ Read: https://openreview.net/forum?id=bkiM54QftZ...
+🔬 Analyzer [1]: Analyzing 5 results, 3 contents
+🔬 Analyzer: More research needed - Trends in LLM-based agent systems research 2024
+🔍 Searcher [2]: Follow-up search for: Trends in LLM-based agent systems research 2024
+🔍 Searcher: Found 5 results, 5 URLs
+📖 ContentReader: Reading 5 URLs...
+📖 Read URL: https://arxiv.org/html/2510.04023v1... (8015 chars)
+  ✓ Read: https://arxiv.org/html/2510.04023v1...
+📖 Read URL: https://arxiv.org/abs/2412.17481... (4772 chars)
+  ✓ Read: https://arxiv.org/abs/2412.17481...
+📖 Read URL: https://www.ijcai.org/proceedings/2024/890... (2267 chars)
+  ✓ Read: https://www.ijcai.org/proceedings/2024/890...
+🔬 Analyzer [2]: Analyzing 5 results, 6 contents
+🔬 Analyzer: More research needed - Specific trends in LLM-based agent systems research in 2024, including application areas, architectures, and evaluation metrics. Also search for frameworks and tools used for LLM agent development.
+🔍 Searcher [3]: Follow-up search for: Specific trends in LLM-based agent systems research in 2024, including application areas, architectures, and evaluation metrics. Also search for frameworks and tools used for LLM agent development.
+🔍 Searcher: Found 5 results, 5 URLs
+📖 ContentReader: Reading 5 URLs...
+📖 Read URL: https://juteq.ca/biggest-ai-agent-paper-releases-2... (8015 chars)
+  ✓ Read: https://juteq.ca/biggest-ai-agent-paper-releases-2024/...
+📖 Read URL: https://www.promptingguide.ai/research/llm-agents... (8015 chars)
+  ✓ Read: https://www.promptingguide.ai/research/llm-agents...
+📖 Read URL: https://www.analyticsvidhya.com/blog/2024/07/ai-ag... (8015 chars)
+  ✓ Read: https://www.analyticsvidhya.com/blog/2024/07/ai-agent-framew...
+🔬 Analyzer [3]: Analyzing 5 results, 9 contents
+🔬 Analyzer: Max iterations reached, proceeding to Writer
+🔬 Analyzer: Research complete with 18 findings
+✍️ Writer: Composing response from 18 findings, 9 contents
+✍️ Writer: Generated 3346 chars
+
+┌────────────────────────────────────
+│ Phase 0 Benchmark Result
+├────────────────────────────────────
+│ Query: 2024년 발표된 LLM 기반 에이전트 시스템 관련 논문들을 분석하고 주...
+│ Time: 38.25s
+│ LLM Calls: 2
+│ Search Calls: 3
+│ URLs Read: 9
+│ Iterations: 3
+│ Est. Tokens: 1288
+│ Response Length: 3346 chars
+│ Has Citations: ❌
+└────────────────────────────────────
+
+
+📊 Running benchmark: RAG(Retrieval-Augmented Generation)와 Agent 기반 접근법의...
+📋 Planner: Creating research plan for: RAG(Retrieval-Augmented Generation)와 Agent 기반 접근법의...
+📋 Planner: Generated 4 queries
+🔍 Searcher [1]: Searching for: RAG vs Agent based approach
+🔍 Searcher: Found 5 results, 5 URLs
+📖 ContentReader: Reading 5 URLs...
+📖 Read URL: https://mitrix.io/blog/llm-fine%E2%80%91tuning-vs-... (8015 chars)
+  ✓ Read: https://mitrix.io/blog/llm-fine%E2%80%91tuning-vs-rag-vs-age...
+📖 Read URL: https://www.bitcot.com/rag-vs-agentic-rag-vs-mcp/... (8015 chars)
+  ✓ Read: https://www.bitcot.com/rag-vs-agentic-rag-vs-mcp/...
+📖 Read URL: https://www.linkedin.com/posts/alexxubyte_systemde... (8015 chars)
+  ✓ Read: https://www.linkedin.com/posts/alexxubyte_systemdesign-codin...
+🔬 Analyzer [1]: Analyzing 5 results, 3 contents
+🔬 Analyzer: Research complete with 5 findings
+✍️ Writer: Composing response from 5 findings, 3 contents
+✍️ Writer: Generated 3517 chars
+
+┌────────────────────────────────────
+│ Phase 0 Benchmark Result
+├────────────────────────────────────
+│ Query: RAG(Retrieval-Augmented Generation)와 Age...
+│ Time: 27.47s
+│ LLM Calls: 2
+│ Search Calls: 1
+│ URLs Read: 3
+│ Iterations: 1
+│ Est. Tokens: 1384
+│ Response Length: 3517 chars
+│ Has Citations: ❌
+└────────────────────────────────────
+
+
+╔═══════════════════════════════════════════
+║  Phase 0 Summary (3 tests)
+╠═══════════════════════════════════════════
+║  Average Time: 32.54s
+║  Average Tokens: 1369
+║  Citation Rate: 0%
+╚═══════════════════════════════════════════
+
+📁 Results saved to: benchmark_results/phase_0_20251220_002536.json
+═══════════════════════════════════════════════════════════════
+Benchmark completed at: Sat Dec 20 12:25:37 AM KST 2025
+═══════════════════════════════════════════════════════════════

@@ -1,0 +1,443 @@
+/home/isak/LangGraph_PJT/langgraph_web_ui/langgraph_server/src/agent/tools.py:36: LangChainDeprecationWarning: The class `TavilySearchResults` was deprecated in LangChain 0.3.25 and will be removed in 1.0. An updated version of the class exists in the `langchain-tavily package and should be used instead. To use it run `pip install -U `langchain-tavily` and import as `from `langchain_tavily import TavilySearch``.
+  tavily_tool = TavilySearchResults(
+
+╔═══════════════════════════════════════════════════════════════
+║  Deep Research Benchmark - Phase 0
+╠═══════════════════════════════════════════════════════════════
+║  Test Queries: 3
+║  Verbose: OFF (500 char preview)
+╚═══════════════════════════════════════════════════════════════
+
+
+📊 Running benchmark: LangGraph와 CrewAI의 멀티 에이전트 아키텍처를 비교하고 장단점을 분석해줘...
+📋 Planner: Creating research plan for: LangGraph와 CrewAI의 멀티 에이전트 아키텍처를 비교하고 장단점을 분석해줘...
+
+📋 Planner: Generated 5 queries
+   └─ Queries:
+      [1] LangGraph vs CrewAI multi-agent architecture comparison
+      [2] LangGraph multi-agent system advantages disadvantages
+      [3] CrewAI multi-agent system advantages disadvantages
+      [4] LangGraph and CrewAI architecture differences
+      [5] LangGraph CrewAI comparison
+   └─ Focus: Multi-agent architecture, LangGraph, CrewAI, Comparison, Pros and Cons, Differences
+🔍 Searcher [1]: Searching for: LangGraph vs CrewAI multi-agent architecture comparison
+
+🔍 Searcher: Found 5 results
+   └─ URLs found:
+      [1] https://www.datacamp.com/tutorial/crewai-vs-langgraph-vs-autogen
+      [2] https://medium.com/@sushmita2310/building-multi-agent-systems-with-langgraph-a-step-by-step-guide-d14088e90f72
+      [3] https://developer.ibm.com/articles/awb-comparing-ai-agent-frameworks-crewai-langgraph-and-beeai/
+      [4] https://blog.langchain.com/langgraph-multi-agent-workflows/
+      [5] https://www.3pillarglobal.com/insights/blog/comparison-crewai-langgraph-n8n/
+   └─ Snippets:
+      • Architecture is the foundation of each framework. CrewAI follows a role-based model where agents behave like employees with specific responsibilities. This makes it easy to visualize workflows in term...
+      • LangChain focuses on building LLM applications with chains and tools.  LangGraph extends LangChain by enabling stateful, multi-step workflows with branching and memory.  LangGraph uses LangChain under...
+      • This article provides a comprehensive analysis of the capabilities, features, and implementation considerations of leading AI agent frameworks focused on multi-agent collaboration and orchestration. B...
+
+📖 ContentReader: Reading 3 URLs...
+   └─ [https://www.datacamp.com/tutorial/crewai-vs-langgr...]
+      Preview: Error: HTTP 403 for URL: https://www.datacamp.com/tutorial/crewai-vs-langgraph-vs-autogen...
+   └─ [https://medium.com/@sushmita2310/building-multi-ag...]
+      Preview: Error: HTTP 403 for URL: https://medium.com/@sushmita2310/building-multi-agent-systems-with-langgraph-a-step-by-step-guide-d14088e90f72...
+📖 Read URL: https://developer.ibm.com/articles/awb-comparing-a... (13 chars)
+   └─ [https://developer.ibm.com/articles/awb-comparing-a...]
+      Preview: IBM Developer...
+🔬 Analyzer [1]: Analyzing 5 results, 3 contents
+
+🔬 Analyzer [1]: Analyzed 5 results, 3 contents
+   └─ New findings:
+      [1] CrewAI uses a role-based architecture, simplifying workflow visualization as teamwork....
+      [2] LangGraph employs a graph-based architecture, offering modular and conditional execution....
+      [3] LangGraph provides lower-level control over agents compared to CrewAI....
+      [4] LangGraph is integrated within the LangChain ecosystem, leveraging its integrations and observability features....
+      [5] CrewAI has highly flexible, role-based crews and flows, while LangGraph has highly flexible, graph-based state machine architecture....
+   └─ Decision: More research needed
+   └─ Next query: detailed comparison of LangGraph and CrewAI architecture, including advantages and disadvantages
+🔍 Searcher [2]: Follow-up search for: detailed comparison of LangGraph and CrewAI architecture, including advantages and disadvantages
+
+🔍 Searcher: Found 5 results
+   └─ URLs found:
+      [1] https://www.linkedin.com/posts/dhavalsays_two-of-the-hottest-frameworks-for-building-activity-7370659801355325440-Y6GG
+      [2] https://www.datacamp.com/tutorial/crewai-vs-langgraph-vs-autogen
+      [3] https://www.datacamp.com/de/tutorial/crewai-vs-langgraph-vs-autogen
+      [4] https://www.zams.com/blog/crewai-vs-langgraph
+      [5] https://xcelore.com/blog/langgraph-vs-crewai/
+   └─ Snippets:
+      • Two of the hottest frameworks for building AI agents right now are LangGraph and CrewAI. But what’s the difference? LangGraph is like designing the flowchart of a conversation. You define how agents o...
+      • Architecture is the foundation of each framework. CrewAI follows a role-based model where agents behave like employees with specific responsibilities. This makes it easy to visualize workflows in term...
+      • Architecture is the foundation of each framework. CrewAI follows a role-based model where agents behave like employees with specific responsibilities. This makes it easy to visualize workflows in term...
+
+📖 ContentReader: Reading 3 URLs...
+📖 Read URL: https://www.linkedin.com/posts/dhavalsays_two-of-t... (8015 chars)
+   └─ [https://www.linkedin.com/posts/dhavalsays_two-of-t...]
+      Preview: LangGraph vs CrewAI: Choosing the Right Framework for AI Agents | Dhaval Patel posted on the topic | LinkedIn Agree & Join LinkedIn By clicking Continue to join or sign in, you agree to LinkedIn’s User Agreement , Privacy Policy , and Cookie Policy . Skip to main content LinkedIn Top Content People ...
+   └─ [https://www.datacamp.com/tutorial/crewai-vs-langgr...]
+      Preview: Error: HTTP 403 for URL: https://www.datacamp.com/tutorial/crewai-vs-langgraph-vs-autogen...
+   └─ [https://www.datacamp.com/de/tutorial/crewai-vs-lan...]
+      Preview: Error: HTTP 403 for URL: https://www.datacamp.com/de/tutorial/crewai-vs-langgraph-vs-autogen...
+🔬 Analyzer [2]: Analyzing 5 results, 6 contents
+
+🔬 Analyzer [2]: Analyzed 5 results, 6 contents
+   └─ New findings:
+      [1] CrewAI follows a role-based model where agents have specific responsibilities, making workflows easy to visualize in terms of teamwork....
+      [2] LangGraph focuses on graph-based orchestration, representing workflows as nodes and edges, enabling modular and conditional execution....
+      [3] CrewAI is beginner-friendly and easy to use but limited in flexibility....
+      [4] LangGraph offers great control and flexibility but is not easy to quickly set up....
+      [5] CrewAI is preferred for quick prototyping, while LangGraph is favored for complex and detailed production workflows requiring deterministic routing....
+   └─ Decision: Research complete (10 total findings)
+✍️ Writer: Composing response from 10 findings, 6 contents
+
+✍️ Writer: Generated response (3571 chars)
+   └─ Sources used:
+      [1] https://www.linkedin.com/posts/dhavalsays_two-of-the-hottest...
+      [2] https://www.datacamp.com/tutorial/crewai-vs-langgraph-vs-aut...
+      [3] https://www.datacamp.com/de/tutorial/crewai-vs-langgraph-vs-...
+   └─ Response preview (500 chars):
+      ## 핵심 요약
+      
+      LangGraph와 CrewAI는 멀티 에이전트 시스템 구축을 위한 인기 있는 프레임워크이지만, 아키텍처와 사용 목적에 있어 뚜렷한 차이를 보인다. CrewAI는 역할 기반 아키텍처로 팀워크를 시뮬레이션하는 데 용이하며, LangGraph는 그래프 기반 아키텍처로 복잡하고 조건부 실행이 필요한 워크플로우에 적합하다.
+      
+      ## 주요 발견 사항
+      
+      *   **아키텍처**: CrewAI는 역할 기반 아키텍처, LangGraph는 그래프 기반 아키텍처를 채택한다.
+      *   **제어 수준**: LangGraph는 CrewAI보다 에이전트에 대한 더 낮은 수준의 제어를 제공한다.
+      *   **통합**: LangGraph는 LangChain 생태계 내에 통합되어 다양한 기능과 관찰 기능을 활용할 수 있다.
+      *   **유연성**: CrewAI는 역할 기반의 유연성이 뛰어나며, LangGraph는 그래프 기반 상태 머신 아키텍처의 유연성이 뛰어나다.
+      *   **사용 용이성**: CrewA
+      ...
+
+┌════════════════════════════════════════════════════════════════
+│ Phase 0 Benchmark Result
+├────────────────────────────────────────────────────────────────
+│ Query: LangGraph와 CrewAI의 멀티 에이전트 아키텍처를 비교하고 장단점을 분석해줘...
+│ Time: 24.07s
+│ LLM Calls: 2
+│ Search Calls: 2
+│ URLs Read: 6
+│ Iterations: 2
+│ Est. Tokens: 1352
+│ Response Length: 3571 chars
+│ Has Citations: ❌
+└────────────────────────────────────────────────────────────────
+
+
+📝 Response Preview (500 chars):
+--------------------------------------------------
+## 핵심 요약
+
+LangGraph와 CrewAI는 멀티 에이전트 시스템 구축을 위한 인기 있는 프레임워크이지만, 아키텍처와 사용 목적에 있어 뚜렷한 차이를 보인다. CrewAI는 역할 기반 아키텍처로 팀워크를 시뮬레이션하는 데 용이하며, LangGraph는 그래프 기반 아키텍처로 복잡하고 조건부 실행이 필요한 워크플로우에 적합하다.
+
+## 주요 발견 사항
+
+*   **아키텍처**: CrewAI는 역할 기반 아키텍처, LangGraph는 그래프 기반 아키텍처를 채택한다.
+*   **제어 수준**: LangGraph는 CrewAI보다 에이전트에 대한 더 낮은 수준의 제어를 제공한다.
+*   **통합**: LangGraph는 LangChain 생태계 내에 통합되어 다양한 기능과 관찰 기능을 활용할 수 있다.
+*   **유연성**: CrewAI는 역할 기반의 유연성이 뛰어나며, LangGraph는 그래프 기반 상태 머신 아키텍처의 유연성이 뛰어나다.
+*   **사용 용이성**: CrewA
+... (truncated)
+
+--------------------------------------------------
+
+
+📊 Running benchmark: 2024년 발표된 LLM 기반 에이전트 시스템 관련 논문들을 분석하고 주요 트렌드를 설명해...
+📋 Planner: Creating research plan for: 2024년 발표된 LLM 기반 에이전트 시스템 관련 논문들을 분석하고 주요 트렌드를 설명해...
+
+📋 Planner: Generated 4 queries
+   └─ Queries:
+      [1] LLM based agent system papers 2024
+      [2] Large language model agent trends 2024
+      [3] Recent advances in LLM agents 2024
+      [4] 2024 LLM agent system architecture
+   └─ Focus: Agent architecture, Applications of LLM agents, Performance evaluation, Emerging trends
+🔍 Searcher [1]: Searching for: LLM based agent system papers 2024
+
+🔍 Searcher: Found 5 results
+   └─ URLs found:
+      [1] https://arxiv.org/html/2408.02479v2
+      [2] https://github.com/AGI-Edgerunners/LLM-Agents-Papers
+      [3] https://openreview.net/forum?id=bkiM54QftZ
+      [4] https://arxiv.org/abs/2402.01680
+      [5] https://papers.nips.cc/paper_files/paper/2024/hash/5d1f02132ef51602adf07000ca5b6138-Abstract-Conference.html
+   └─ Snippets:
+      • By following previous research efforts[21, 8, 17], we collected relevant papers from DBLP and arXiv, focusing on publications from the latter half of 2023 to December 2024. DBLP offers comprehensive, ...
+      • [2024/02/22] Triad: A Framework Leveraging a Multi-Role LLM-based Agent to Solve Knowledge Base Question Answering | ( | [code]     [2024/02/22] Large Language Models as Urban Residents: An LLM Agent ...
+      • Abstract: Large language model-based multi-agent systems have shown great abilities across various tasks due to the collaboration of expert agents, each focusing on a specific domain. However, the imp...
+
+📖 ContentReader: Reading 3 URLs...
+📖 Read URL: https://arxiv.org/html/2408.02479v2... (8015 chars)
+   └─ [https://arxiv.org/html/2408.02479v2...]
+      Preview: From LLMs to LLM-based Agents for Software Engineering: A Survey of Current, Challenges and Future I Introduction II EXISTING Surveys AND THE SURVEY STRUCTURE II-A Existing Works II-B Methodology II-B 1 Database Selection and Rationale II-B 2 Paper Retrieval Process II-B 3 Selection Criteria II-B 4 ...
+📖 Read URL: https://github.com/AGI-Edgerunners/LLM-Agents-Pape... (8015 chars)
+   └─ [https://github.com/AGI-Edgerunners/LLM-Agents-Pape...]
+      Preview: GitHub - AGI-Edgerunners/LLM-Agents-Papers: A repo lists papers related to LLM based agent Skip to content Navigation Menu Toggle navigation Sign in Appearance settings Platform AI CODE CREATION GitHub Copilot Write better code with AI GitHub Spark Build and deploy intelligent apps GitHub Models Man...
+📖 Read URL: https://openreview.net/forum?id=bkiM54QftZ... (3701 chars)
+   └─ [https://openreview.net/forum?id=bkiM54QftZ...]
+      Preview: On the Resilience of LLM-Based Multi-Agent Collaboration with Faulty Agents | OpenReview Toggle navigation OpenReview .net Login Go to ICML 2025 Conference homepage On the Resilience of LLM-Based Multi-Agent Collaboration with Faulty Agents Jen-tse Huang , Jiaxu Zhou , Tailin Jin , Xuhui Zhou , Zixi...
+🔬 Analyzer [1]: Analyzing 5 results, 3 contents
+
+🔬 Analyzer [1]: Analyzed 5 results, 3 contents
+   └─ New findings:
+      [1] Collected papers from DBLP and arXiv, focusing on publications from the latter half of 2023 to December 2024, related to LLM-based agents....
+      [2] A survey paper discusses essential aspects and challenges of multi-agent systems based on LLMs, including domains, agent profiling, communication, and...
+      [3] MAGIS, a novel LLM-based Multi-Agent framework for GitHub Issue resolution, consisting of four agents customized for software evolution: Manager, Repo...
+      [4] Research investigates the resilience of multi-agent collaboration with faulty agents, finding hierarchical structures the best and propose methods to ...
+   └─ Decision: More research needed
+   └─ Next query: 2024 LLM agent system trends analysis
+🔍 Searcher [2]: Follow-up search for: 2024 LLM agent system trends analysis
+
+🔍 Searcher: Found 5 results
+   └─ URLs found:
+      [1] https://blog.promptlayer.com/types-of-llm-agent/
+      [2] https://blog.langchain.com/langchain-state-of-ai-2024/
+      [3] https://www.linkedin.com/pulse/everything-you-need-know-multi-ai-agents-2024-serhii-uspenskyi-v4qqf
+      [4] https://arxiv.org/html/2510.04023v1
+      [5] https://thenewstack.io/top-5-ai-engineering-trends-of-2024/
+   └─ Snippets:
+      • The future of LLM agents lies in their seamless integration into our daily lives. These advancements will transform LLM agents from tools into partners, enhancing human capabilities and enriching our ...
+      • In 2024, developers leaned into complexity with multi-step agents, sharpened efficiency by doing more with fewer LLM calls, and added quality checks to their apps using methods of feedback and evaluat...
+      • Multi agent LLMs are developed to function as a collaborative network of both open-source and closed-source language models, where each agent is assigned a specialized task that it can perform with ex...
+
+📖 ContentReader: Reading 3 URLs...
+📖 Read URL: https://blog.promptlayer.com/types-of-llm-agent/... (8015 chars)
+   └─ [https://blog.promptlayer.com/types-of-llm-agent/...]
+      Preview: 7 Types of LLM Agents: A Comprehensive Guide (2024) Platform -- Prompt Management -- Evaluations -- Observability -- Dataset Management -- Prompt Chaining Docs Blog Case Studies Careers Log in Contact Us Contact Us Log In Back LLM Agents Explained: Types, Use Cases, and Future Trends By &nbsp;Erich ...
+📖 Read URL: https://blog.langchain.com/langchain-state-of-ai-2... (8015 chars)
+   └─ [https://blog.langchain.com/langchain-state-of-ai-2...]
+      Preview: LangChain State of AI 2024 Report Skip to content Case Studies In the Loop Web Home Try LangSmith Docs Sign in Subscribe LangChain State of AI 2024 Report Dive into LangSmith product usage patterns that show how the AI ecosystem and the way people are building LLM apps is evolving. By LangChain 6 mi...
+📖 Read URL: https://www.linkedin.com/pulse/everything-you-need... (8015 chars)
+   └─ [https://www.linkedin.com/pulse/everything-you-need...]
+      Preview: Everything you need to know about multi AI agents in 2024: explanation, examples and challenges Agree & Join LinkedIn By clicking Continue to join or sign in, you agree to LinkedIn’s User Agreement , Privacy Policy , and Cookie Policy . Skip to main content LinkedIn Top Content People Learning Jobs ...
+🔬 Analyzer [2]: Analyzing 5 results, 6 contents
+
+🔬 Analyzer [2]: Analyzed 5 results, 6 contents
+   └─ New findings:
+      [1] LLM agents are evolving from tools to partners, enhancing human capabilities....
+      [2] In 2024, development trends include multi-step agents, efficient LLM call usage, and quality checks....
+      [3] Multi-agent LLMs function as collaborative networks with specialized tasks....
+      [4] LLM agents are applied to data science tasks like data exploration, automated machine learning, and visualization....
+      [5] AI is integrated into developer tools, and AI agent creation techniques are emerging....
+   └─ Decision: More research needed
+   └─ Next query: specific examples of architectures and frameworks of multi-agent LLM systems 2024
+🔍 Searcher [3]: Follow-up search for: specific examples of architectures and frameworks of multi-agent LLM systems 2024
+
+🔍 Searcher: Found 5 results
+   └─ URLs found:
+      [1] https://www.superannotate.com/blog/multi-agent-llms
+      [2] https://www.classicinformatics.com/blog/how-llms-and-multi-agent-systems-work-together-2025
+      [3] https://getstream.io/blog/multiagent-ai-frameworks/
+      [4] https://dl.acm.org/doi/10.24963/ijcai.2024/890
+      [5] https://www.shakudo.io/blog/top-9-ai-agent-frameworks
+   └─ Snippets:
+      • Multi-agent LLM popular frameworks include AutoGen, a flexible AI agent playground with human-in-the-loop support; LangChain, which provides building blocks for complex AI applications; LangGraph, ena...
+      • ### Common Architectures [...] AutoGen is one of the most popular and research-driven frameworks for multi-agent systems, developed by Microsoft. It’s designed for flexibility and experimentation, mak...
+      • What is an Agent?    Why Use Multi-Agent AI Frameworks?    Basic Structure of an Agent    Enterprise Use Cases of Multi-Agents    Limitations of AI Agents    Top 5 Multi-Agent AI Frameworks    1. Agno...
+
+📖 ContentReader: Reading 3 URLs...
+📖 Read URL: https://www.superannotate.com/blog/multi-agent-llm... (8015 chars)
+   └─ [https://www.superannotate.com/blog/multi-agent-llm...]
+      Preview: Multi-agent LLMs in 2025 [+frameworks] | SuperAnnotate Join our 60-minute workshop to supercharge your AI agents with actionable performance insights. Register now Platform Products Builder Create exactly the annotation UI that you need. Orchestrate Build robust CI/CD pipelines using advanced orches...
+📖 Read URL: https://www.classicinformatics.com/blog/how-llms-a... (8015 chars)
+   └─ [https://www.classicinformatics.com/blog/how-llms-a...]
+      Preview: LLMs and Multi-Agent Systems: The Future of AI in 2025 We are working remotely and continue to serve amid COVID-19 lockdown. See How Services DATA Data Engineering Data Warehousing Business Intelligence DIGITAL Digital Transformation Platform Modernization Customer Experience Digital Experience AI E...
+📖 Read URL: https://getstream.io/blog/multiagent-ai-frameworks... (8015 chars)
+   └─ [https://getstream.io/blog/multiagent-ai-frameworks...]
+      Preview: Best 5 Frameworks To Build Multi-Agent AI Applications Build low-latency Vision AI applications using our new open-source Vision AI SDK . ⭐️ on GitHub -&gt; Products Solutions Developers Company Pricing Contact Log in Back Products Chat Messaging Build real-time chat messaging in less time Video &am...
+🔬 Analyzer [3]: Analyzing 5 results, 9 contents
+
+🔬 Analyzer: Max iterations reached, proceeding to Writer
+
+🔬 Analyzer [3]: Analyzed 5 results, 9 contents
+   └─ New findings:
+      [1] Multi-agent LLM frameworks like AutoGen, LangChain, LangGraph, and CrewAI are popular....
+      [2] AutoGen is a research-driven framework for multi-agent systems emphasizing flexibility and usability....
+      [3] AgentFlow is a platform for building multi-agent systems using libraries like LangChain, CrewAI, and AutoGen....
+      [4] A survey paper on LLM-based agents for software engineering is available (August 2024)....
+      [5] Research explores the resilience of multi-agent collaboration in the presence of faulty agents....
+   └─ Decision: Research complete (19 total findings)
+✍️ Writer: Composing response from 19 findings, 9 contents
+
+✍️ Writer: Generated response (4099 chars)
+   └─ Sources used:
+      [1] https://blog.langchain.com/langchain-state-of-ai-2024/...
+      [2] https://arxiv.org/html/2408.02479v2...
+      [3] https://github.com/AGI-Edgerunners/LLM-Agents-Papers...
+   └─ Response preview (500 chars):
+      ## 핵심 요약
+      
+      2024년 LLM 기반 에이전트 시스템 연구는 멀티 에이전트 시스템의 발전과 응용, 그리고 그 과정에서 발생하는 문제점과 해결 방안에 집중하고 있다. 특히 소프트웨어 엔지니어링, 데이터 과학 등 다양한 분야에서 LLM 에이전트의 활용이 증가하고 있으며, 에이전트의 효율성과 안정성을 높이기 위한 연구가 활발히 진행 중이다.
+      
+      ## 주요 발견 사항
+      
+      *   **멀티 에이전트 시스템의 중요성 증가**: 단일 LLM 에이전트에서 벗어나 협업을 통해 복잡한 문제를 해결하는 멀티 에이전트 시스템이 주목받고 있다. (LangChain, AutoGen, CrewAI 등의 프레임워크 활용 증가)
+      *   **특정 분야(소프트웨어 엔지니어링, 데이터 과학)에서의 활용**: 소프트웨어 개발 자동화, 데이터 탐색 및 분석 등 특정 분야에서 LLM 에이전트의 적용 사례가 늘고 있다.
+      *   **에이전트의 효율성 및 품질 향상**: LLM 호출 비용 절감, 에이전트의 다단계 추론 능력 향상,
+      ...
+
+┌════════════════════════════════════════════════════════════════
+│ Phase 0 Benchmark Result
+├────────────────────────────────────────────────────────────────
+│ Query: 2024년 발표된 LLM 기반 에이전트 시스템 관련 논문들을 분석하고 주요 트렌드를 설명해줘...
+│ Time: 35.63s
+│ LLM Calls: 2
+│ Search Calls: 3
+│ URLs Read: 9
+│ Iterations: 3
+│ Est. Tokens: 1485
+│ Response Length: 4099 chars
+│ Has Citations: ❌
+└────────────────────────────────────────────────────────────────
+
+
+📝 Response Preview (500 chars):
+--------------------------------------------------
+## 핵심 요약
+
+2024년 LLM 기반 에이전트 시스템 연구는 멀티 에이전트 시스템의 발전과 응용, 그리고 그 과정에서 발생하는 문제점과 해결 방안에 집중하고 있다. 특히 소프트웨어 엔지니어링, 데이터 과학 등 다양한 분야에서 LLM 에이전트의 활용이 증가하고 있으며, 에이전트의 효율성과 안정성을 높이기 위한 연구가 활발히 진행 중이다.
+
+## 주요 발견 사항
+
+*   **멀티 에이전트 시스템의 중요성 증가**: 단일 LLM 에이전트에서 벗어나 협업을 통해 복잡한 문제를 해결하는 멀티 에이전트 시스템이 주목받고 있다. (LangChain, AutoGen, CrewAI 등의 프레임워크 활용 증가)
+*   **특정 분야(소프트웨어 엔지니어링, 데이터 과학)에서의 활용**: 소프트웨어 개발 자동화, 데이터 탐색 및 분석 등 특정 분야에서 LLM 에이전트의 적용 사례가 늘고 있다.
+*   **에이전트의 효율성 및 품질 향상**: LLM 호출 비용 절감, 에이전트의 다단계 추론 능력 향상,
+... (truncated)
+
+--------------------------------------------------
+
+
+📊 Running benchmark: RAG(Retrieval-Augmented Generation)와 Agent 기반 접근법의...
+📋 Planner: Creating research plan for: RAG(Retrieval-Augmented Generation)와 Agent 기반 접근법의...
+
+📋 Planner: Generated 4 queries
+   └─ Queries:
+      [1] RAG (Retrieval-Augmented Generation) vs Agent-based approach
+      [2] Differences between RAG and Agent-based systems
+      [3] When to use RAG vs Agent-based approach
+      [4] Advantages and disadvantages of RAG and Agent-based approaches
+   └─ Focus: RAG architecture and use cases, Agent-based system architecture and use cases, Comparison of performance metrics for RAG and Agent-based systems, Trade-offs between RAG and Agent-based approaches
+🔍 Searcher [1]: Searching for: RAG (Retrieval-Augmented Generation) vs Agent-based approach
+
+🔍 Searcher: Found 5 results
+   └─ URLs found:
+      [1] https://www.linkedin.com/posts/alexxubyte_systemdesign-coding-interviewtips-activity-7344040591753678849-j-6J
+      [2] https://testrigor.com/blog/rag-vs-ai-agents/
+      [3] https://mitrix.io/blog/llm-fine%E2%80%91tuning-vs-rag-vs-agents-a-practical-comparison/
+      [4] https://medium.com/olarry/understanding-the-difference-between-rag-and-ai-agents-10df56b35e02
+      [5] https://developer.nvidia.com/blog/traditional-rag-vs-agentic-rag-why-ai-agents-need-dynamic-knowledge-to-get-smarter/
+   └─ Snippets:
+      • RAG vs Agentic RAG RAG (Retrieval Augmented Generation) is a method that combines information retrieval with large language models to generate answers. Here’s how RAG works on a high level: 1 - The mo...
+      • As we dive deeper into this AI-driven world, we can expect these technologies to get better. From RAG, we can expect more intelligent and adaptive retrievals, enhanced context integration and processi...
+      • In all fairness, there’s no single “winner” across all scenarios. Fine-tuning shines in high-volume, domain-specific workloads; RAG thrives where data changes quickly; and agents unlock new possibilit...
+
+📖 ContentReader: Reading 3 URLs...
+📖 Read URL: https://www.linkedin.com/posts/alexxubyte_systemde... (8015 chars)
+   └─ [https://www.linkedin.com/posts/alexxubyte_systemde...]
+      Preview: RAG vs Agentic RAG: How AI Agents Improve Answers | Alex Xu posted on the topic | LinkedIn Agree & Join LinkedIn By clicking Continue to join or sign in, you agree to LinkedIn’s User Agreement , Privacy Policy , and Cookie Policy . Skip to main content LinkedIn Top Content People Learning Jobs Games...
+📖 Read URL: https://testrigor.com/blog/rag-vs-ai-agents/... (8015 chars)
+   └─ [https://testrigor.com/blog/rag-vs-ai-agents/...]
+      Preview: Retrieval Augmented Generation (RAG) vs. AI Agents - testRigor AI-Based Automated Testing Tool --> --> You’re 15 minutes away from fewer bugs and almost no test maintenance Request a Demo Now Why testRigor? AI Testing AI In Software Testing Generative AI in Software Testing Prompt Engineering in Sof...
+📖 Read URL: https://mitrix.io/blog/llm-fine%E2%80%91tuning-vs-... (8015 chars)
+   └─ [https://mitrix.io/blog/llm-fine%E2%80%91tuning-vs-...]
+      Preview: LLM fine‑tuning vs. RAG vs. agents: a practical comparison - MITRIX Technology Home Services AI development for startups AI/ML & generative AI Consulting Cloud development Business intelligence Digital transformation Mobile development Web development Portfolio Dedicated Team Team augmentation Start...
+🔬 Analyzer [1]: Analyzing 5 results, 3 contents
+
+🔬 Analyzer [1]: Analyzed 5 results, 3 contents
+   └─ New findings:
+      [1] RAG (Retrieval Augmented Generation) combines information retrieval with large language models to generate answers by retrieving relevant data, extrac...
+      [2] AI Agents can access constantly changing data, both internal and external, and use reasoning to enhance accuracy and decision-making....
+      [3] RAG is a retrieval-based augmentation technique, while AI Agents perform multi-step tasks....
+      [4] Fine-tuning is suitable for high-volume, domain-specific workloads, RAG thrives where data changes quickly, and agents unlock new possibilities for or...
+   └─ Decision: More research needed
+   └─ Next query: detailed comparison of RAG and Agentic RAG, including specific use cases and implementation differences
+🔍 Searcher [2]: Follow-up search for: detailed comparison of RAG and Agentic RAG, including specific use cases and implementation differences
+
+🔍 Searcher: Found 5 results
+   └─ URLs found:
+      [1] https://medium.com/@smith.emily2584/rag-vs-agentic-rag-a-deep-dive-into-the-future-of-knowledge-retrieval-in-ai-c20162d3c622
+      [2] https://medium.com/@gaddam.rahul.kumar/agentic-rag-vs-traditional-rag-b1a156f72167
+      [3] https://www.datacamp.com/blog/agentic-rag
+      [4] https://www.polestarllp.com/blog/traditional-rag-vs-agentic-rag
+      [5] https://www.techrxiv.org/users/876974/articles/1325941-traditional-rag-vs-agentic-rag-a-comparative-study-of-retrieval-augmented-systems
+   └─ Snippets:
+      • Both RAG and Agentic RAG are pivotal in advancing how enterprises leverage LLMs for knowledge-intensive tasks. RAG remains a reliable solution for accuracy-driven, static use cases like customer suppo...
+      • ## Conclusion  Retrieval-Augmented Generation now comes in two clear flavors. Traditional RAG is the reliable starter kit — quick to deploy, low-cost to run, and perfect for single-hop answers drawn f...
+      • In contrast, agentic RAG systems are designed to be proactive and autonomous. By continuously analyzing the context and user intent, agentic RAG systems can autonomously retrieve and integrate relevan...
+
+📖 ContentReader: Reading 3 URLs...
+   └─ [https://medium.com/@smith.emily2584/rag-vs-agentic...]
+      Preview: Error: HTTP 403 for URL: https://medium.com/@smith.emily2584/rag-vs-agentic-rag-a-deep-dive-into-the-future-of-knowledge-retrieval-in-ai-c20162d3c622...
+   └─ [https://medium.com/@gaddam.rahul.kumar/agentic-rag...]
+      Preview: Error: HTTP 403 for URL: https://medium.com/@gaddam.rahul.kumar/agentic-rag-vs-traditional-rag-b1a156f72167...
+   └─ [https://www.datacamp.com/blog/agentic-rag...]
+      Preview: Error: HTTP 403 for URL: https://www.datacamp.com/blog/agentic-rag...
+🔬 Analyzer [2]: Analyzing 5 results, 6 contents
+
+🔬 Analyzer [2]: Analyzed 5 results, 6 contents
+   └─ New findings:
+      [1] Traditional RAG is suitable for accuracy-driven, static use cases like customer support and knowledge retrieval....
+      [2] Agentic RAG empowers AI systems with reasoning, planning, and autonomous action, making it ideal for complex and dynamic decisions in industries like ...
+      [3] Traditional RAG is easier to build and maintain initially, while agentic RAG requires more sophisticated design....
+      [4] Agentic RAG systems proactively and autonomously retrieve and integrate information from diverse sources, including real-time data and external APIs....
+      [5] Agentic workflows can complete multi-step investigations in single coordinated processes, reducing computational costs and analyst time....
+   └─ Decision: Research complete (12 total findings)
+✍️ Writer: Composing response from 12 findings, 6 contents
+
+✍️ Writer: Generated response (5206 chars)
+   └─ Sources used:
+      [1] https://medium.com/@smith.emily2584/rag-vs-agentic-rag-a-dee...
+      [2] https://www.linkedin.com/posts/alexxubyte_systemdesign-codin...
+      [3] https://medium.com/@gaddam.rahul.kumar/agentic-rag-vs-tradit...
+   └─ Response preview (500 chars):
+      ## 핵심 요약
+      
+      RAG(Retrieval-Augmented Generation, 검색 증강 생성)는 정보 검색과 대규모 언어 모델을 결합하여 답변을 생성하는 방식이며, 에이전트 기반 접근법은 자율적인 에이전트가 추론, 계획, 행동을 통해 복잡한 작업을 수행하는 방식입니다. RAG는 비교적 정적인 지식 기반에 적합하며, 에이전트 기반 접근법은 동적이고 복잡한 환경에서 더욱 강력한 솔루션을 제공합니다.
+      
+      ## 주요 발견 사항
+      
+      *   **RAG (검색 증강 생성):** 관련 데이터를 검색하고 벡터 데이터베이스에 저장한 다음, 검색된 정보를 프롬프트에 추가하여 LLM이 답변을 생성하도록 합니다. 빠르고 정확한 정보 검색에 유리합니다.
+      *   **에이전트 기반 접근법:** 지속적으로 변화하는 내/외부 데이터에 접근하고, 추론 능력을 사용하여 정확성과 의사 결정을 향상시킵니다. 복잡한 다단계 작업을 수행할 수 있습니다.
+      *   **RAG vs 에이전트:** RAG는 검색 기반 증강 기술인 
+      ...
+
+┌════════════════════════════════════════════════════════════════
+│ Phase 0 Benchmark Result
+├────────────────────────────────────────────────────────────────
+│ Query: RAG(Retrieval-Augmented Generation)와 Agent 기반 접근법의 차이점과 각각 언...
+│ Time: 30.31s
+│ LLM Calls: 2
+│ Search Calls: 2
+│ URLs Read: 6
+│ Iterations: 2
+│ Est. Tokens: 1806
+│ Response Length: 5206 chars
+│ Has Citations: ❌
+└────────────────────────────────────────────────────────────────
+
+
+📝 Response Preview (500 chars):
+--------------------------------------------------
+## 핵심 요약
+
+RAG(Retrieval-Augmented Generation, 검색 증강 생성)는 정보 검색과 대규모 언어 모델을 결합하여 답변을 생성하는 방식이며, 에이전트 기반 접근법은 자율적인 에이전트가 추론, 계획, 행동을 통해 복잡한 작업을 수행하는 방식입니다. RAG는 비교적 정적인 지식 기반에 적합하며, 에이전트 기반 접근법은 동적이고 복잡한 환경에서 더욱 강력한 솔루션을 제공합니다.
+
+## 주요 발견 사항
+
+*   **RAG (검색 증강 생성):** 관련 데이터를 검색하고 벡터 데이터베이스에 저장한 다음, 검색된 정보를 프롬프트에 추가하여 LLM이 답변을 생성하도록 합니다. 빠르고 정확한 정보 검색에 유리합니다.
+*   **에이전트 기반 접근법:** 지속적으로 변화하는 내/외부 데이터에 접근하고, 추론 능력을 사용하여 정확성과 의사 결정을 향상시킵니다. 복잡한 다단계 작업을 수행할 수 있습니다.
+*   **RAG vs 에이전트:** RAG는 검색 기반 증강 기술인 
+... (truncated)
+
+--------------------------------------------------
+
+
+╔═══════════════════════════════════════════
+║  Phase 0 Summary (3 tests)
+╠═══════════════════════════════════════════
+║  Average Time: 30.00s
+║  Average Tokens: 1548
+║  Citation Rate: 0%
+╚═══════════════════════════════════════════
+
+📁 Results saved to: benchmark_results/phase_0_20251220_005203.json
+═══════════════════════════════════════════════════════════════
+Benchmark completed at: Sat Dec 20 12:52:04 AM KST 2025
+═══════════════════════════════════════════════════════════════

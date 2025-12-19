@@ -1,0 +1,208 @@
+/home/isak/LangGraph_PJT/langgraph_web_ui/langgraph_server/src/agent/tools.py:36: LangChainDeprecationWarning: The class `TavilySearchResults` was deprecated in LangChain 0.3.25 and will be removed in 1.0. An updated version of the class exists in the `langchain-tavily package and should be used instead. To use it run `pip install -U `langchain-tavily` and import as `from `langchain_tavily import TavilySearch``.
+  tavily_tool = TavilySearchResults(
+
+╔═══════════════════════════════════════════════════════════════
+║  Deep Research Benchmark - Phase 0
+╠═══════════════════════════════════════════════════════════════
+║  Test Queries: 3
+║  Verbose: OFF (500 char preview)
+╚═══════════════════════════════════════════════════════════════
+
+
+📊 Running benchmark: LangGraph와 CrewAI의 멀티 에이전트 아키텍처를 비교하고 장단점을 분석해줘...
+📋 Planner: Creating research plan for: LangGraph와 CrewAI의 멀티 에이전트 아키텍처를 비교하고 장단점을 분석해줘...
+📋 Planner: Generated 5 queries
+🔍 Searcher [1]: Searching for: LangGraph vs CrewAI multi-agent architecture comparison
+🔍 Searcher: Found 5 results, 5 URLs
+📖 ContentReader: Reading 5 URLs...
+  ✓ Read: https://www.datacamp.com/tutorial/crewai-vs-langgraph-vs-aut...
+  ✓ Read: https://medium.com/@sushmita2310/building-multi-agent-system...
+📖 Read URL: https://developer.ibm.com/articles/awb-comparing-a... (13 chars)
+  ✓ Read: https://developer.ibm.com/articles/awb-comparing-ai-agent-fr...
+🔬 Analyzer [1]: Analyzing 5 results, 3 contents
+🔬 Analyzer: More research needed - in-depth comparison of LangGraph and CrewAI multi-agent architectures with specific advantages and disadvantages
+🔍 Searcher [2]: Follow-up search for: in-depth comparison of LangGraph and CrewAI multi-agent architectures with specific advantages and disadvantages
+🔍 Searcher: Found 5 results, 5 URLs
+📖 ContentReader: Reading 5 URLs...
+📖 Read URL: https://www.amplework.com/blog/langgraph-vs-autoge... (8015 chars)
+  ✓ Read: https://www.amplework.com/blog/langgraph-vs-autogen-vs-crewa...
+📖 Read URL: https://www.premai.io/blog/open-source-agentic-fra... (8015 chars)
+  ✓ Read: https://www.premai.io/blog/open-source-agentic-frameworks-la...
+  ✓ Read: https://medium.com/@saeedhajebi/multiagent-orchestration-sho...
+🔬 Analyzer [2]: Analyzing 5 results, 6 contents
+🔬 Analyzer: More research needed - in-depth comparison of debugging tools and state management in LangGraph and CrewAI
+🔍 Searcher [3]: Follow-up search for: in-depth comparison of debugging tools and state management in LangGraph and CrewAI
+🔍 Searcher: Found 5 results, 5 URLs
+📖 ContentReader: Reading 5 URLs...
+📖 Read URL: https://dev.to/rosidotidev/in-depth-comparison-wor... (8015 chars)
+  ✓ Read: https://dev.to/rosidotidev/in-depth-comparison-workflow-cont...
+  ✓ Read: https://medium.com/@saeedhajebi/multiagent-orchestration-sho...
+📖 Read URL: https://sparkco.ai/blog/crewai-vs-langchain-agents... (8015 chars)
+  ✓ Read: https://sparkco.ai/blog/crewai-vs-langchain-agents-a-deep-di...
+🔬 Analyzer [3]: Analyzing 5 results, 9 contents
+🔬 Analyzer: Max iterations reached, proceeding to Writer
+🔬 Analyzer: Research complete with 19 findings
+✍️ Writer: Composing response from 19 findings, 9 contents
+✍️ Writer: Generated 4707 chars
+
+┌════════════════════════════════════════════════════════════════
+│ Phase 0 Benchmark Result
+├────────────────────────────────────────────────────────────────
+│ Query: LangGraph와 CrewAI의 멀티 에이전트 아키텍처를 비교하고 장단점을 분석해줘...
+│ Time: 35.64s
+│ LLM Calls: 2
+│ Search Calls: 3
+│ URLs Read: 9
+│ Iterations: 3
+│ Est. Tokens: 1569
+│ Response Length: 4707 chars
+│ Has Citations: ❌
+└────────────────────────────────────────────────────────────────
+
+
+📝 Response Preview (500 chars):
+--------------------------------------------------
+## 핵심 요약
+
+LangGraph와 CrewAI는 멀티 에이전트 시스템 구축을 위한 강력한 프레임워크이지만, 아키텍처, 사용 편의성, 그리고 제공하는 제어 수준에서 뚜렷한 차이를 보인다. CrewAI는 역할 기반 아키텍처로 팀 협업에 최적화되어 있으며, LangGraph는 그래프 기반 아키텍처로 복잡하고 세밀한 워크플로우 제어에 강점을 가진다.
+
+## 주요 발견 사항
+
+*   **아키텍처:** CrewAI는 역할 기반 (role-based) 아키텍처를 사용하는 반면, LangGraph는 그래프 기반 (graph-based) 아키텍처를 사용한다.
+*   **제어 수준:** LangGraph는 에이전트 워크플로우에 대한 낮은 수준의 제어를 제공하며, CrewAI는 높은 수준의 추상화를 통해 멀티 에이전트 팀 구축을 간소화한다.
+*   **통합:** LangGraph는 LangChain 생태계와 긴밀하게 통합되어 있으며, LangSmith를 통한 관찰 가능성 (observability)
+... (truncated)
+
+--------------------------------------------------
+
+
+📊 Running benchmark: 2024년 발표된 LLM 기반 에이전트 시스템 관련 논문들을 분석하고 주요 트렌드를 설명해...
+📋 Planner: Creating research plan for: 2024년 발표된 LLM 기반 에이전트 시스템 관련 논문들을 분석하고 주요 트렌드를 설명해...
+📋 Planner: Generated 4 queries
+🔍 Searcher [1]: Searching for: LLM based agent system papers 2024
+🔍 Searcher: Found 5 results, 5 URLs
+📖 ContentReader: Reading 5 URLs...
+📖 Read URL: https://arxiv.org/html/2408.02479v2... (8015 chars)
+  ✓ Read: https://arxiv.org/html/2408.02479v2...
+📖 Read URL: https://github.com/AGI-Edgerunners/LLM-Agents-Pape... (8015 chars)
+  ✓ Read: https://github.com/AGI-Edgerunners/LLM-Agents-Papers...
+📖 Read URL: https://openreview.net/forum?id=bkiM54QftZ... (3701 chars)
+  ✓ Read: https://openreview.net/forum?id=bkiM54QftZ...
+🔬 Analyzer [1]: Analyzing 5 results, 3 contents
+🔬 Analyzer: More research needed - Specific trends in LLM-based agent systems research in 2024 with performance benchmarks and evaluation metrics.
+🔍 Searcher [2]: Follow-up search for: Specific trends in LLM-based agent systems research in 2024 with performance benchmarks and evaluation metrics.
+🔍 Searcher: Found 5 results, 5 URLs
+📖 ContentReader: Reading 5 URLs...
+📖 Read URL: https://arxiv.org/html/2507.21504v1... (8015 chars)
+  ✓ Read: https://arxiv.org/html/2507.21504v1...
+  ✓ Read: https://dl.acm.org/doi/10.1145/3711896.3736570...
+📖 Read URL: https://newsletter.victordibia.com/p/ai-agents-202... (8015 chars)
+  ✓ Read: https://newsletter.victordibia.com/p/ai-agents-2024-rewind-a...
+🔬 Analyzer [2]: Analyzing 5 results, 6 contents
+🔬 Analyzer: More research needed - Specific performance metrics and evaluation results from the identified benchmarks (TaskBench, DIBS, etc.) for LLM-based agent systems in 2024
+🔍 Searcher [3]: Follow-up search for: Specific performance metrics and evaluation results from the identified benchmarks (TaskBench, DIBS, etc.) for LLM-based agent systems in 2024
+🔍 Searcher: Found 5 results, 5 URLs
+📖 ContentReader: Reading 5 URLs...
+📖 Read URL: https://samiranama.com/posts/Evaluating-LLM-based-... (8015 chars)
+  ✓ Read: https://samiranama.com/posts/Evaluating-LLM-based-Agents-Met...
+📖 Read URL: https://arxiv.org/html/2507.21504v1... (8015 chars)
+  ✓ Read: https://arxiv.org/html/2507.21504v1...
+📖 Read URL: https://arxiv.org/html/2503.16416v1... (8015 chars)
+  ✓ Read: https://arxiv.org/html/2503.16416v1...
+🔬 Analyzer [3]: Analyzing 5 results, 9 contents
+🔬 Analyzer: Max iterations reached, proceeding to Writer
+🔬 Analyzer: Research complete with 18 findings
+✍️ Writer: Composing response from 18 findings, 9 contents
+✍️ Writer: Generated 3003 chars
+
+┌════════════════════════════════════════════════════════════════
+│ Phase 0 Benchmark Result
+├────────────────────────────────────────────────────────────────
+│ Query: 2024년 발표된 LLM 기반 에이전트 시스템 관련 논문들을 분석하고 주요 트렌드를 설명해줘...
+│ Time: 34.43s
+│ LLM Calls: 2
+│ Search Calls: 3
+│ URLs Read: 9
+│ Iterations: 3
+│ Est. Tokens: 1197
+│ Response Length: 3003 chars
+│ Has Citations: ❌
+└────────────────────────────────────────────────────────────────
+
+
+📝 Response Preview (500 chars):
+--------------------------------------------------
+## 핵심 요약
+
+2024년에 발표된 LLM 기반 에이전트 시스템 관련 연구는 LLM을 활용한 다양한 분야에서의 자동화 및 협업 가능성을 탐구하고 있으며, 특히 평가 방법론과 다중 에이전트 시스템의 견고성(resilience)에 대한 관심이 높아지고 있다.
+
+## 주요 발견 사항
+
+*   **다양한 응용 분야**: 작업 자동화, 헬스케어, 소프트웨어 엔지니어링, 엔터프라이즈 워크플로우 등 다양한 분야에서 LLM 기반 에이전트의 활용 가능성이 탐색되고 있다.
+*   **평가 및 벤치마킹**: LLM 에이전트의 성능 평가를 위한 방법론, 지표, 벤치마크(TaskBench, DIBS, MAGIS 등) 개발이 활발하게 이루어지고 있으며, 작업 완료율, 출력 품질, 도구 사용, 추론 능력, 기억/맥락 유지, 다중 에이전트 협업 등이 주요 평가 요소로 고려되고 있다.
+*   **다중 에이전트 시스템**: 다중 에이전트 시스템의 설계 및 견고성, 특히 오류가 있는 에이전트가 존재하는 환경에서의 
+... (truncated)
+
+--------------------------------------------------
+
+
+📊 Running benchmark: RAG(Retrieval-Augmented Generation)와 Agent 기반 접근법의...
+📋 Planner: Creating research plan for: RAG(Retrieval-Augmented Generation)와 Agent 기반 접근법의...
+📋 Planner: Generated 5 queries
+🔍 Searcher [1]: Searching for: RAG vs Agent based approach
+🔍 Searcher: Found 5 results, 5 URLs
+📖 ContentReader: Reading 5 URLs...
+📖 Read URL: https://mitrix.io/blog/llm-fine%E2%80%91tuning-vs-... (8015 chars)
+  ✓ Read: https://mitrix.io/blog/llm-fine%E2%80%91tuning-vs-rag-vs-age...
+📖 Read URL: https://www.bitcot.com/rag-vs-agentic-rag-vs-mcp/... (8015 chars)
+  ✓ Read: https://www.bitcot.com/rag-vs-agentic-rag-vs-mcp/...
+📖 Read URL: https://www.linkedin.com/posts/alexxubyte_systemde... (8015 chars)
+  ✓ Read: https://www.linkedin.com/posts/alexxubyte_systemdesign-codin...
+🔬 Analyzer [1]: Analyzing 5 results, 3 contents
+🔬 Analyzer: Research complete with 7 findings
+✍️ Writer: Composing response from 7 findings, 3 contents
+✍️ Writer: Generated 3410 chars
+
+┌════════════════════════════════════════════════════════════════
+│ Phase 0 Benchmark Result
+├────────────────────────────────────────────────────────────────
+│ Query: RAG(Retrieval-Augmented Generation)와 Agent 기반 접근법의 차이점과 각각 언...
+│ Time: 22.97s
+│ LLM Calls: 2
+│ Search Calls: 1
+│ URLs Read: 3
+│ Iterations: 1
+│ Est. Tokens: 1331
+│ Response Length: 3410 chars
+│ Has Citations: ❌
+└────────────────────────────────────────────────────────────────
+
+
+📝 Response Preview (500 chars):
+--------------------------------------------------
+## 핵심 요약
+
+RAG (검색 증강 생성)는 LLM의 지식 부족을 보완하여 정보 검색을 통해 답변 품질을 높이는 기술이고, Agent 기반 접근법은 LLM에 의사 결정 및 작업 수행 능력을 부여하여 더 복잡한 문제를 해결하는 데 유용합니다. RAG는 빠르고 효율적인 정보 검색에, Agent는 다단계 추론 및 작업 오케스트레이션이 필요한 경우에 적합합니다.
+
+## 주요 발견 사항
+
+*   **RAG (Retrieval-Augmented Generation):** 정적 콘텐츠에서 빠른 답변을 얻는 데 효과적이며, LLM에 외부 지식을 제공하여 성능을 향상시킵니다. 단순한 쿼리 기반 작업에 적합합니다.
+*   **Agent 기반 접근법 (Agentic RAG 포함):** 목표 기반 추론 및 의사 결정이 필요한 복잡한 작업에 유용합니다. AI Agent는 프로젝트 관리자처럼 작업을 계획, 실행하고 도구를 선택할 수 있습니다.
+*   **RAG vs Agent:** RAG는 검색 기반 증강
+... (truncated)
+
+--------------------------------------------------
+
+
+╔═══════════════════════════════════════════
+║  Phase 0 Summary (3 tests)
+╠═══════════════════════════════════════════
+║  Average Time: 31.01s
+║  Average Tokens: 1366
+║  Citation Rate: 0%
+╚═══════════════════════════════════════════
+
+📁 Results saved to: benchmark_results/phase_0_20251220_004332.json
+═══════════════════════════════════════════════════════════════
+Benchmark completed at: Sat Dec 20 12:43:33 AM KST 2025
+═══════════════════════════════════════════════════════════════
