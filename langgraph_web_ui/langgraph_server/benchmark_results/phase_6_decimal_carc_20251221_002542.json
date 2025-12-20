@@ -1,0 +1,20 @@
+[
+  {
+    "phase": "Decimal CARC",
+    "query": "LangGraph와 CrewAI의 멀티 에이전트 아키텍처를 비교하고 장단점을 분석해줘",
+    "timestamp": "2025-12-21T00:25:42.159033",
+    "total_time_sec": 25.93,
+    "llm_calls": 2,
+    "search_calls": 2,
+    "urls_read": 6,
+    "research_iterations": 2,
+    "estimated_tokens": 1086,
+    "quality_completeness": 4.0,
+    "quality_accuracy": 4.0,
+    "quality_relevance": 4.5,
+    "quality_clarity": 4.0,
+    "quality_total": 16.5,
+    "has_citations": true,
+    "response_length": 2765
+  }
+]

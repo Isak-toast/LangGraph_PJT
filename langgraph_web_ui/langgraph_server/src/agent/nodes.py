@@ -718,7 +718,16 @@ IMPORTANT: Preserve and include the citations [1], [2], etc. from the research c
 # 7. Critique 노드 - CARC 다차원 품질 평가 (Phase 5 확장)
 # ================================================================
 
-CRITIQUE_PROMPT = """You are a RESPONSE QUALITY EVALUATOR using the CARC Framework.
+CRITIQUE_PROMPT = """You are a STRICT RESPONSE QUALITY EVALUATOR using the CARC Framework.
+
+<Critical_Instruction>
+BE A STRICT CRITIC. You MUST:
+1. Find at least 1-2 weaknesses for EACH dimension
+2. Score of 5 is RARE (only for exceptional, expert-level work)
+3. Score of 4 is "Good" (most well-written responses should get this)
+4. Score of 3 is "Acceptable" (basic quality, room for improvement)
+5. Default assumption: Response is "Good" (4) until proven "Excellent" (5)
+</Critical_Instruction>
 
 <Task>
 Evaluate the research response quality using 4 dimensions, each scored 1-5.
@@ -726,42 +735,61 @@ Evaluate the research response quality using 4 dimensions, each scored 1-5.
 
 <CARC_Framework>
 1. **Completeness** (1-5): Did the response answer ALL parts of the question?
-   - 5: Fully complete, addresses every aspect
-   - 3: Partially complete, some aspects missing
-   - 1: Incomplete, major parts unanswered
+   - 5: EXCEPTIONAL - Answers every aspect with depth, examples, AND edge cases
+   - 4: Good - Answers main aspects but misses some nuances
+   - 3: Acceptable - Covers basics but lacks depth in 1-2 areas
+   - 2: Poor - Missing important aspects
+   - 1: Incomplete - Major parts unanswered
 
 2. **Accuracy** (1-5): Are the cited facts and sources correct?
-   - 5: All citations accurate and verifiable
-   - 3: Some inaccuracies or questionable sources
-   - 1: Major factual errors or fabricated citations
+   - 5: EXCEPTIONAL - 5+ diverse, authoritative sources, all verifiable
+   - 4: Good - 3-4 sources, mostly reliable
+   - 3: Acceptable - 1-2 sources, or some questionable claims
+   - 2: Poor - Unverified claims or weak sources
+   - 1: Inaccurate - Major factual errors or fabricated citations
 
 3. **Relevance** (1-5): Is the response directly relevant to the question?
-   - 5: Highly relevant, stays on topic throughout
-   - 3: Somewhat relevant, includes tangential info
-   - 1: Off-topic or irrelevant content
+   - 5: EXCEPTIONAL - 100% on-topic, no tangents, perfectly focused
+   - 4: Good - Mostly relevant, minor tangential info
+   - 3: Acceptable - Some off-topic content (10-20%)
+   - 2: Poor - Significant irrelevant content
+   - 1: Off-topic - Fails to address the question
 
 4. **Clarity** (1-5): Is the response well-structured and easy to understand?
-   - 5: Excellent structure, clear language
-   - 3: Decent structure, some unclear parts
-   - 1: Disorganized, hard to follow
+   - 5: EXCEPTIONAL - Professional quality, publication-ready
+   - 4: Good - Clear structure (intro, body, conclusion)
+   - 3: Acceptable - Readable but could be better organized
+   - 2: Poor - Confusing structure or unclear language
+   - 1: Disorganized - Hard to follow
 </CARC_Framework>
 
+<Scoring_Checklist>
+Before giving 5 in ANY dimension, ask:
+- Is this truly EXCEPTIONAL, not just "good"?
+- Would a domain expert approve this without changes?
+- Are there NO weaknesses at all?
+
+If you answer "no" to any question, score 4 or below.
+</Scoring_Checklist>
+
 <Output_Format>
+IMPORTANT: Use decimal scores (e.g., 3.5, 4.2) for finer granularity.
 {
-    "completeness": 4,
-    "accuracy": 5,
-    "relevance": 4,
-    "clarity": 5,
-    "total": 18,
-    "feedback": "Brief overall assessment",
-    "improvement_suggestions": ["suggestion1", "suggestion2"]
+    "completeness": 4.0,
+    "accuracy": 3.5,
+    "relevance": 4.2,
+    "clarity": 4.0,
+    "total": 15.7,
+    "feedback": "Brief overall assessment with specific weaknesses found",
+    "improvement_suggestions": ["specific suggestion 1", "specific suggestion 2"]
 }
 </Output_Format>
 
 <Decision>
-- Total >= 16: Excellent quality ✅
-- Total 12-15: Good quality, minor improvements possible
-- Total < 12: Needs significant improvement ⚠️
+- Total >= 18: Excellent quality ✅ (rare)
+- Total 14-17: Good quality 👍
+- Total 10-13: Acceptable ⚡
+- Total < 10: Needs improvement ⚠️
 </Decision>
 """
 
@@ -813,11 +841,11 @@ Please evaluate this response using the CARC Framework.
         from typing import List
         
         class CARCResult(BaseModel):
-            completeness: int
-            accuracy: int
-            relevance: int
-            clarity: int
-            total: int
+            completeness: float
+            accuracy: float
+            relevance: float
+            clarity: float
+            total: float
             feedback: str
             improvement_suggestions: List[str]
         

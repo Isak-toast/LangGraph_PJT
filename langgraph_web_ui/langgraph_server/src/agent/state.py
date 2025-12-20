@@ -116,12 +116,12 @@ class DeepResearchState(TypedDict):
     # Self-Critique (Critique) - Phase 5 + CARC Framework
     # ========================================
     
-    # CARC 다차원 품질 평가 (각 1-5점)
-    quality_completeness: Optional[int]   # 완전성: 질문의 모든 부분에 답변했는가?
-    quality_accuracy: Optional[int]       # 정확성: 인용된 정보가 정확한가?
-    quality_relevance: Optional[int]      # 관련성: 응답이 질문과 직접 관련있는가?
-    quality_clarity: Optional[int]        # 명확성: 구조가 잘 정리되었는가?
-    quality_total: Optional[int]          # 총점 (4-20)
+    # CARC 다차원 품질 평가 (각 1.0-5.0점, 소수점 1자리)
+    quality_completeness: Optional[float]   # 완전성: 질문의 모든 부분에 답변했는가?
+    quality_accuracy: Optional[float]       # 정확성: 인용된 정보가 정확한가?
+    quality_relevance: Optional[float]      # 관련성: 응답이 질문과 직접 관련있는가?
+    quality_clarity: Optional[float]        # 명확성: 구조가 잘 정리되었는가?
+    quality_total: Optional[float]          # 총점 (4.0-20.0)
     
     # 비평 피드백
     critique_feedback: Optional[str]

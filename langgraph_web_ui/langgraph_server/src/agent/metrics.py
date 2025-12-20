@@ -34,12 +34,12 @@ class ResearchMetrics:
     # 토큰 지표
     estimated_tokens: int           # 추정 토큰 사용량
     
-    # CARC 품질 지표 (자동 평가)
-    quality_completeness: Optional[int] = None  # 완전성 1-5
-    quality_accuracy: Optional[int] = None      # 정확성 1-5
-    quality_relevance: Optional[int] = None     # 관련성 1-5
-    quality_clarity: Optional[int] = None       # 명확성 1-5
-    quality_total: Optional[int] = None         # 총점 4-20
+    # CARC 품질 지표 (자동 평가, 소수점 1자리)
+    quality_completeness: Optional[float] = None  # 완전성 1.0-5.0
+    quality_accuracy: Optional[float] = None      # 정확성 1.0-5.0
+    quality_relevance: Optional[float] = None     # 관련성 1.0-5.0
+    quality_clarity: Optional[float] = None       # 명확성 1.0-5.0
+    quality_total: Optional[float] = None         # 총점 4.0-20.0
     
     # 기타 지표
     has_citations: bool = False             # 인용 포함 여부
@@ -128,12 +128,14 @@ class ResearchBenchmark:
     def _print_metrics(self, m: ResearchMetrics, response: str = ""):
         """지표 출력"""
         
-        # CARC 품질 등급 결정
+        # CARC 품질 등급 결정 (엄격한 기준)
         if m.quality_total:
-            if m.quality_total >= 16:
-                quality_grade = "✅ Excellent"
-            elif m.quality_total >= 12:
+            if m.quality_total >= 18:
+                quality_grade = "✅ Excellent (rare)"
+            elif m.quality_total >= 14:
                 quality_grade = "👍 Good"
+            elif m.quality_total >= 10:
+                quality_grade = "⚡ Acceptable"
             else:
                 quality_grade = "⚠️ Needs work"
             carc_line = f"│ CARC Quality: C={m.quality_completeness} A={m.quality_accuracy} R={m.quality_relevance} C={m.quality_clarity} → {m.quality_total}/20 {quality_grade}"
