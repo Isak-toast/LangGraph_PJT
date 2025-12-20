@@ -104,11 +104,61 @@ def read_url_tool(url: str) -> str:
 
 
 # ================================================================
+# Think Tool - 전략적 사고 (Phase 2)
+# ================================================================
+# 
+# Analyzer가 검색 결과를 분석할 때 전략적으로 생각하도록 도와주는 도구.
+# ReAct 패턴에서 영감을 받아, 행동 전에 생각을 명시적으로 기록합니다.
+#
+# 사용 방법:
+#   result = think_tool.invoke("What did I find? What's missing? Should I continue?")
+#
+# 반환 형식:
+#   "Thought recorded: [thought content]"
+
+@tool
+def think_tool(thought: str) -> str:
+    """
+    Strategic thinking tool for reflection and planning.
+    Use this AFTER analyzing search results to decide next steps.
+    
+    This helps you:
+    - Reflect on what information was found
+    - Identify gaps in the research
+    - Plan the next search query strategically
+    - Decide whether to continue or stop searching
+    
+    Args:
+        thought: Your strategic thinking about the current research state.
+                 Should include:
+                 - Key findings so far
+                 - What's still missing
+                 - Whether more research is needed
+                 - Specific next query if needed
+    
+    Returns:
+        Acknowledgment of the recorded thought
+    
+    Example:
+        think_tool("Found comparison articles but missing performance benchmarks. Need to search for 'LangGraph vs CrewAI performance'")
+    """
+    # 환경변수로 verbose 체크
+    verbose = os.environ.get("VERBOSE_LOGGING", "false").lower() == "true"
+    if verbose:
+        print(f"💭 Think: {thought}")
+    else:
+        display = thought if len(thought) <= 100 else thought[:100] + "..."
+        print(f"💭 Think: {display}")
+    return f"Thought recorded: {thought}"
+
+
+# ================================================================
 # 사용 가능한 도구 목록
 # ================================================================
 # 
-# Researcher는 이 두 도구를 모두 사용할 수 있습니다:
+# Researcher는 이 세 도구를 모두 사용할 수 있습니다:
 # 1. tavily_tool: 먼저 웹 검색으로 관련 URL 찾기
 # 2. read_url_tool: 찾은 URL의 상세 내용 읽기
+# 3. think_tool: 전략적 사고 (Phase 2)
 
-tools = [tavily_tool, read_url_tool]
+tools = [tavily_tool, read_url_tool, think_tool]

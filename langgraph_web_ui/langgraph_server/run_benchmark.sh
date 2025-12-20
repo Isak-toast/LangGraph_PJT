@@ -35,6 +35,7 @@ while [[ $# -gt 0 ]]; do
     case $1 in
         --verbose|-v)
             VERBOSE="--verbose"
+            export VERBOSE_LOGGING="true"  # 노드 로깅에서 전체 출력
             shift
             ;;
         *)

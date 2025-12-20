@@ -19,7 +19,7 @@ nodes.py - Deep Research 노드 구현
 from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
 from langchain_google_genai import ChatGoogleGenerativeAI
 from src.agent.state import DeepResearchState
-from src.agent.tools import tavily_tool, read_url_tool
+from src.agent.tools import tavily_tool, read_url_tool, think_tool
 
 
 # ================================================================
@@ -27,9 +27,37 @@ from src.agent.tools import tavily_tool, read_url_tool
 # ================================================================
 
 llm = ChatGoogleGenerativeAI(
-    model="gemini-2.0-flash-exp",
+    model="gemini-2.0-flash",
     temperature=0.3
 )
+
+# ================================================================
+# 로깅 설정
+# ================================================================
+
+# 환경변수 또는 전역 설정으로 verbose 모드 제어
+import os
+VERBOSE_MODE = os.environ.get("VERBOSE_LOGGING", "false").lower() == "true"
+
+
+def truncate_text(text: str, max_len: int = 200, force_full: bool = False) -> str:
+    """텍스트 자르기 (verbose 모드면 전체 출력)
+    
+    Args:
+        text: 원본 텍스트
+        max_len: 최대 길이 (기본 200자)
+        force_full: True면 무조건 전체 출력
+    
+    Returns:
+        잘린 텍스트 (필요시에만 ... 추가)
+    """
+    if force_full or VERBOSE_MODE:
+        return text
+    
+    if len(text) <= max_len:
+        return text  # 짧으면 그대로 (... 없이)
+    
+    return text[:max_len] + "..."
 
 
 # ================================================================
@@ -69,7 +97,7 @@ def planner_node(state: DeepResearchState) -> dict:
             user_query = msg.content
             break
     
-    print(f"📋 Planner: Creating research plan for: {user_query[:50]}...")
+    print(f"📋 Planner: Creating research plan for: {user_query[:50]}")
     
     # LLM에게 계획 생성 요청
     structured_llm = llm.with_structured_output({
@@ -143,14 +171,22 @@ def searcher_node(state: DeepResearchState) -> dict:
             print(f"      [{i}] {url}")
         print("   └─ Snippets:")
         for r in results[:3]:
-            snippet = r.get('content', '')[:200].replace('\n', ' ')
-            print(f"      • {snippet}...")
+            snippet = truncate_text(r.get('content', '').replace('\n', ' '), 200)
+            print(f"      • {snippet}")
+        
+        # think_tool: 검색 후 전략적 분석
+        snippets_summary = " | ".join([r.get('content', '')[:100] for r in results[:3]])
+        think_result = think_tool.invoke(
+            f"Query: {query} | Found {len(results)} results, {len(urls)} URLs. "
+            f"Key snippets: {snippets_summary[:300]}. "
+            f"Assessment: Is this sufficient or need more specific search?"
+        )
         
         return {
             "search_results": results,
-            "urls_to_read": urls[:5],  # 상위 5개 URL
+            "urls_to_read": urls[:5],
             "current_query_index": current_idx + 1,
-            "next_search_query": None  # 사용 후 리셋
+            "next_search_query": None
         }
     except Exception as e:
         print(f"❌ Searcher error: {e}")
@@ -171,7 +207,7 @@ def content_reader_node(state: DeepResearchState) -> dict:
         print("📖 ContentReader: No URLs to read")
         return {"read_contents": existing_contents}
     
-    print(f"\n📖 ContentReader: Reading {len(urls[:3])} URLs...")
+    print(f"\n📖 ContentReader: Reading {len(urls[:3])} URLs")
     
     new_contents = []
     for url in urls[:3]:  # 상위 3개만 읽기 (토큰 절약)
@@ -182,11 +218,11 @@ def content_reader_node(state: DeepResearchState) -> dict:
                 "content": content[:4000],  # 각 URL 4000자 제한
                 "title": url.split("/")[-1]
             })
-            preview = content[:300].replace('\n', ' ')
-            print(f"   └─ [{url[:50]}...]")
-            print(f"      Preview: {preview}...")
+            preview = truncate_text(content.replace('\n', ' '), 300)
+            print(f"   └─ [{truncate_text(url, 60)}]")
+            print(f"      Preview: {preview}")
         except Exception as e:
-            print(f"   ✗ Failed: {url[:40]}... ({e})")
+            print(f"   ✗ Failed: {truncate_text(url, 40)} ({e})")
     
     # 기존 내용 + 새 내용
     all_contents = existing_contents + new_contents
@@ -200,23 +236,47 @@ def content_reader_node(state: DeepResearchState) -> dict:
 
 ANALYZER_PROMPT = """You are a RESEARCH ANALYZER. Analyze the collected information.
 
-YOUR TASKS:
+<Task>
 1. Extract key findings from the search results and read contents
 2. Determine if the information is sufficient to answer the user's question
 3. If more research is needed, suggest a specific search query
+</Task>
 
-CONSIDER:
-- Have we found specific papers/articles about the topic?
-- Is the information detailed enough?
-- Are there gaps in our knowledge?
+<Show_Your_Thinking>
+BEFORE making a decision, think strategically about:
+- What key information did I find?
+- What's still missing to fully answer the question?
+- Is additional research worth the time cost?
+- What specific query would fill the gaps?
+</Show_Your_Thinking>
 
-OUTPUT FORMAT (JSON):
+<Decision_Criteria>
+STOP researching (needs_more_research=false) when:
+- You have 3+ quality sources covering the main points
+- You found specific data, examples, or expert opinions
+- Additional searches would likely return duplicate information
+
+CONTINUE researching (needs_more_research=true) when:
+- Key aspects of the question are unanswered
+- You only have 1-2 low-quality sources
+- You're missing specific examples or data
+</Decision_Criteria>
+
+<Hard_Limits>
+- Maximum 3 research iterations (enforced by system)
+- Stop if you have enough information for a good answer
+- Prefer quality over quantity
+</Hard_Limits>
+
+<Output_Format>
 {
     "findings": ["finding1", "finding2", ...],
     "needs_more_research": true/false,
     "next_search_query": "specific query if more research needed"
 }
+</Output_Format>
 """
+
 
 def analyzer_node(state: DeepResearchState) -> dict:
     """수집된 정보를 분석하는 Analyzer 노드"""
@@ -280,8 +340,8 @@ Existing Findings: {existing_findings}
         if analysis.get("findings"):
             print("   └─ New findings:")
             for i, finding in enumerate(analysis.get("findings", [])[:5], 1):
-                preview = finding[:150].replace('\n', ' ')
-                print(f"      [{i}] {preview}...")
+                preview = truncate_text(finding.replace('\n', ' '), 150)
+                print(f"      [{i}] {preview}")
         
         if needs_more:
             print(f"   └─ Decision: More research needed")
@@ -394,8 +454,8 @@ Now compress and organize this information with proper citations:
         # 상세 로그 출력
         print(f"   └─ Compressed to {len(compressed)} chars (from ~{len(content_to_compress)} raw chars)")
         print(f"   └─ Sources cited: {len(source_urls)}")
-        preview = compressed[:400].replace('\n', '\n      ')
-        print(f"   └─ Preview:\n      {preview}...")
+        preview = truncate_text(compressed, 400).replace('\n', '\n      ')
+        print(f"   └─ Preview:\n      {preview}")
         
         return {"compressed_notes": compressed}
         
@@ -508,12 +568,10 @@ IMPORTANT: Preserve and include the citations [1], [2], etc. from the research c
         print(f"\n✍️ Writer: Generated response ({len(content)} chars)")
         print("   └─ Sources used:")
         for i, url in enumerate(source_urls[:3], 1):
-            print(f"      [{i}] {url[:60]}...")
-        print(f"   └─ Response preview (500 chars):")
-        preview = content[:500].replace('\n', '\n      ')
+            print(f"      [{i}] {truncate_text(url, 60)}")
+        print(f"   └─ Response preview:")
+        preview = truncate_text(content, 500).replace('\n', '\n      ')
         print(f"      {preview}")
-        if len(content) > 500:
-            print("      ...")
         
     except Exception as e:
         print(f"❌ Writer error: {e}")

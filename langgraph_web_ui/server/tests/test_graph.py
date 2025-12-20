@@ -14,7 +14,7 @@ from langchain_core.messages import HumanMessage
 
 
 def test_graph_execution():
-    print("Running Graph Test...")
+    print("Running Graph Test")
     inputs = {"messages": [HumanMessage(content="Research about LangGraph and write a short summary.")]}
     
     # We use invoke to run full execution
