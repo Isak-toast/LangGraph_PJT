@@ -34,8 +34,14 @@ class ResearchMetrics:
     # 토큰 지표
     estimated_tokens: int           # 추정 토큰 사용량
     
-    # 품질 지표 (수동 평가)
-    response_quality: Optional[int] = None  # 1-5점
+    # CARC 품질 지표 (자동 평가)
+    quality_completeness: Optional[int] = None  # 완전성 1-5
+    quality_accuracy: Optional[int] = None      # 정확성 1-5
+    quality_relevance: Optional[int] = None     # 관련성 1-5
+    quality_clarity: Optional[int] = None       # 명확성 1-5
+    quality_total: Optional[int] = None         # 총점 4-20
+    
+    # 기타 지표
     has_citations: bool = False             # 인용 포함 여부
     response_length: int = 0                # 응답 길이 (문자)
 
@@ -96,7 +102,12 @@ class ResearchBenchmark:
             urls_read=len(result.get("read_contents", [])),
             research_iterations=result.get("research_iteration", 0),
             estimated_tokens=estimate_tokens(str(messages)),
-            response_quality=None,  # 수동 평가 필요
+            # CARC 품질 점수 (자동 평가)
+            quality_completeness=result.get("quality_completeness"),
+            quality_accuracy=result.get("quality_accuracy"),
+            quality_relevance=result.get("quality_relevance"),
+            quality_clarity=result.get("quality_clarity"),
+            quality_total=result.get("quality_total"),
             has_citations=has_citations(final_response),
             response_length=len(final_response)
         )
@@ -117,6 +128,18 @@ class ResearchBenchmark:
     def _print_metrics(self, m: ResearchMetrics, response: str = ""):
         """지표 출력"""
         
+        # CARC 품질 등급 결정
+        if m.quality_total:
+            if m.quality_total >= 16:
+                quality_grade = "✅ Excellent"
+            elif m.quality_total >= 12:
+                quality_grade = "👍 Good"
+            else:
+                quality_grade = "⚠️ Needs work"
+            carc_line = f"│ CARC Quality: C={m.quality_completeness} A={m.quality_accuracy} R={m.quality_relevance} C={m.quality_clarity} → {m.quality_total}/20 {quality_grade}"
+        else:
+            carc_line = "│ CARC Quality: N/A"
+        
         print(f"""
 ┌════════════════════════════════════════════════════════════════
 │ {m.phase} Benchmark Result
@@ -130,6 +153,7 @@ class ResearchBenchmark:
 │ Est. Tokens: {m.estimated_tokens}
 │ Response Length: {m.response_length} chars
 │ Has Citations: {'✅' if m.has_citations else '❌'}
+{carc_line}
 └────────────────────────────────────────────────────────────────
 """)
         
@@ -180,6 +204,18 @@ class ResearchBenchmark:
         avg_tokens = sum(r.estimated_tokens for r in self.results) / len(self.results)
         citations_rate = sum(1 for r in self.results if r.has_citations) / len(self.results) * 100
         
+        # CARC 평균 계산
+        carc_results = [r for r in self.results if r.quality_total is not None]
+        if carc_results:
+            avg_carc = sum(r.quality_total for r in carc_results) / len(carc_results)
+            avg_c = sum(r.quality_completeness for r in carc_results) / len(carc_results)
+            avg_a = sum(r.quality_accuracy for r in carc_results) / len(carc_results)
+            avg_r = sum(r.quality_relevance for r in carc_results) / len(carc_results)
+            avg_cl = sum(r.quality_clarity for r in carc_results) / len(carc_results)
+            carc_line = f"║  CARC Quality: C={avg_c:.1f} A={avg_a:.1f} R={avg_r:.1f} C={avg_cl:.1f} → {avg_carc:.1f}/20"
+        else:
+            carc_line = "║  CARC Quality: N/A"
+        
         print(f"""
 ╔═══════════════════════════════════════════
 ║  {self.phase} Summary ({len(self.results)} tests)
@@ -187,6 +223,7 @@ class ResearchBenchmark:
 ║  Average Time: {avg_time:.2f}s
 ║  Average Tokens: {avg_tokens:.0f}
 ║  Citation Rate: {citations_rate:.0f}%
+{carc_line}
 ╚═══════════════════════════════════════════
 """)
 

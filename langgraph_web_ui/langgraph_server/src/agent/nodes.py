@@ -23,13 +23,16 @@ from src.agent.tools import tavily_tool, read_url_tool, think_tool
 
 
 # ================================================================
-# LLM 초기화
+# LLM 및 설정 초기화 (Phase 6: Multi-LLM)
 # ================================================================
 
-llm = ChatGoogleGenerativeAI(
-    model="gemini-2.0-flash",
-    temperature=0.3
-)
+from src.agent.config import research_config
+
+# 역할별 LLM 인스턴스 생성
+llm = research_config.get_llm("analyzer")  # 기본 LLM (분석용)
+planner_llm = research_config.get_llm("planner")
+writer_llm = research_config.get_llm("writer")
+critic_llm = research_config.get_llm("critic")
 
 # ================================================================
 # 로깅 설정
@@ -37,7 +40,7 @@ llm = ChatGoogleGenerativeAI(
 
 # 환경변수 또는 전역 설정으로 verbose 모드 제어
 import os
-VERBOSE_MODE = os.environ.get("VERBOSE_LOGGING", "false").lower() == "true"
+VERBOSE_MODE = research_config.verbose_mode
 
 
 def truncate_text(text: str, max_len: int = 200, force_full: bool = False) -> str:
@@ -211,8 +214,8 @@ def planner_node(state: DeepResearchState) -> dict:
     
     print(f"📋 Planner: Creating research plan for: {user_query[:50]}")
     
-    # LLM에게 계획 생성 요청
-    structured_llm = llm.with_structured_output({
+    # LLM에게 계획 생성 요청 (Phase 6: planner_llm 사용)
+    structured_llm = planner_llm.with_structured_output({
         "type": "object",
         "properties": {
             "search_queries": {"type": "array", "items": {"type": "string"}},
@@ -670,8 +673,8 @@ IMPORTANT: Preserve and include the citations [1], [2], etc. from the research c
 """
     
     try:
-        # HumanMessage로 호출해야 Gemini가 제대로 응답함
-        response = llm.invoke([HumanMessage(content=full_prompt)])
+        # HumanMessage로 호출해야 Gemini가 제대로 응답함 (Phase 6: writer_llm 사용)
+        response = writer_llm.invoke([HumanMessage(content=full_prompt)])
         content = response.content
         
         if not content or len(content.strip()) < 50:
@@ -712,40 +715,58 @@ IMPORTANT: Preserve and include the citations [1], [2], etc. from the research c
 
 
 # ================================================================
-# 7. Critique 노드 - 응답 자체 평가 (Phase 5)
+# 7. Critique 노드 - CARC 다차원 품질 평가 (Phase 5 확장)
 # ================================================================
 
-CRITIQUE_PROMPT = """You are a RESPONSE CRITIC. Evaluate the research response quality.
+CRITIQUE_PROMPT = """You are a RESPONSE QUALITY EVALUATOR using the CARC Framework.
 
 <Task>
-Analyze the response and provide a quality assessment on a scale of 1-10.
+Evaluate the research response quality using 4 dimensions, each scored 1-5.
 </Task>
 
-<Evaluation_Criteria>
-1. **Completeness** (1-3 points): Does the response fully answer the question?
-2. **Accuracy** (1-3 points): Are the facts and citations correct?
-3. **Structure** (1-2 points): Is the response well-organized?
-4. **Clarity** (1-2 points): Is the language clear and professional?
-</Evaluation_Criteria>
+<CARC_Framework>
+1. **Completeness** (1-5): Did the response answer ALL parts of the question?
+   - 5: Fully complete, addresses every aspect
+   - 3: Partially complete, some aspects missing
+   - 1: Incomplete, major parts unanswered
+
+2. **Accuracy** (1-5): Are the cited facts and sources correct?
+   - 5: All citations accurate and verifiable
+   - 3: Some inaccuracies or questionable sources
+   - 1: Major factual errors or fabricated citations
+
+3. **Relevance** (1-5): Is the response directly relevant to the question?
+   - 5: Highly relevant, stays on topic throughout
+   - 3: Somewhat relevant, includes tangential info
+   - 1: Off-topic or irrelevant content
+
+4. **Clarity** (1-5): Is the response well-structured and easy to understand?
+   - 5: Excellent structure, clear language
+   - 3: Decent structure, some unclear parts
+   - 1: Disorganized, hard to follow
+</CARC_Framework>
 
 <Output_Format>
 {
-    "score": 8,
-    "feedback": "The response is comprehensive but lacks depth in X area.",
-    "needs_improvement": false,
-    "improvement_suggestions": ["Add more examples", "Clarify section Y"]
+    "completeness": 4,
+    "accuracy": 5,
+    "relevance": 4,
+    "clarity": 5,
+    "total": 18,
+    "feedback": "Brief overall assessment",
+    "improvement_suggestions": ["suggestion1", "suggestion2"]
 }
 </Output_Format>
 
 <Decision>
-- Score >= 7: Good quality, no improvement needed
-- Score 5-6: Acceptable but could be better
-- Score < 5: Needs significant improvement
+- Total >= 16: Excellent quality ✅
+- Total 12-15: Good quality, minor improvements possible
+- Total < 12: Needs significant improvement ⚠️
 </Decision>
 """
 
 def critique_node(state: DeepResearchState) -> dict:
-    """응답 품질을 자체 평가하는 Critique 노드 (Phase 5)"""
+    """CARC 프레임워크로 응답 품질을 다차원 평가하는 Critique 노드"""
     
     # 마지막 Writer 응답 찾기
     messages = state.get("messages", [])
@@ -758,7 +779,11 @@ def critique_node(state: DeepResearchState) -> dict:
     if not writer_response:
         print("🔍 Critique: No Writer response found, skipping...")
         return {
-            "critique_score": None,
+            "quality_completeness": None,
+            "quality_accuracy": None,
+            "quality_relevance": None,
+            "quality_clarity": None,
+            "quality_total": None,
             "critique_feedback": None,
             "needs_improvement": False
         }
@@ -770,7 +795,7 @@ def critique_node(state: DeepResearchState) -> dict:
             user_query = msg.content
             break
     
-    print(f"\n🔍 Critique: Evaluating response quality...")
+    print(f"\n🔍 Critique: CARC Quality Evaluation...")
     
     try:
         # 평가 요청
@@ -780,48 +805,66 @@ Original Question: {user_query}
 Response to Evaluate:
 {writer_response[:3000]}...
 
-Please evaluate this response according to the criteria.
+Please evaluate this response using the CARC Framework.
 """
         
         # JSON 출력을 위한 구조화된 응답 요청
         from pydantic import BaseModel
         from typing import List
         
-        class CritiqueResult(BaseModel):
-            score: int
+        class CARCResult(BaseModel):
+            completeness: int
+            accuracy: int
+            relevance: int
+            clarity: int
+            total: int
             feedback: str
-            needs_improvement: bool
             improvement_suggestions: List[str]
         
-        critique_llm = llm.with_structured_output(CritiqueResult)
+        # Phase 6: critic_llm 사용
+        structured_critic = critic_llm.with_structured_output(CARCResult)
         
-        result = critique_llm.invoke([
+        result = structured_critic.invoke([
             SystemMessage(content=CRITIQUE_PROMPT),
             HumanMessage(content=evaluation_request)
         ])
         
-        # 결과 로깅
-        score = result.score
-        feedback = result.feedback
-        needs_improvement = result.needs_improvement
+        # 결과 계산 및 로깅
+        c, a, r, cl = result.completeness, result.accuracy, result.relevance, result.clarity
+        total = c + a + r + cl
         
-        status = "✅ Good" if score >= 7 else "⚠️ Acceptable" if score >= 5 else "❌ Needs work"
+        # 품질 등급 결정
+        if total >= 16:
+            grade = "✅ Excellent"
+        elif total >= 12:
+            grade = "👍 Good"
+        else:
+            grade = "⚠️ Needs work"
         
-        print(f"   └─ Score: {score}/10 {status}")
-        print(f"   └─ Feedback: {truncate_text(feedback, 200)}")
-        if result.improvement_suggestions:
-            print(f"   └─ Suggestions: {', '.join(result.improvement_suggestions[:2])}")
+        needs_improvement = total < 14
+        
+        print(f"   └─ CARC Scores: C={c} A={a} R={r} C={cl}")
+        print(f"   └─ Total: {total}/20 {grade}")
+        print(f"   └─ Feedback: {truncate_text(result.feedback, 150)}")
         
         return {
-            "critique_score": score,
-            "critique_feedback": feedback,
+            "quality_completeness": c,
+            "quality_accuracy": a,
+            "quality_relevance": r,
+            "quality_clarity": cl,
+            "quality_total": total,
+            "critique_feedback": result.feedback,
             "needs_improvement": needs_improvement
         }
         
     except Exception as e:
         print(f"❌ Critique error: {e}")
         return {
-            "critique_score": None,
+            "quality_completeness": None,
+            "quality_accuracy": None,
+            "quality_relevance": None,
+            "quality_clarity": None,
+            "quality_total": None,
             "critique_feedback": str(e),
             "needs_improvement": False
         }

@@ -113,16 +113,20 @@ class DeepResearchState(TypedDict):
     query_analysis: Optional[str]
 
     # ========================================
-    # Self-Critique (Critique) - Phase 5
+    # Self-Critique (Critique) - Phase 5 + CARC Framework
     # ========================================
     
-    # 응답 품질 점수 (1-10)
-    critique_score: Optional[int]
+    # CARC 다차원 품질 평가 (각 1-5점)
+    quality_completeness: Optional[int]   # 완전성: 질문의 모든 부분에 답변했는가?
+    quality_accuracy: Optional[int]       # 정확성: 인용된 정보가 정확한가?
+    quality_relevance: Optional[int]      # 관련성: 응답이 질문과 직접 관련있는가?
+    quality_clarity: Optional[int]        # 명확성: 구조가 잘 정리되었는가?
+    quality_total: Optional[int]          # 총점 (4-20)
     
     # 비평 피드백
     critique_feedback: Optional[str]
     
-    # 개선 필요 여부
+    # 개선 필요 여부 (총점 < 14일 때)
     needs_improvement: bool
     
     # 개선된 응답 (필요시)
