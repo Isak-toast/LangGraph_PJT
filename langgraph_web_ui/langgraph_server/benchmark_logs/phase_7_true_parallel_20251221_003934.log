@@ -1,0 +1,780 @@
+/home/isak/LangGraph_PJT/langgraph_web_ui/langgraph_server/src/agent/tools.py:36: LangChainDeprecationWarning: The class `TavilySearchResults` was deprecated in LangChain 0.3.25 and will be removed in 1.0. An updated version of the class exists in the `langchain-tavily package and should be used instead. To use it run `pip install -U `langchain-tavily` and import as `from `langchain_tavily import TavilySearch``.
+  tavily_tool = TavilySearchResults(
+
+╔═══════════════════════════════════════════════════════════════
+║  Deep Research Benchmark - Phase 7 Parallel
+╠═══════════════════════════════════════════════════════════════
+║  Test Queries: 3
+║  Verbose: ON (full response)
+╚═══════════════════════════════════════════════════════════════
+
+
+📊 Running benchmark: LangGraph와 CrewAI의 멀티 에이전트 아키텍처를 비교하고 장단점을 분석해줘...
+
+🔎 Clarify: Analyzing query...
+   └─ Query: LangGraph와 CrewAI의 멀티 에이전트 아키텍처를 비교하고 장단점을 분석해줘
+   └─ Status: 🟢 Clear
+   └─ Analysis: The query asks for a comparison of multi-agent architectures in LangGraph and CrewAI, including the advantages and disadvantages of each. The query is sufficiently specific and does not require further clarification.
+   └─ Topics: LangGraph, CrewAI, Multi-Agent Architecture
+📋 Planner: Creating research plan for: LangGraph와 CrewAI의 멀티 에이전트 아키텍처를 비교하고 장단점을 분석해줘
+
+📋 Planner: Generated 4 queries
+   └─ Queries:
+      [1] LangGraph vs CrewAI multi-agent architecture
+      [2] LangGraph multi-agent benefits and limitations
+      [3] CrewAI multi-agent benefits and limitations
+      [4] Comparison of LangGraph and CrewAI architectures
+   └─ Focus: Architectural differences, Performance benchmarks, Scalability, Ease of use and implementation, Community support and documentation
+
+🚀 ParallelResearcher [Phase 7]: Executing 3 queries in parallel
+   └─ Max workers: 3
+   └─ [1] LangGraph vs CrewAI multi-agent architecture
+   └─ [2] LangGraph multi-agent benefits and limitations
+   └─ [3] CrewAI multi-agent benefits and limitations
+📖 Read URL: https://www.leanware.co/insights/langgraph-vs-crew... (8015 chars)
+📖 Read URL: https://www.zenml.io/blog/langgraph-vs-crewai... (8015 chars)
+   ✓ Query 1 completed in 1.34s
+📖 Read URL: https://aws.amazon.com/blogs/machine-learning/buil... (8015 chars)
+   ✓ Query 2 completed in 2.36s
+📖 Read URL: https://www.emergentmind.com/topics/crewai... (8015 chars)
+   ✓ Query 3 completed in 2.61s
+
+   ⏱️ Parallel research completed: 3/3 queries in 2.61s
+   └─ Total results: 15
+   └─ Total contents: 6
+   └─ Total findings: 9
+   └─ Speedup: 2.4x (sequential would take 6.3s)
+🔬 Analyzer [1]: Analyzing 15 results, 6 contents
+
+🔬 Analyzer [1]: Analyzed 15 results, 6 contents
+   └─ New findings:
+      [1] CrewAI is specifically designed for multi-agent systems, offering better abstractions for agent collaboration and natural communication, delegation, and parallel operation.
+      [2] LangGraph can implement multi-agent patterns but requires explicit graph design for coordination, offering more determinism and control over agent interactions.
+      [3] CrewAI offers faster initial setup with its role-based, YAML-configurable approach, allowing teams to build working multi-agent systems quickly.
+      [4] LangGraph requires a deeper understanding of graph structures, state management, and functional composition, taking longer to master but providing more flexibility for complex workflows.
+      [5] LangGraph is well-suited for tasks involving code generation and complex multi-agent coding workflows, while CrewAI is user-friendly and ideal for those new to multi-agent AI.
+   └─ Decision: Research complete (17 total findings)
+
+📦 Compress: Compressing 17 findings, 6 contents
+   └─ Compressed to 3456 chars (from ~7447 raw chars)
+   └─ Sources cited: 6
+   └─ Preview:
+      ## Key Findings
+      - CrewAI is designed for multi-agent systems with abstractions that facilitate agent collaboration, natural communication, task delegation, and parallel operation [10].
+      - CrewAI offers a faster initial setup due to its role-based, YAML-configurable approach, enabling teams to build working multi-agent systems in hours [2, 12].
+      - LangGraph excels in software development tasks, particularly those involving code generation and complex multi-agent coding workflows [3, 14].
+      - LangGraph allows implementation of loops and conditional logic, enabling agents to handle more dynamic and complex tasks [1].
+      - CrewAI is designed to scale effortlessly, ensuring responsiveness and efficiency as the multi-agent system grows [8].
+      
+      ## Detailed Information
+      
+      **CrewAI**
+      - CrewAI is specifically designed for multi-agent systems, providing better abstractions for agent collaboration, including natural communication, delegation, and parallel operation [10].
+      - It offers faster initial setup using a role-based, YAML-configurable approach, allowing teams to quickly build working multi-agent systems [2, 12].
+      - CrewAI is built with production in mind, offering flexibility similar to Autogen's conversational agents and the structured process approach of ChatDev, but without the rigidity [9].
+      - CrewAI is designed for robust orchestration of multi-agent systems, geared towards longer-running operations and demonstrating scalability in production environments [16].
+      - It incorporates robust Human-in-the-Loop (HitL) capabilities, allowing for configurable breakpoints where human input can be requested [17].
+      - CrewAI enables autonomous task delegation and collaboration through specialized agents, integrating deterministic tools with language-model-based reasoning [7].
+      - CrewAI is designed to scale effortlessly, ensuring your multi-agent system remains responsive and efficient as it grows [8].
+      
+      **LangGraph**
+      - LangGraph can implement multi-agent patterns but requires explicit graph design for coordination, offering more determinism and control over agent interactions [11].
+      - It necessitates a deeper understanding of graph structures, state management, and functional composition, which takes longer to master but provides more flexibility for complex workflows [13].
+      - LangGraph is well-suited for tasks involving code generation and complex multi-agent coding workflows [3, 14].
+      - LangGraph's approach is robust for tasks requiring stable, trackable flows, especially in enterprise settings, focusing on orchestration rather than dynamic planning and execution [15].
+      - LangGraph allows the implementation of loops and conditional logic within workflows, enabling agents to handle more dynamic and complex tasks [1].
+      
+      **Comparison**
+      - LangGraph is best suited for tasks involving code generation and complex multi-agent coding [3, 14], while CrewAI is more user-friendly and ideal for those new to multi-agent AI [14].
+      
+      ## Sources
+      [1] https://aws.amazon.com/blogs/machine-learning/build-multi-agent-systems-with-langgraph-and-amazon-bedrock/
+      [2] https://www.zenml.io/blog/langgraph-vs-crewai
+      [3] https://cwan.com/resources/blog/building-multi-agent-systems-with-langgraph/
+      [4] https://www.emergentmind.com/topics/crewai
+      [5] https://www.datacamp.com/tutorial/crew-ai
+      [6] https://www.leanware.co/insights/langgraph-vs-crewai-comparison
+      [7] [Q3]
+      [8] [Q3]
+      [9] [Q3]
+      [10] [Q1]
+      [11] [Q1]
+      [12] [Q1]
+      [13] [Q1]
+      [14] [Q1]
+      [15] [Q2]
+      [16] [Q3]
+      [17] [Q3]
+
+✍️ Writer: Composing response from 17 findings
+   └─ Using compressed notes (3456 chars)
+
+✍️ Writer: Generated response (2819 chars)
+   └─ Sources used:
+      [1] https://aws.amazon.com/blogs/machine-learning/build-multi-agent-systems-with-langgraph-and-amazon-bedrock/
+      [2] https://www.zenml.io/blog/langgraph-vs-crewai
+      [3] https://cwan.com/resources/blog/building-multi-agent-systems-with-langgraph/
+   └─ Response preview:
+      ## 핵심 요약
+      
+      LangGraph와 CrewAI는 모두 멀티 에이전트 시스템 구축을 위한 프레임워크이지만, 접근 방식과 장단점이 뚜렷하다. CrewAI는 간편한 설정과 협업에 최적화된 추상화를 제공하는 반면, LangGraph는 더 세밀한 제어와 복잡한 워크플로우 구현에 강점을 보인다.
+      
+      ## 주요 발견 사항
+      
+      *   CrewAI는 에이전트 협업, 자연스러운 커뮤니케이션, 작업 위임 및 병렬 처리를 용이하게 하는 추상화를 통해 멀티 에이전트 시스템에 특화되어 있다 [10].
+      *   CrewAI는 역할 기반 YAML 구성 방식을 사용하여 초기 설정이 빠르므로 팀이 몇 시간 만에 작동하는 멀티 에이전트 시스템을 구축할 수 있다 [2, 12].
+      *   LangGraph는 특히 코드 생성 및 복잡한 멀티 에이전트 코딩 워크플로우와 관련된 소프트웨어 개발 작업에 탁월하다 [3, 14].
+      *   LangGraph는 루프 및 조건부 로직 구현을 통해 에이전트가 보다 동적이고 복잡한 작업을 처리할 수 있도록 한다 [1].
+      *   CrewAI는 손쉽게 확장되도록 설계되어 멀티 에이전트 시스템이 성장함에 따라 응답성과 효율성을 보장한다 [8].
+      
+      ## 상세 분석
+      
+      ### CrewAI
+      
+      CrewAI는 멀티 에이전트 시스템 구축을 위해 설계된 프레임워크로서, 에이전트 간의 협업을 위한 다양한 추상화를 제공한다. 특히 자연스러운 의사소통, 작업 위임, 병렬 처리 등을 쉽게 구현할 수 있도록 지원한다 [10].  CrewAI의 가장 큰 장점 중 하나는 빠른 초기 설정이다. 역할 기반의 YAML 구성 방식을 채택하여 몇 시간 안에 멀티 에이전트 시스템을 구축하고 실행할 수 있다 [2, 12].  이는 프로토타입을 빠르게 제작하고 테스트해야 하는 상황에서 매우 유용하다. 또한, CrewAI는 Autogen의 대화형 에이전트와 ChatDev의 구조화된 프로세스 접근 방식의 유연성을 결합하면서도 경직성을 줄여 프로덕션 환경에 적합하도록 설계되었다 [9].  더 나아가, CrewAI는 대규모 멀티 에이전트 시스템의 확장성을 고려하여 설계되었으며, 시스템이 성장함에 따라 응답성과 효율성을 유지하도록 보장한다 [8].  Human-in-the-Loop (HitL) 기능도 강력하게 지원하여, 필요한 시점에 인간의 개입을 요청할 수 있도록 구성 가능한 중단점(breakpoints)을 제공한다 [17].  CrewAI는 언어 모델 기반 추론과 결정론적 도구를 통합하여 자율적인 작업 위임 및 협업을 가능하게 한다 [7].
+      
+      ### LangGraph
+      
+      LangGraph는 멀티 에이전트 패턴을 구현할 수 있지만, 에이전트 간의 상호 작용을 위한 명시적인 그래프 설계를 필요로 한다 [11].  따라서 CrewAI보다 더 많은 제어력과 결정성을 제공한다. 하지만 그래프 구조, 상태 관리, 함수적 구성에 대한 깊은 이해가 필요하며, 이는 숙달하는 데 더 많은 시간이 소요될 수 있다 [13].  LangGraph는 특히 코드 생성 및 복잡한 멀티 에이전트 코딩 워크플로우와 관련된 작업에 적합하다 [3, 14]. LangGraph의 접근 방식은 안정적이고 추적 가능한 흐름이 필요한 작업, 특히 엔터프라이즈 환경에서 강력하며, 동적 계획 및 실행보다는 오케스트레이션에 중점을 둔다 [15]. 또한, 워크플로우 내에서 루프 및 조건부 로직을 구현할 수 있어 에이전트가 보다 동적이고 복잡한 작업을 처리할 수 있도록 한다 [1]. AWS의 문서에서도 LangGraph를 활용한 멀티 에이전트 시스템 구축 사례를 소개하고 있다 [1].
+      
+      ### 비교 분석
+      
+      CrewAI는 멀티 에이전트 AI를 처음 접하는 사용자에게 더 사용자 친화적이고 이상적인 반면 [14], LangGraph는 코드 생성 및 복잡한 멀티 에이전트 코딩과 관련된 작업에 가장 적합하다 [3, 14]. ZenML의 블로그에서는 LangGraph와 CrewAI를 비교하면서, CrewAI가 더 빠른 초기 설정을 제공한다고 언급한다 [2]. Leanware의 분석에서는 LangGraph와 CrewAI의 장단점을 비교하면서, 프로젝트의 요구 사항에 따라 적합한 프레임워크를 선택해야 한다고 강조한다 [6].
+      
+      ## 관련 자료 및 출처
+      
+      *   [1] https://aws.amazon.com/blogs/machine-learning/build-multi-agent-systems-with-langgraph-and-amazon-bedrock/
+      *   [2] https://www.zenml.io/blog/langgraph-vs-crewai
+      *   [3] https://cwan.com/resources/blog/building-multi-agent-systems-with-langgraph/
+      *   [4] https://www.emergentmind.com/topics/crewai
+      *   [5] https://www.datacamp.com/tutorial/crew-ai
+      *   [6] https://www.leanware.co/insights/langgraph-vs-crewai-comparison
+      
+      ## 결론 및 평가
+      
+      LangGraph와 CrewAI는 각각의 장단점을 가지고 있으며, 프로젝트의 요구 사항과 개발자의 숙련도에 따라 선택이 달라질 수 있다.  빠른 프로토타입 제작과 간편한 설정을 중요시한다면 CrewAI가 적합하며, 복잡한 워크플로우 제어와 코드 생성 작업에 집중한다면 LangGraph가 더 나은 선택일 수 있다.  두 프레임워크 모두 활발하게 개발되고 있으며, 멀티 에이전트 시스템 개발의 미래를 엿볼 수 있는 중요한 도구이다.  궁극적으로, 프로젝트의 구체적인 요구 사항을 신중하게 평가하고, 각 프레임워크의 장단점을 고려하여 최적의 선택을 하는 것이 중요하다.
+
+🔍 Critique: CARC Quality Evaluation...
+   └─ CARC Scores: C=4.0 A=3.5 R=4.5 C=4.0
+   └─ Total: 16.0/20 ✅ Excellent
+   └─ Feedback: The response provides a good overview and comparison of LangGraph and CrewAI, addressing their strengths and weaknesses. However, it could benefit from more in-depth analysis and specific examples to illustrate the differences. While the sources are listed, some of them (e.g., emergentmind.com, datacamp.com) might not be considered highly authoritative, and more direct links to documentation or specific use cases would improve accuracy. The response is highly relevant and generally clear, though a more structured comparison table could enhance clarity further.
+
+┌════════════════════════════════════════════════════════════════
+│ Phase 7 Parallel Benchmark Result
+├────────────────────────────────────────────────────────────────
+│ Query: LangGraph와 CrewAI의 멀티 에이전트 아키텍처를 비교하고 장단점을 분석해줘...
+│ Time: 24.96s
+│ LLM Calls: 2
+│ Search Calls: 3
+│ URLs Read: 6
+│ Iterations: 1
+│ Est. Tokens: 1131
+│ Response Length: 2819 chars
+│ Has Citations: ✅
+│ CARC Quality: C=4.0 A=3.5 R=4.5 C=4.0 → 16.0/20 👍 Good
+└────────────────────────────────────────────────────────────────
+
+
+======================================================================
+📄 FULL RESPONSE:
+======================================================================
+## 핵심 요약
+
+LangGraph와 CrewAI는 모두 멀티 에이전트 시스템 구축을 위한 프레임워크이지만, 접근 방식과 장단점이 뚜렷하다. CrewAI는 간편한 설정과 협업에 최적화된 추상화를 제공하는 반면, LangGraph는 더 세밀한 제어와 복잡한 워크플로우 구현에 강점을 보인다.
+
+## 주요 발견 사항
+
+*   CrewAI는 에이전트 협업, 자연스러운 커뮤니케이션, 작업 위임 및 병렬 처리를 용이하게 하는 추상화를 통해 멀티 에이전트 시스템에 특화되어 있다 [10].
+*   CrewAI는 역할 기반 YAML 구성 방식을 사용하여 초기 설정이 빠르므로 팀이 몇 시간 만에 작동하는 멀티 에이전트 시스템을 구축할 수 있다 [2, 12].
+*   LangGraph는 특히 코드 생성 및 복잡한 멀티 에이전트 코딩 워크플로우와 관련된 소프트웨어 개발 작업에 탁월하다 [3, 14].
+*   LangGraph는 루프 및 조건부 로직 구현을 통해 에이전트가 보다 동적이고 복잡한 작업을 처리할 수 있도록 한다 [1].
+*   CrewAI는 손쉽게 확장되도록 설계되어 멀티 에이전트 시스템이 성장함에 따라 응답성과 효율성을 보장한다 [8].
+
+## 상세 분석
+
+### CrewAI
+
+CrewAI는 멀티 에이전트 시스템 구축을 위해 설계된 프레임워크로서, 에이전트 간의 협업을 위한 다양한 추상화를 제공한다. 특히 자연스러운 의사소통, 작업 위임, 병렬 처리 등을 쉽게 구현할 수 있도록 지원한다 [10].  CrewAI의 가장 큰 장점 중 하나는 빠른 초기 설정이다. 역할 기반의 YAML 구성 방식을 채택하여 몇 시간 안에 멀티 에이전트 시스템을 구축하고 실행할 수 있다 [2, 12].  이는 프로토타입을 빠르게 제작하고 테스트해야 하는 상황에서 매우 유용하다. 또한, CrewAI는 Autogen의 대화형 에이전트와 ChatDev의 구조화된 프로세스 접근 방식의 유연성을 결합하면서도 경직성을 줄여 프로덕션 환경에 적합하도록 설계되었다 [9].  더 나아가, CrewAI는 대규모 멀티 에이전트 시스템의 확장성을 고려하여 설계되었으며, 시스템이 성장함에 따라 응답성과 효율성을 유지하도록 보장한다 [8].  Human-in-the-Loop (HitL) 기능도 강력하게 지원하여, 필요한 시점에 인간의 개입을 요청할 수 있도록 구성 가능한 중단점(breakpoints)을 제공한다 [17].  CrewAI는 언어 모델 기반 추론과 결정론적 도구를 통합하여 자율적인 작업 위임 및 협업을 가능하게 한다 [7].
+
+### LangGraph
+
+LangGraph는 멀티 에이전트 패턴을 구현할 수 있지만, 에이전트 간의 상호 작용을 위한 명시적인 그래프 설계를 필요로 한다 [11].  따라서 CrewAI보다 더 많은 제어력과 결정성을 제공한다. 하지만 그래프 구조, 상태 관리, 함수적 구성에 대한 깊은 이해가 필요하며, 이는 숙달하는 데 더 많은 시간이 소요될 수 있다 [13].  LangGraph는 특히 코드 생성 및 복잡한 멀티 에이전트 코딩 워크플로우와 관련된 작업에 적합하다 [3, 14]. LangGraph의 접근 방식은 안정적이고 추적 가능한 흐름이 필요한 작업, 특히 엔터프라이즈 환경에서 강력하며, 동적 계획 및 실행보다는 오케스트레이션에 중점을 둔다 [15]. 또한, 워크플로우 내에서 루프 및 조건부 로직을 구현할 수 있어 에이전트가 보다 동적이고 복잡한 작업을 처리할 수 있도록 한다 [1]. AWS의 문서에서도 LangGraph를 활용한 멀티 에이전트 시스템 구축 사례를 소개하고 있다 [1].
+
+### 비교 분석
+
+CrewAI는 멀티 에이전트 AI를 처음 접하는 사용자에게 더 사용자 친화적이고 이상적인 반면 [14], LangGraph는 코드 생성 및 복잡한 멀티 에이전트 코딩과 관련된 작업에 가장 적합하다 [3, 14]. ZenML의 블로그에서는 LangGraph와 CrewAI를 비교하면서, CrewAI가 더 빠른 초기 설정을 제공한다고 언급한다 [2]. Leanware의 분석에서는 LangGraph와 CrewAI의 장단점을 비교하면서, 프로젝트의 요구 사항에 따라 적합한 프레임워크를 선택해야 한다고 강조한다 [6].
+
+## 관련 자료 및 출처
+
+*   [1] https://aws.amazon.com/blogs/machine-learning/build-multi-agent-systems-with-langgraph-and-amazon-bedrock/
+*   [2] https://www.zenml.io/blog/langgraph-vs-crewai
+*   [3] https://cwan.com/resources/blog/building-multi-agent-systems-with-langgraph/
+*   [4] https://www.emergentmind.com/topics/crewai
+*   [5] https://www.datacamp.com/tutorial/crew-ai
+*   [6] https://www.leanware.co/insights/langgraph-vs-crewai-comparison
+
+## 결론 및 평가
+
+LangGraph와 CrewAI는 각각의 장단점을 가지고 있으며, 프로젝트의 요구 사항과 개발자의 숙련도에 따라 선택이 달라질 수 있다.  빠른 프로토타입 제작과 간편한 설정을 중요시한다면 CrewAI가 적합하며, 복잡한 워크플로우 제어와 코드 생성 작업에 집중한다면 LangGraph가 더 나은 선택일 수 있다.  두 프레임워크 모두 활발하게 개발되고 있으며, 멀티 에이전트 시스템 개발의 미래를 엿볼 수 있는 중요한 도구이다.  궁극적으로, 프로젝트의 구체적인 요구 사항을 신중하게 평가하고, 각 프레임워크의 장단점을 고려하여 최적의 선택을 하는 것이 중요하다.
+======================================================================
+
+
+📊 Running benchmark: 2024년 발표된 LLM 기반 에이전트 시스템 관련 논문들을 분석하고 주요 트렌드를 설명해...
+
+🔎 Clarify: Analyzing query...
+   └─ Query: 2024년 발표된 LLM 기반 에이전트 시스템 관련 논문들을 분석하고 주요 트렌드를 설명해줘
+   └─ Status: 🟢 Clear
+   └─ Analysis: The query asks for an analysis of research papers on LLM-based agent systems published in 2024, and requests an explanation of the main trends. The intent is clear, and the topic is reasonably focused.
+   └─ Topics: LLM, Agent Systems, Research Trends
+📋 Planner: Creating research plan for: 2024년 발표된 LLM 기반 에이전트 시스템 관련 논문들을 분석하고 주요 트렌드를 설명해
+
+📋 Planner: Generated 4 queries
+   └─ Queries:
+      [1] LLM based agent system papers 2024
+      [2] Large language model agent trends 2024
+      [3] 2024 LLM agent system architecture
+      [4] Recent advances in LLM agents 2024
+   └─ Focus: Architecture of LLM-based agent systems, Applications of LLM agents, Performance benchmarks for LLM agents, Emerging trends in LLM agent development
+
+🚀 ParallelResearcher [Phase 7]: Executing 3 queries in parallel
+   └─ Max workers: 3
+   └─ [1] LLM based agent system papers 2024
+   └─ [2] Large language model agent trends 2024
+   └─ [3] 2024 LLM agent system architecture
+📖 Read URL: https://arxiv.org/html/2503.04596v2... (8015 chars)
+   ✓ Query 3 completed in 2.39s
+📖 Read URL: https://www.linkedin.com/pulse/evolving-landscape-... (8015 chars)
+📖 Read URL: https://www.superannotate.com/blog/large-action-mo... (8015 chars)
+   ✓ Query 2 completed in 3.17s
+📖 Read URL: https://www.nature.com/articles/s41598-025-92337-6... (8015 chars)
+📖 Read URL: https://github.com/taichengguo/LLM_MultiAgents_Sur... (8015 chars)
+   ✓ Query 1 completed in 11.97s
+
+   ⏱️ Parallel research completed: 3/3 queries in 11.97s
+   └─ Total results: 15
+   └─ Total contents: 6
+   └─ Total findings: 9
+   └─ Speedup: 1.5x (sequential would take 17.5s)
+🔬 Analyzer [1]: Analyzing 15 results, 6 contents
+
+🔬 Analyzer [1]: Analyzed 15 results, 6 contents
+   └─ New findings:
+      [1] Functional and Multi-agent Design is a key area, focusing on enhancing internal modules and scaling to collaborative systems.
+      [2] Cognitive architectures are being connected to LLM agents, leveraging cognitive science research for more robust agents.
+      [3] There's a shift towards multi-agent LLM systems where specialized AI agents collaborate to solve complex problems.
+      [4] A trend is emerging to develop smaller, highly capable LLMs such as TinyGPT and TinyLlama.
+      [5] Developers are creating more complex multi-step agents.
+   └─ Decision: More research needed
+   └─ Next query: 2024 LLM agent system trends examples
+🔍 Searcher [2]: Follow-up search for: 2024 LLM agent system trends examples
+
+🔍 Searcher: Found 5 results
+   └─ URLs found:
+      [1] https://medium.com/@ai_hi/llm-trends-in-the-making-what-to-expect-in-2024-915029dfd9b6
+      [2] https://newsletter.victordibia.com/p/ai-agents-2024-rewind-a-year-of-building
+      [3] https://blog.promptlayer.com/types-of-llm-agent/
+      [4] https://blog.langchain.com/langchain-state-of-ai-2024/
+      [5] https://thenewstack.io/top-5-ai-engineering-trends-of-2024/
+   └─ Snippets:
+      • ● Customer Support: In 2024, LLMs will be further automating modern customer service, offering 24/7 personalized support, efficient problem-solving, and multilingual capabilities.  ● Marketing Automation: LLM-powered agents will be further transforming marketing through personalized, scalable campaigns and efficient data analysis.  ● Workflow Automation: LLMs are transforming workflow automation using intelligent agents. [...] This article looks ahead to 2024, forecasting future LLM advancements, and their impact on sales and marketing use cases. We anticipate LLMs not just augmenting existing abilities but also opening new avenues for innovation and efficiency.  The Dawn of Multimodal Mastery: New Frontiers in Creativity and Reasoning  Current LLMs struggled with logical reasoning (with 60% accuracy, as the graph below illustrates), biases, hallucinations, and a focus on text-based tasks. [...] General AI models often fall short in niche areas, lacking the required precision and accuracy. Domain-specific, fine-tuned LLMs address this by offering specialized knowledge. For instance, Google’s Med-Palm 2, honed with medical data, accurately responds to medical inquiries, achieving 86.5% score on the MedQA dataset (compared to GPT 3.5’s 60.2%, as the graph below shows). Similarly, BloombergGPT, tailored for financial data, exemplifies the efficacy of such targeted LLMs.
+      • An important caveat here lies in _how_ the agents are implemented. Most deployments use an LLM as a thin wrapper/orchestrator that "calls" existing APIs as tools. In essence, this trend represents a shift from a less manual approach " clicking fetch data, upload to Salesforce, and generate report buttons" to a more streamlined approach "saying generate report" while an LLM-enabled pipeline handles the clicking. [...] >    Before: LLMs focused solely on language modeling. Capabilities like planning, tool use, and task decomposition/reasoning implemented external to the model. >  >    Trend: Models now designed from the ground up with built-in capabilities for multi-step task decomposition, planning, tool use, and multimodal interactions.  3. Interface Agents Take Center Stage  Image 8 [...] >    Before - Separate apps and apis that users interact with to complete business tasks in products >  >    Trend: LLMs act as thin orchestration layers that translate natural language requests into multiple of API calls (minimizes clicks and intermediate tasks).  2. “Agent-Native” Foundation Models  Image 6  An interesting development this year was seeing teams build foundation models specifically designed for _agency_. What does this mean?
+      • Involving multiple LLM agents working collaboratively, these systems tackle complex tasks by leveraging the strengths of various specialized agents. They communicate and coordinate to achieve common objectives.  Example: A team of agents where one gathers data, another analyzes it, and a third generates reports based on the analysis.  Understanding these categories helps in selecting the appropriate type of LLM agent for specific applications, ensuring optimal performance and user experience. [...] Personalized Learning: Educational platforms utilize LLM agents to create customized learning experiences, adapting content to individual student needs and learning styles. For example, AI tutors can simulate classroom interactions, providing tailored feedback and support.  Content Creation: LLM agents assist educators in developing course materials, quizzes, and interactive content, streamlining the curriculum development process and ensuring content relevance.  ### Legal [...] As LLM agents become more autonomous, ensuring ethical behavior and transparency will be paramount. Developing agents with built-in ethical frameworks and the ability to explain their decision-making processes will be crucial in building trust and accountability. For example, in legal advisory roles, an LLM agent could provide not only recommendations but also the rationale behind them, allowing users to make informed decisions.
+💭 Think: Query: 2024 LLM agent system trends examples | Found 5 results, 5 URLs. Key snippets: ● Customer Support: In 2024, LLMs will be further automating modern customer service, offering 24/7  | An important caveat here lies in _how_ the agents are implemented. Most deployments use an LLM as a  | Involving multiple LLM agents working collaboratively, these systems tackle complex tasks by l. Assessment: Is this sufficient or need more specific search?
+
+📖 ContentReader: Reading 3 URLs in parallel 🚀
+📖 Read URL: https://blog.promptlayer.com/types-of-llm-agent/... (8015 chars)
+📖 Read URL: https://newsletter.victordibia.com/p/ai-agents-202... (8015 chars)
+   ✓ [https://medium.com/@ai_hi/llm-trends-in-the-making-what-to-expect-in-2024-915029dfd9b6]
+      Preview: Error: HTTP 403 for URL: https://medium.com/@ai_hi/llm-trends-in-the-making-what-to-expect-in-2024-915029dfd9b6
+   ✓ [https://blog.promptlayer.com/types-of-llm-agent/]
+      Preview: 7 Types of LLM Agents: A Comprehensive Guide (2024) Platform -- Prompt Management -- Evaluations -- Observability -- Dataset Management -- Prompt Chaining Docs Blog Case Studies Careers Log in Contact Us Contact Us Log In Back LLM Agents Explained: Types, Use Cases, and Future Trends By &nbsp;Erich H. Nov 21, 2024 type of LLM agent Large Language Model (LLM) agents have rapidly evolved, becoming one of the hot topics in the tech industry. Initially designed for natural language processing tasks, LLMs can now serve as autonomous agents capable of complex decision-making and task execution. In this guide, we’ll explore the basics of LLM Agents, their types (such as Conversational Agents, Task-Oriented Agents, Creative Agents, and more), real-world applications, and the emerging trends driving their evolution. Whether you're a tech enthusiast, a professional exploring AI, or someone curious about how these systems work, this guide will provide valuable insights into the ever-expanding world of LLM Agents. What are LLM Agents? LLM Agents are advanced AI systems that leverage large language models to autonomously perform tasks by interpreting inputs, planning actions, and executing them using integrated tools. Unlike traditional chatbots, which are limited to predefined responses, LLM Agents can exhibit complex reasoning, maintain memory of past interactions, and adapt their behavior based on environmental feedback. This enables them to handle intricate tasks across various domains, from automating workflows to providing personalized assistance Different Types of LLM Agents In 2024, Large Language Model (LLM) agents have diversified into specialized categories, each tailored to specific functionalities and applications. Here's an overview of the different types of LLM agents: 1. Conversational Agents These agents engage in natural dialogue with users, providing information, answering questions, and assisting with various tasks. They rely on LLMs to understand and generate human-like responses. Example : Customer support chatbots that handle inquiries and provide solutions. 2. Task-Oriented Agents Focused on performing specific tasks or achieving predefined objectives, these agents interact with users to understand their needs and then execute actions to fulfill those needs. Example : AI assistants that schedule appointments or manage emails. 3. Creative Agents Capable of generating original and creative content such as artwork, music, or writing, these agents use LLMs to understand human preferences and artistic styles, enabling them to produce content that resonates with audiences. Example : Content generation tools that draft articles or create digital art. 4. Collaborative Agents These agents work alongside humans to accomplish shared goals or tasks, facilitating communication, coordination, and cooperation between team members or between humans and machines. LLMs may support collaborative agents by assisting in decision-making, generating reports, or providing insights. Example: Project management bots that help teams coordinate tasks and deadlines. 5. Multimodal Agents Extending beyond text, multimodal agents process and generate content across various formats, including audio, images, and video. This capability allows for richer and more immersive interactions. Example: Virtual assistants that can interpret visual data or generate images based on textual descriptions. 6. Autonomous Agents Designed to operate with minimal human intervention, autonomous agents can make decisions and perform actions independently. They are often used in environments where continuous operation is essential. Example: Robotic process automation bots that handle repetitive tasks in business processes. 7. Multi-Agent Systems Involving multiple LLM agents working collaboratively, these systems tackle complex tasks by leveraging the strengths of various specialized agents. They communicate and coordinate to achieve common objectives. Example: A team of
+   ✓ [https://newsletter.victordibia.com/p/ai-agents-2024-rewind-a-year-of-building]
+      Preview: AI Agents 2024 Rewind - A Year of Building and Learning Designing with AI Subscribe Sign in Designing with AI Podcast AI Agents 2024 Rewind - A Year of Building and Learning 43 2 15 1× 0:00 Current time: 0:00 / Total time: -13:30 -13:30 Audio playback is not supported on your browser. Please upgrade. AI Agents 2024 Rewind - A Year of Building and Learning Issue #26 | What were the top 5 trends in AI Multi-Agent Systems from 2024? What can we expect in 2025? Victor Dibia, PhD Jan 02, 2025 43 2 15 Share Transcript I spent a good chunk of 2024 focused on multi-agent system s - contributing to AutoGen - an OSS framework for building multi-agent apps, and working on a book on the topic . A lot has happened! This post is an attempt to catalog some of the key events into themes, and a reflection on where things might be headed. The content here is likely subjective (my viewpoint on what was interesting) and is based on a list agent/multi-agent news items I curated over the last year. TLDR: Five key observations from building and studying AI agents in 2024: Enterprises are adopting agents, but with some caveats Teams are building &quot;agent-native&quot; foundation models from the ground up Interface automation agents dominated early commercial applications A Shift to Complex Tasks and the Rise of Frameworks Benchmarks reveal both progress and limitations 1. Enterprise Adoption of Agents in Products .. with Caveats Many enterprises and startups have adopted the term “agents” in products, describing them broadly at systems that act on a user’s behalf with the goal of saving the user time and avoiding tedious/busy work . Some examples below: Microsoft Copilot Agents : “These AI-driven agents assist users in performing a variety of tasks, working alongside you to offer suggestions, automate repetitive tasks, and provide insights to help you make informed decision” Salesforce Agentforce : “Agentforce is a proactive, autonomous AI application that provides specialized, always-on support to employees or customers. You can equip Agentforce with any necessary business knowledge to execute tasks according to its specific role“ Sema4.ai agents. Sema4 goes a bit further than other offerings in their claims - “&quot;RPA fall short when it comes to complex, knowledge-based work. They lack the ability to reason, make judgments, and adapt to real-world changes.” LinkedIn HR Assistant : “Starting today, recruiters can choose to delegate time-consuming tasks to Hiring Assistant including finding candidates and assisting in applicant review, so they can focus on the most strategic, people-centric parts of their job” An important caveat here lies in how the agents are implemented. Most deployments use an LLM as a thin wrapper/orchestrator that &quot;calls&quot; existing APIs as tools. In essence, this trend represents a shift from a less manual approach &quot; clicking fetch data, upload to Salesforce, and generate report buttons&quot; to a more streamlined approach &quot;saying generate report&quot; while an LLM-enabled pipeline handles the clicking. This is clearly the responsible approach - retaining the reliability of existing APIs while improving user experience by minimizing repetitive steps. It is also non-trivial, as ensuring reliable tool selection at production scale remains challenging. While this is still several steps removed from truly autonomous assistants (the holy grail of agents), it represents a first step toward that journey. Before - Separate apps and apis that users interact with to complete business tasks in products Trend : LLMs act as thin orchestration layers that translate natural language requests into multiple of API calls (minimizes clicks and intermediate tasks). 2. “Agent-Native” Foundation Models An interesting development this year was seeing teams build foundation models specifically designed for agency . What does this mean? Well, a good agent must do a few things well - reason through multi-step plans for tasks, act 
+   └─ ⏱️ Parallel read: 3/3 URLs in 0.14s
+🔬 Analyzer [2]: Analyzing 5 results, 9 contents
+
+🔬 Analyzer [2]: Analyzed 5 results, 9 contents
+   └─ New findings:
+      [1] In 2024, LLMs are being used for customer support, marketing automation, and workflow automation.
+      [2] LLMs are often used as orchestrators of existing APIs, streamlining processes.
+      [3] Multi-agent systems, where multiple LLMs collaborate, are being developed.
+      [4] Developers are focusing on creating more efficient and reliable LLM applications.
+      [5] There's a trend towards smaller, more capable LLMs.
+   └─ Decision: More research needed
+   └─ Next query: specific examples of multi-agent LLM systems architectures 2024
+🔍 Searcher [3]: Follow-up search for: specific examples of multi-agent LLM systems architectures 2024
+
+🔍 Searcher: Found 5 results
+   └─ URLs found:
+      [1] https://xue-guang.com/post/llm-marl/
+      [2] https://collabnix.com/multi-agent-and-multi-llm-architecture-complete-guide-for-2025/
+      [3] https://springsapps.com/knowledge/everything-you-need-to-know-about-multi-ai-agents-in-2024-explanation-examples-and-challenges
+      [4] https://www.classicinformatics.com/blog/how-llms-and-multi-agent-systems-work-together-2025
+      [5] https://www.k2view.com/blog/multi-agent-llm/
+   └─ Snippets:
+      • The Multi-LLM-Agent System (MLAS) framework addresses the evolution from single-agent to multi-agent systems, highlighting advantages including higher task-solving performance potential, greater system flexibility, proprietary data preservation for participating entities, and feasibility of monetization. The framework implements layered protocol architectures for diverse agent interactions with dynamic protocol selection based on task requirements (Zhang et al., 2024). [...] LLM-based Multi-Agent System (LLM-MAS) refers to a computational system comprising multiple intelligent agents powered by large language models that can perceive, learn, reason, and act collaboratively to solve complex tasks collectively at scale (SuperAnnotate, 2024). This definition encompasses five essential components that characterize these systems: profile (how agents are created with personalized characteristics), perception (environmental information acquisition), self-action (memory, [...] The field has converged on several dominant architectural patterns. Centralized coordination employs a supervisor agent that manages and directs specialized worker agents, exemplified by AutoGen’s supervisor architecture and LangGraph’s supervisor tool-calling pattern (Analytics Vidhya, 2024). This approach provides clear control and coordination but can create bottlenecks. Decentralized systems enable peer-to-peer communication without central authority, as seen in CAMEL’s role-playing
+      • ### 2. AutoGen – Microsoft’s Multi-Agent Framework  AutoGen specializes in creating conversational multi-agent systems where agents communicate through natural language dialogue.  Key Features:   Human-in-the-loop support  Flexible agent creation  Built-in conversation management  Integration with multiple LLM providers  Best For: Research applications, coding copilots, and collaborative problem-solving scenarios.  ### 3. CrewAI – Production-Ready Multi-Agent Teams [...] The artificial intelligence landscape has dramatically shifted in 2025. While single Large Language Models (LLMs) like GPT-4 and Claude dominated 2023-2024, the future belongs to multi-agent LLM systems where specialized AI agents collaborate to solve complex problems. According to recent research, over 80% of enterprise workloads are expected to run on AI-driven systems by 2026, with multi-agent architectures leading this transformation. [...] The key to success lies in understanding when and how to deploy multi-agent systems effectively. Start with simple use cases, choose the right framework for your needs, and gradually build complexity as you gain experience.
+      • Multi AI Agents are systems that are based on many agents connected to similar or different Large Language Models. In contrast to regular single-agent models, multi agent systems in artificial intelligence allow these autonomous agents to handle complex, multifaceted tasks more effectively, by sharing responsibilities and coordinating with each other. This multi agent architecture offers a unique advantage for applications that require adaptability and precision, showcasing the capabilities of [...] In a multi agent LLM system, the typical workflow starts when a user provides a high-level task or query. The multi agent system then decomposes this task into smaller, manageable subtasks, which are assigned to different specialized agents within the multi agent architecture. Each agent, equipped with unique capabilities, tackles its designated subtask using its LLM to reason, plan, and take action. [...] Multi agent LLMs are developed to function as a collaborative network of both open-source and closed-source language models, where each agent is assigned a specialized task that it can perform with expertise. The research interest in LLM-based multi-agent systems is rapidly growing, especially for problem-solving and world simulation applications.
+💭 Think: Query: specific examples of multi-agent LLM systems architectures 2024 | Found 5 results, 5 URLs. Key snippets: The Multi-LLM-Agent System (MLAS) framework addresses the evolution from single-agent to multi-agent | ### 2. AutoGen – Microsoft’s Multi-Agent Framework
+
+AutoGen specializes in creating conversational m | Multi AI Agents are systems that are based on many agents connected to similar or different La. Assessment: Is this sufficient or need more specific search?
+
+📖 ContentReader: Reading 3 URLs in parallel 🚀
+📖 Read URL: https://springsapps.com/knowledge/everything-you-n... (8015 chars)
+📖 Read URL: https://xue-guang.com/post/llm-marl/... (8015 chars)
+📖 Read URL: https://collabnix.com/multi-agent-and-multi-llm-ar... (8015 chars)
+   ✓ [https://springsapps.com/knowledge/everything-you-need-to-know-about-multi-ai-agents-in-2024-explanation-examples-and-challenges]
+      Preview: Everything you need to know about multi AI agents in 2025: explanation, examples and challenges - Springs August 19, 2025 Everything you need to know about multi AI agents in 2025: explanation, examples and challenges Everything you need to know about multi AI agents: explanation, examples, and challenges Written by Serhii Uspenskyi COO AI &amp; ML AI &amp; ML Table of Contents H2 generate H3 generate Intro Step by step, our society is moving into the era of human-like systems that can replace some people’s functions and make it 10 times faster showing even better results. If a couple of years ago we talked about some new AI chatbots that can answer questions for customer support purposes, today - we discuss agents for artificial intelligence , their huge possibilities, features, structures, etc. According to Forester , AI startups received $12.2 billion in funding across over 1,100 deals only during Q1 2024, reflecting continued investor confidence in AI&#x27;s transformative potential. Additionally, as businesses use more AI agents , 39% of companies predict an increase in workforce size due to new roles supporting AI initiatives, while 51% of employees anticipate AI will positively impact their jobs within five years. These numbers are impressive but what is even more impressive is that AI agents can combine into multiple systems - called multi agent or multi AI agent. In this article, we will describe the basics of multi agent systems in artificial intelligence, their capabilities, examples and the ways to build agents and multi agent systems. Are you ready? Let’s move on. Multi AI Agents And Multiagent Systems - What Are They? Multi AI Agents are systems that are based on many agents connected to similar or different Large Language Models . In contrast to regular single-agent models, multi agent systems in artificial intelligence allow these autonomous agents to handle complex, multifaceted tasks more effectively, by sharing responsibilities and coordinating with each other. This multi agent architecture offers a unique advantage for applications that require adaptability and precision, showcasing the capabilities of multi agent artificial intelligence. As we may see from the schema above, the core components of the multi AI agent are: Agents - agents are built with distinct roles, personas, and specific contexts in mind, allowing them to operate within a multi agent system. Each agent uses LLM for processing, enabling it to perform specialized tasks with precision. Agents Managing - it outlines how these agents collaborate, whether through sequential, hierarchical, or bi-directional communication patterns. This coordination is key for multi agent optimization, allowing agents to respond dynamically to task requirements. Human in the loop - having a human in the loop is essential to support decision-making and assess results. This human oversight complements the autonomous capabilities of agents, providing the reliability of the multi agent system. Tool - agents are equipped with various tools for specific tasks, such as searching the web for information, reading or generating documents, or uploading code to repositories. These tools amplify the versatility of multi agent artificial intelligence, enabling it to handle complex tasks. LLM - each agent’s actions are supported by language model, which provide the inference required to interpret and generate responses. This LLM backbone is fundamental to the functionality of the multi agent system, guiding each agent’s contributions to the collective process. Context - the context is a set of information that is defined by a prompt so it may recognize intent and react. These prompts are used by AI algorithms integrated into the agents to act specially. The core structure of multi agent systems in artificial intelligence enables each agent to operate either independently or as part of a coordinated group, depending on the needs of the task. Despite their autonomy, these agents 
+   ✓ [https://xue-guang.com/post/llm-marl/]
+      Preview: LLMs for Multi-Agent Cooperation | Xueguang Lyu Search Xueguang Lyu Xueguang Lyu Home Posts Publications Contact CV Research Statement Light Dark Automatic LLMs for Multi-Agent Cooperation Last updated on May 25, 2025 19 min read LLM The emergence of Large Language Models (LLMs) has catalyzed a paradigm shift in artificial intelligence, particularly in how we approach complex problem-solving through multi-agent systems. As we stand in May 2025, the field of LLM-based multi-agent cooperation has evolved from theoretical curiosity to practical reality, with implementations spanning software development, financial trading, robotics, and enterprise operations. This comprehensive survey examines the current state of this rapidly evolving field, synthesizing recent research, frameworks, and real-world applications. 1. Introduction to multi-agent cooperation with LLMs LLM-based multi-agent systems represent a fundamental evolution in artificial intelligence, where multiple AI agents powered by large language models collaborate to solve complex tasks that exceed the capabilities of individual agents. Unlike traditional multi-agent systems that rely on predefined protocols and rigid communication structures, LLM-based systems leverage natural language as a universal medium for coordination, enabling unprecedented flexibility and emergent behaviors (Tran et al., 2025; Zhou et al., 2024). The core innovation lies in transforming language models from passive text generators into active, autonomous agents capable of perception, reasoning, planning, and collaborative action. These agents can assume specialized roles, share knowledge dynamically, and adapt their strategies based on interaction outcomes (Guo et al., 2024). The field has experienced explosive growth, with research publications increasing exponentially each quarter since 2023, driven by the promise of solving complex real-world problems through collective AI intelligence. What makes LLM-based multi-agent cooperation particularly compelling is its ability to mirror human collaborative patterns while potentially surpassing human limitations in scale, consistency, and processing speed. From virtual software companies where AI agents fulfill roles from CEO to programmer, to financial trading teams that combine fundamental and technical analysis, these systems are demonstrating new possibilities for automated problem-solving (Tran et al., 2025; SuperAnnotate, 2024). 2. Key concepts and terminology Core definitions shaping the field LLM-based Multi-Agent System (LLM-MAS) refers to a computational system comprising multiple intelligent agents powered by large language models that can perceive, learn, reason, and act collaboratively to solve complex tasks collectively at scale (SuperAnnotate, 2024). This definition encompasses five essential components that characterize these systems: profile (how agents are created with personalized characteristics), perception (environmental information acquisition), self-action (memory, reasoning, and planning capabilities), mutual interaction (inter-agent communication), and evolution (self-reflection and progressive enhancement) (Zhou et al., 2024; Tran et al., 2025). Agentic AI represents the application of LLMs as autonomous agents capable of goal-oriented behavior in dynamic environments. This concept moves beyond simple text generation to encompass planning, reasoning, and action-taking capabilities. The transition from &ldquo;virtual assistants&rdquo; to &ldquo;virtual collaborators&rdquo; marks a fundamental shift in how we conceptualize AI systems. Collaboration channels serve as critical pathways enabling agents to work together, facilitating planning and coordination capabilities. These channels exhibit advanced behaviors including Theory of Mind reasoning, where agents develop models of other agents' beliefs, goals, and intentions (SuperAnnotate, 2024). The sophistication of these channels determines the system&rsquo;s ability to tackle 
+   ✓ [https://collabnix.com/multi-agent-and-multi-llm-architecture-complete-guide-for-2025/]
+      Preview: Multi-Agent and Multi-LLM Architecture: Complete Guide for 2025 - Collabnix Join our Discord Server Follow Collabnix Home AI Qwen 3 AI Model Gemma3 AI Model GPT OSS AI Model Docs Resources Cheatsheets KubeLabs DockerLabs Terraform Labs Raspberry Pi Jetson Nano Jetson AGX Xavier Community Events Chat Slack Discord Write for Us! 2 Share Collabnix Team Follow The Collabnix Team is a diverse collective of Docker, Kubernetes, and IoT experts united by a passion for cloud-native technologies. With backgrounds spanning across DevOps, platform engineering, cloud architecture, and container orchestration, our contributors bring together decades of combined experience from various industries and technical domains. Multi-Agent and Multi-LLM Architecture: Complete Guide for 2025 19th September 2025 7 min read Table of Contents Toggle Introduction The Evolution from Single to Multi-Agent AI Systems What Are Multi-Agent LLM Systems? Key Components of Multi-Agent Architecture Why Multi-Agent Systems Outperform Single-Agent Models 1. Enhanced Accuracy and Reduced Hallucinations 2. Specialized Expertise 3. Scalability and Parallel Processing 4. Fault Tolerance and Robustness Top Multi-Agent LLM Frameworks in 2025 1. LangGraph &#8211; The Graph-Based Leader 2. AutoGen &#8211; Microsoft&#8217;s Multi-Agent Framework 3. CrewAI &#8211; Production-Ready Multi-Agent Teams 4. LangChain &#8211; The Comprehensive Ecosystem 5. OpenAI Swarm &#8211; Lightweight Agent Orchestration Multi-Agent Architecture Patterns 1. Network Architecture 2. Supervisor Architecture 3. Hierarchical Architecture 4. Custom Workflow Architecture Real-World Applications and Use Cases 1. Software Development Teams 2. Content Creation and Marketing 3. Customer Support Automation 4. Financial Analysis and Trading 5. Healthcare and Medical Research Implementation Guide Building Your First Multi-Agent System Step 1 Define Your Use Case and Architecture Step 2 Choose Your Framework Step 3 Design Agent Roles and Responsibilities Step 4 Implement Communication Patterns Step 5 Add Memory and Context Management Step 6 Implement Tool Integration Step 7 Testing and Optimization Common Challenges and Solutions 1. Coordination Complexity 2. Context Consistency 3. Error Propagation 4. Cost and Resource Management 5. Debugging and Observability Performance Optimization Strategies 1. Agent Specialization 2. Parallel Processing 3. Caching and Memoization 4. Model Selection per Task 5. Resource Pooling Security and Privacy Considerations 1. Data Isolation 2. Authentication and Authorization 3. Privacy-Preserving Techniques Future Trends and Developments 1. Autonomous Agent Ecosystems 2. Cross-Organization Agent Collaboration 3. Enhanced Reasoning Capabilities 4. Better Human-AI Collaboration Cost-Benefit Analysis Implementation Costs Expected Benefits Getting Started Your Multi-Agent Journey Phase 1 Learning and Experimentation (Months 1-2) Phase 2 Development and Testing (Months 3-6) Phase 3 Deployment and Scaling (Months 7+) Conclusion The Multi-Agent Future Introduction: The Evolution from Single to Multi-Agent AI Systems The artificial intelligence landscape has dramatically shifted in 2025. While single Large Language Models (LLMs) like GPT-4 and Claude dominated 2023-2024, the future belongs to multi-agent LLM systems where specialized AI agents collaborate to solve complex problems. According to recent research, over 80% of enterprise workloads are expected to run on AI-driven systems by 2026 , with multi-agent architectures leading this transformation. This comprehensive guide explores everything you need to know about multi-agent and multi-LLM architecture, from fundamental concepts to implementation frameworks, real-world applications, and the challenges you&#8217;ll face when building these systems. What Are Multi-Agent LLM Systems? Multi-agent LLM systems are AI architectures where multiple specialized agents, each powered by large language models, work together to complete complex ta
+   └─ ⏱️ Parallel read: 3/3 URLs in 1.78s
+🔬 Analyzer [3]: Analyzing 5 results, 12 contents
+
+🔬 Analyzer: Max iterations reached, proceeding to Writer
+
+🔬 Analyzer [3]: Analyzed 5 results, 12 contents
+   └─ New findings:
+      [1] The shift from single LLM agents to multi-agent systems is driven by increased task-solving potential, flexibility, data preservation, and monetization opportunities.
+      [2] Frameworks like Multi-LLM-Agent System (MLAS), AutoGen, and CrewAI are designed to facilitate multi-agent communication and collaboration.
+      [3] AutoGen specializes in conversational multi-agent systems with human-in-the-loop support and integration with multiple LLM providers.
+      [4] CrewAI is a production-ready framework for building multi-agent teams.
+      [5] Heterogeneous multi-agent systems (X-MAS) assign different LLMs to agents based on their specialization, optimizing efficiency.
+   └─ Decision: Research complete (34 total findings)
+
+📦 Compress: Compressing 34 findings, 12 contents
+   └─ Compressed to 5085 chars (from ~9121 raw chars)
+   └─ Sources cited: 12
+   └─ Preview:
+      ## Key Findings
+      - The AI landscape is shifting from single LLMs to collaborative multi-agent systems [3].
+      - There is a trend towards developing smaller, highly capable LLMs [4].
+      - Developers are focusing on creating more efficient and reliable LLM applications [20].
+      - Key agent capabilities include planning, tool use, and coordination [16].
+      - LLMs are being integrated with cognitive architectures for more robust performance [2].
+      
+      ## Detailed Information
+      *   **Shift to Multi-Agent Systems:** The AI field is moving away from single LLMs like GPT-4 and Claude towards multi-agent systems where specialized AI agents collaborate [3], [12], [25]. This shift is driven by the potential for increased task-solving capabilities, flexibility, data preservation, and monetization [25]. Frameworks like Multi-LLM-Agent System (MLAS), AutoGen, and CrewAI are designed to facilitate multi-agent communication and collaboration [26]. AutoGen supports human-in-the-loop interaction and integration with multiple LLM providers [27]. CrewAI is designed for building production-ready multi-agent teams [28]. Heterogeneous multi-agent systems (X-MAS) optimize efficiency by assigning different LLMs to agents based on their specialization [29].
+      
+      *   **Smaller, More Capable LLMs:** A significant trend is the development of smaller, highly capable LLMs, such as TinyGPT and TinyLlama (1.1 billion parameters) [4], [13], [21], [31].
+      
+      *   **Enhanced Agent Design:** Research focuses on enhancing agent modules and scaling them to collaborative systems [1], [10], [22], [30]. This includes functional and multi-agent design [1], [10], [22], [30]. Effective agents require built-in capabilities for planning, tool use, and coordination [16], [24], [33].
+      
+      *   **Cognitive Architectures:** LLM agents are being connected to classical cognitive architectures (SOAR, ACT-R) [2], [11], [23], [34], leveraging cognitive science research for more robust agents [11], [34].
+      
+      *   **LLM Application & Use Cases:** Developers are building more complex multi-step agents [6], [14] and focusing on creating more efficient and reliable LLM applications [20]. LLMs are utilized in various applications, including customer support, marketing automation, and workflow automation [17], [32], and often act as orchestrators of existing APIs [18]. Agent roles and tasks are dynamically generated based on project requirements [15]. In 2024, developers focused on multi-step agents and efficiency by minimizing LLM calls, and adding quality checks [6].
+      
+      ## Sources
+      [1] Q3
+      [2] Q3
+      [3] Q3
+      [4] Q2
+      [5] Q2
+      [6] Q2
+      [7] Q1
+      [8] Q1
+      [9] Q1
+      [10] Functional and Multi-agent Design is a key area, focusing on enhancing internal modules and scaling to collaborative systems.
+      [11] Cognitive architectures are being connected to LLM agents, leveraging cognitive science research for more robust agents.
+      [12] There's a shift towards multi-agent LLM systems where specialized AI agents collaborate to solve complex problems.
+      [13] A trend is emerging to develop smaller, highly capable LLMs such as TinyGPT and TinyLlama.
+      [14] Developers are creating more complex multi-step agents.
+      [15] Agent roles and tasks are dynamically generated based on project requirements.
+      [16] Effective agents require built-in capabilities for planning, tool use, and coordination.
+      [17] In 2024, LLMs are being used for customer support, marketing automation, and workflow automation.
+      [18] LLMs are often used as orchestrators of existing APIs, streamlining processes.
+      [19] Multi-agent systems, where multiple LLMs collaborate, are being developed.
+      [20] Developers are focusing on creating more efficient and reliable LLM applications.
+      [21] There's a trend towards smaller, more capable LLMs.
+      [22] Research focuses on enhancing agent modules and scaling them to collaborative systems.
+      [23] Cognitive architectures are being connected to LLM agents.
+      [24] Planning, tool use and coordination are important capabilities.
+      [25] The shift from single LLM agents to multi-agent systems is driven by increased task-solving potential, flexibility, data preservation, and monetization opportunities.
+      [26] Frameworks like Multi-LLM-Agent System (MLAS), AutoGen, and CrewAI are designed to facilitate multi-agent communication and collaboration.
+      [27] AutoGen specializes in conversational multi-agent systems with human-in-the-loop support and integration with multiple LLM providers.
+      [28] CrewAI is a production-ready framework for building multi-agent teams.
+      [29] Heterogeneous multi-agent systems (X-MAS) assign different LLMs to agents based on their specialization, optimizing efficiency.
+      [30] Key research areas include functional and multi-agent design, enhancing agent modules, and scaling to collaborative systems.
+      [31] There's a trend toward smaller, highly capable LLMs.
+      [32] LLMs are being used in various applications, including customer support, marketing automation, and workflow automation.
+      [33] Effective agents need planning, tool use, and coordination capabilities.
+      [34] Cognitive architectures are being connected to LLM agents to create more robust agents.
+
+✍️ Writer: Composing response from 34 findings
+   └─ Using compressed notes (5085 chars)
+
+✍️ Writer: Generated response (5925 chars)
+   └─ Sources used:
+      [1] https://arxiv.org/html/2503.04596v2
+      [2] https://www.superannotate.com/blog/large-action-models
+      [3] https://springsapps.com/knowledge/everything-you-need-to-know-about-multi-ai-agents-in-2024-explanation-examples-and-challenges
+   └─ Response preview:
+      ## 핵심 요약
+      
+      2024년 LLM 기반 에이전트 시스템 연구는 단일 LLM에서 협업적인 다중 에이전트 시스템으로의 전환, 소형화된 고성능 LLM 개발, 에이전트 기능 향상 및 효율적인 LLM 애플리케이션 구축에 집중되고 있다.
+      
+      ## 주요 발견 사항
+      
+      *   **다중 에이전트 시스템으로의 전환:** AI 분야는 GPT-4, Claude와 같은 단일 LLM에서 벗어나 특화된 AI 에이전트들이 협력하는 다중 에이전트 시스템으로 이동하고 있다 [3], [12], [25].
+      *   **소형화된 고성능 LLM:** TinyGPT, TinyLlama (11억 개 파라미터)와 같이 작지만 강력한 LLM 개발이 두드러진 추세이다 [4], [13], [21], [31].
+      *   **향상된 에이전트 설계:** 에이전트 모듈 개선 및 협업 시스템으로의 확장에 연구가 집중되고 있으며 [1], [10], [22], [30], 효과적인 에이전트를 위해 계획, 도구 사용, 협업 기능이 내장되어야 한다 [16], [24], [33].
+      *   **인지 아키텍처 통합:** LLM 에이전트가 고전적인 인지 아키텍처(SOAR, ACT-R)와 연결되어 더욱 견고한 에이전트를 위한 인지 과학 연구를 활용하고 있다 [2], [11], [23], [34].
+      *   **LLM 애플리케이션 및 활용 사례:** 개발자들은 보다 복잡한 다단계 에이전트를 구축하고 있으며 [6], [14], 효율적이고 안정적인 LLM 애플리케이션 개발에 집중하고 있다 [20]. LLM은 고객 지원, 마케팅 자동화, 워크플로우 자동화와 같은 다양한 애플리케이션에 활용되며 [17], [32], 기존 API 오케스트레이터 역할을 수행하는 경우가 많다 [18].
+      
+      ## 상세 분석
+      
+      *   **다중 에이전트 시스템:** 다중 에이전트 시스템으로의 전환은 복잡한 문제 해결 능력 향상, 유연성, 데이터 보존, 수익 창출 가능성 때문에 추진되고 있다 [25]. Multi-LLM-Agent System (MLAS), AutoGen, CrewAI와 같은 프레임워크는 다중 에이전트 간의 통신 및 협업을 용이하게 한다 [26]. AutoGen은 인간 참여형 상호 작용 및 여러 LLM 공급자와의 통합을 지원하며 [27], CrewAI는 프로덕션 환경에 적합한 다중 에이전트 팀을 구축하기 위해 설계되었다 [28]. 이기종 다중 에이전트 시스템 (X-MAS)은 전문 분야에 따라 에이전트에 다른 LLM을 할당하여 효율성을 최적화한다 [29]. 이는 특히 복잡한 문제를 분업하여 해결하고, 각 LLM의 강점을 활용하는 데 효과적이다.
+      
+      *   **소형화된 고성능 LLM:** 리소스 제약적인 환경에서의 사용을 용이하게 하고, 추론 비용을 절감하며, 특정 작업에 특화된 모델을 만들 수 있다는 장점 때문에 소형 LLM 개발이 주목받고 있다. TinyGPT, TinyLlama와 같은 모델은 적은 파라미터 수에도 불구하고 상당한 성능을 보여준다 [4], [13], [21], [31].
+      
+      *   **에이전트 설계 개선:**  계획, 도구 사용, 협업 능력은 에이전트가 자율적으로 복잡한 작업을 수행하는 데 필수적이다 [16], [24], [33]. 에이전트 내부 모듈을 개선하고, 이러한 모듈을 협업 시스템으로 확장하는 연구는 보다 강력하고 유연한 에이전트 시스템 구축에 기여한다 [1], [10], [22], [30]. 특히, 에이전트의 역할과 작업을 프로젝트 요구 사항에 따라 동적으로 생성하는 기술은 다양한 환경에 대한 적응성을 높인다 [15].
+      
+      *   **인지 아키텍처 통합:** LLM 에이전트에 SOAR, ACT-R과 같은 고전적인 인지 아키텍처를 통합함으로써, 인간의 인지 과정을 모방하여 에이전트의 추론 능력, 학습 능력, 문제 해결 능력을 향상시킬 수 있다 [2], [11], [23], [34]. 이는 에이전트의 안정성과 신뢰성을 높이는 데 중요한 역할을 한다.
+      
+      *   **LLM 애플리케이션:** 고객 지원, 마케팅 자동화, 워크플로우 자동화 외에도, LLM은 API 오케스트레이터로서 다양한 시스템을 통합하고 프로세스를 자동화하는 데 널리 사용되고 있다 [17], [18], [32]. 개발자들은 LLM 호출 횟수를 최소화하고 품질 검사를 추가하여 다단계 에이전트의 효율성을 높이는 데 주력하고 있다 [6].
+      
+      ## 관련 자료 및 출처
+      
+      [1] Q3
+      [2] Q3
+      [3] Q3
+      [4] Q2
+      [5] Q2
+      [6] Q2
+      [7] Q1
+      [8] Q1
+      [9] Q1
+      [10] Functional and Multi-agent Design is a key area, focusing on enhancing internal modules and scaling to collaborative systems.
+      [11] Cognitive architectures are being connected to LLM agents, leveraging cognitive science research for more robust agents.
+      [12] There's a shift towards multi-agent LLM systems where specialized AI agents collaborate to solve complex problems.
+      [13] A trend is emerging to develop smaller, highly capable LLMs such as TinyGPT and TinyLlama.
+      [14] Developers are creating more complex multi-step agents.
+      [15] Agent roles and tasks are dynamically generated based on project requirements.
+      [16] Effective agents require built-in capabilities for planning, tool use, and coordination.
+      [17] In 2024, LLMs are being used for customer support, marketing automation, and workflow automation.
+      [18] LLMs are often used as orchestrators of existing APIs, streamlining processes.
+      [19] Multi-agent systems, where multiple LLMs collaborate, are being developed.
+      [20] Developers are focusing on creating more efficient and reliable LLM applications.
+      [21] There's a trend towards smaller, more capable LLMs.
+      [22] Research focuses on enhancing agent modules and scaling them to collaborative systems.
+      [23] Cognitive architectures are being connected to LLM agents.
+      [24] Planning, tool use and coordination are important capabilities.
+      [25] The shift from single LLM agents to multi-agent systems is driven by increased task-solving potential, flexibility, data preservation, and monetization opportunities.
+      [26] Frameworks like Multi-LLM-Agent System (MLAS), AutoGen, and CrewAI are designed to facilitate multi-agent communication and collaboration.
+      [27] AutoGen specializes in conversational multi-agent systems with human-in-the-loop support and integration with multiple LLM providers.
+      [28] CrewAI is a production-ready framework for building multi-agent teams.
+      [29] Heterogeneous multi-agent systems (X-MAS) assign different LLMs to agents based on their specialization, optimizing efficiency.
+      [30] Key research areas include functional and multi-agent design, enhancing agent modules, and scaling to collaborative systems.
+      [31] There's a trend toward smaller, highly capable LLMs.
+      [32] LLMs are being used in various applications, including customer support, marketing automation, and workflow automation.
+      [33] Effective agents need planning, tool use, and coordination capabilities.
+      [34] Cognitive architectures are being connected to LLM agents to create more robust agents.
+      
+      SOURCE URLs:
+      - https://arxiv.org/html/2503.04596v2
+      - https://www.superannotate.com/blog/large-action-models
+      - https://springsapps.com/knowledge/everything-you-need-to-know-about-multi-ai-agents-in-2024-explanation-examples-and-challenges
+      - https://blog.promptlayer.com/types-of-llm-agent/
+      - https://medium.com/@gianluca.mondillo/how-ai-agents-really-work-beyond-the-hype-inside-the-architecture-aa6c892a5c2a
+      - https://xue-guang.com/post/llm-marl/
+      - https://www.linkedin.com/pulse/evolving-landscape-large-language-models-2024-2025-zqgue
+      - https://newsletter.victordibia.com/p/ai-agents-2024-rewind-a-year-of-building
+      - https://github.com/taichengguo/LLM_MultiAgents_Survey_Papers
+      - https://medium.com/@ai_hi/llm-trends-in-the-making-what-to-expect-in-2024-915029dfd9b6
+      - https://collabnix.com/multi-agent-and-multi-llm-architecture-complete-guide-for-2025/
+      - https://www.nature.com/articles/s41598-025-92337-6
+      
+      ## 결론 및 평가
+      
+      2024년 LLM 기반 에이전트 시스템 연구는 AI 시스템의 효율성, 유연성, 적응성을 높이는 데 중점을 두고 있다. 다중 에이전트 시스템, 소형화된 고성능 LLM, 향상된 에이전트 설계, 인지 아키텍처 통합은 이러한 목표를 달성하기 위한 핵심 전략이다. 향후 연구는 이러한 트렌드를 더욱 발전시켜 다양한 실제 애플리케이션에서 LLM 기반 에이전트 시스템의 활용도를 높이는 데 집중할 것으로 예상된다. 특히, 다중 에이전트 시스템의 협업 효율성을 높이고, 소형 LLM의 성능을 극대화하며, 에이전트의 안전성과 윤리적인 문제를 해결하는 것이 중요한 과제가 될 것이다.
+
+🔍 Critique: CARC Quality Evaluation...
+   └─ CARC Scores: C=4.0 A=3.5 R=4.5 C=4.0
+   └─ Total: 16.0/20 ✅ Excellent
+   └─ Feedback: The response provides a good overview of LLM agent trends in 2024, covering key areas like multi-agent systems, smaller LLMs, and agent design. However, the accuracy is questionable due to the citations not being actual research papers but rather notes like 'Q3' or general statements. While the response is mostly relevant and well-organized, the lack of verifiable sources and specific paper titles is a significant weakness.
+
+┌════════════════════════════════════════════════════════════════
+│ Phase 7 Parallel Benchmark Result
+├────────────────────────────────────────────────────────────────
+│ Query: 2024년 발표된 LLM 기반 에이전트 시스템 관련 논문들을 분석하고 주요 트렌드를 설명해줘...
+│ Time: 49.0s
+│ LLM Calls: 2
+│ Search Calls: 5
+│ URLs Read: 12
+│ Iterations: 3
+│ Est. Tokens: 1910
+│ Response Length: 5925 chars
+│ Has Citations: ✅
+│ CARC Quality: C=4.0 A=3.5 R=4.5 C=4.0 → 16.0/20 👍 Good
+└────────────────────────────────────────────────────────────────
+
+
+======================================================================
+📄 FULL RESPONSE:
+======================================================================
+## 핵심 요약
+
+2024년 LLM 기반 에이전트 시스템 연구는 단일 LLM에서 협업적인 다중 에이전트 시스템으로의 전환, 소형화된 고성능 LLM 개발, 에이전트 기능 향상 및 효율적인 LLM 애플리케이션 구축에 집중되고 있다.
+
+## 주요 발견 사항
+
+*   **다중 에이전트 시스템으로의 전환:** AI 분야는 GPT-4, Claude와 같은 단일 LLM에서 벗어나 특화된 AI 에이전트들이 협력하는 다중 에이전트 시스템으로 이동하고 있다 [3], [12], [25].
+*   **소형화된 고성능 LLM:** TinyGPT, TinyLlama (11억 개 파라미터)와 같이 작지만 강력한 LLM 개발이 두드러진 추세이다 [4], [13], [21], [31].
+*   **향상된 에이전트 설계:** 에이전트 모듈 개선 및 협업 시스템으로의 확장에 연구가 집중되고 있으며 [1], [10], [22], [30], 효과적인 에이전트를 위해 계획, 도구 사용, 협업 기능이 내장되어야 한다 [16], [24], [33].
+*   **인지 아키텍처 통합:** LLM 에이전트가 고전적인 인지 아키텍처(SOAR, ACT-R)와 연결되어 더욱 견고한 에이전트를 위한 인지 과학 연구를 활용하고 있다 [2], [11], [23], [34].
+*   **LLM 애플리케이션 및 활용 사례:** 개발자들은 보다 복잡한 다단계 에이전트를 구축하고 있으며 [6], [14], 효율적이고 안정적인 LLM 애플리케이션 개발에 집중하고 있다 [20]. LLM은 고객 지원, 마케팅 자동화, 워크플로우 자동화와 같은 다양한 애플리케이션에 활용되며 [17], [32], 기존 API 오케스트레이터 역할을 수행하는 경우가 많다 [18].
+
+## 상세 분석
+
+*   **다중 에이전트 시스템:** 다중 에이전트 시스템으로의 전환은 복잡한 문제 해결 능력 향상, 유연성, 데이터 보존, 수익 창출 가능성 때문에 추진되고 있다 [25]. Multi-LLM-Agent System (MLAS), AutoGen, CrewAI와 같은 프레임워크는 다중 에이전트 간의 통신 및 협업을 용이하게 한다 [26]. AutoGen은 인간 참여형 상호 작용 및 여러 LLM 공급자와의 통합을 지원하며 [27], CrewAI는 프로덕션 환경에 적합한 다중 에이전트 팀을 구축하기 위해 설계되었다 [28]. 이기종 다중 에이전트 시스템 (X-MAS)은 전문 분야에 따라 에이전트에 다른 LLM을 할당하여 효율성을 최적화한다 [29]. 이는 특히 복잡한 문제를 분업하여 해결하고, 각 LLM의 강점을 활용하는 데 효과적이다.
+
+*   **소형화된 고성능 LLM:** 리소스 제약적인 환경에서의 사용을 용이하게 하고, 추론 비용을 절감하며, 특정 작업에 특화된 모델을 만들 수 있다는 장점 때문에 소형 LLM 개발이 주목받고 있다. TinyGPT, TinyLlama와 같은 모델은 적은 파라미터 수에도 불구하고 상당한 성능을 보여준다 [4], [13], [21], [31].
+
+*   **에이전트 설계 개선:**  계획, 도구 사용, 협업 능력은 에이전트가 자율적으로 복잡한 작업을 수행하는 데 필수적이다 [16], [24], [33]. 에이전트 내부 모듈을 개선하고, 이러한 모듈을 협업 시스템으로 확장하는 연구는 보다 강력하고 유연한 에이전트 시스템 구축에 기여한다 [1], [10], [22], [30]. 특히, 에이전트의 역할과 작업을 프로젝트 요구 사항에 따라 동적으로 생성하는 기술은 다양한 환경에 대한 적응성을 높인다 [15].
+
+*   **인지 아키텍처 통합:** LLM 에이전트에 SOAR, ACT-R과 같은 고전적인 인지 아키텍처를 통합함으로써, 인간의 인지 과정을 모방하여 에이전트의 추론 능력, 학습 능력, 문제 해결 능력을 향상시킬 수 있다 [2], [11], [23], [34]. 이는 에이전트의 안정성과 신뢰성을 높이는 데 중요한 역할을 한다.
+
+*   **LLM 애플리케이션:** 고객 지원, 마케팅 자동화, 워크플로우 자동화 외에도, LLM은 API 오케스트레이터로서 다양한 시스템을 통합하고 프로세스를 자동화하는 데 널리 사용되고 있다 [17], [18], [32]. 개발자들은 LLM 호출 횟수를 최소화하고 품질 검사를 추가하여 다단계 에이전트의 효율성을 높이는 데 주력하고 있다 [6].
+
+## 관련 자료 및 출처
+
+[1] Q3
+[2] Q3
+[3] Q3
+[4] Q2
+[5] Q2
+[6] Q2
+[7] Q1
+[8] Q1
+[9] Q1
+[10] Functional and Multi-agent Design is a key area, focusing on enhancing internal modules and scaling to collaborative systems.
+[11] Cognitive architectures are being connected to LLM agents, leveraging cognitive science research for more robust agents.
+[12] There's a shift towards multi-agent LLM systems where specialized AI agents collaborate to solve complex problems.
+[13] A trend is emerging to develop smaller, highly capable LLMs such as TinyGPT and TinyLlama.
+[14] Developers are creating more complex multi-step agents.
+[15] Agent roles and tasks are dynamically generated based on project requirements.
+[16] Effective agents require built-in capabilities for planning, tool use, and coordination.
+[17] In 2024, LLMs are being used for customer support, marketing automation, and workflow automation.
+[18] LLMs are often used as orchestrators of existing APIs, streamlining processes.
+[19] Multi-agent systems, where multiple LLMs collaborate, are being developed.
+[20] Developers are focusing on creating more efficient and reliable LLM applications.
+[21] There's a trend towards smaller, more capable LLMs.
+[22] Research focuses on enhancing agent modules and scaling them to collaborative systems.
+[23] Cognitive architectures are being connected to LLM agents.
+[24] Planning, tool use and coordination are important capabilities.
+[25] The shift from single LLM agents to multi-agent systems is driven by increased task-solving potential, flexibility, data preservation, and monetization opportunities.
+[26] Frameworks like Multi-LLM-Agent System (MLAS), AutoGen, and CrewAI are designed to facilitate multi-agent communication and collaboration.
+[27] AutoGen specializes in conversational multi-agent systems with human-in-the-loop support and integration with multiple LLM providers.
+[28] CrewAI is a production-ready framework for building multi-agent teams.
+[29] Heterogeneous multi-agent systems (X-MAS) assign different LLMs to agents based on their specialization, optimizing efficiency.
+[30] Key research areas include functional and multi-agent design, enhancing agent modules, and scaling to collaborative systems.
+[31] There's a trend toward smaller, highly capable LLMs.
+[32] LLMs are being used in various applications, including customer support, marketing automation, and workflow automation.
+[33] Effective agents need planning, tool use, and coordination capabilities.
+[34] Cognitive architectures are being connected to LLM agents to create more robust agents.
+
+SOURCE URLs:
+- https://arxiv.org/html/2503.04596v2
+- https://www.superannotate.com/blog/large-action-models
+- https://springsapps.com/knowledge/everything-you-need-to-know-about-multi-ai-agents-in-2024-explanation-examples-and-challenges
+- https://blog.promptlayer.com/types-of-llm-agent/
+- https://medium.com/@gianluca.mondillo/how-ai-agents-really-work-beyond-the-hype-inside-the-architecture-aa6c892a5c2a
+- https://xue-guang.com/post/llm-marl/
+- https://www.linkedin.com/pulse/evolving-landscape-large-language-models-2024-2025-zqgue
+- https://newsletter.victordibia.com/p/ai-agents-2024-rewind-a-year-of-building
+- https://github.com/taichengguo/LLM_MultiAgents_Survey_Papers
+- https://medium.com/@ai_hi/llm-trends-in-the-making-what-to-expect-in-2024-915029dfd9b6
+- https://collabnix.com/multi-agent-and-multi-llm-architecture-complete-guide-for-2025/
+- https://www.nature.com/articles/s41598-025-92337-6
+
+## 결론 및 평가
+
+2024년 LLM 기반 에이전트 시스템 연구는 AI 시스템의 효율성, 유연성, 적응성을 높이는 데 중점을 두고 있다. 다중 에이전트 시스템, 소형화된 고성능 LLM, 향상된 에이전트 설계, 인지 아키텍처 통합은 이러한 목표를 달성하기 위한 핵심 전략이다. 향후 연구는 이러한 트렌드를 더욱 발전시켜 다양한 실제 애플리케이션에서 LLM 기반 에이전트 시스템의 활용도를 높이는 데 집중할 것으로 예상된다. 특히, 다중 에이전트 시스템의 협업 효율성을 높이고, 소형 LLM의 성능을 극대화하며, 에이전트의 안전성과 윤리적인 문제를 해결하는 것이 중요한 과제가 될 것이다.
+======================================================================
+
+
+📊 Running benchmark: RAG(Retrieval-Augmented Generation)와 Agent 기반 접근법의...
+
+🔎 Clarify: Analyzing query...
+   └─ Query: RAG(Retrieval-Augmented Generation)와 Agent 기반 접근법의 차이점과 각각 언제 사용하면 좋은지 설명해줘
+   └─ Status: 🟢 Clear
+   └─ Analysis: The query asks for a comparison between Retrieval-Augmented Generation (RAG) and Agent-based approaches, specifically focusing on their differences and optimal use cases. The intent is clear: to understand the distinctions and when to apply each approach.
+   └─ Topics: Retrieval-Augmented Generation, Agent-based approach
+📋 Planner: Creating research plan for: RAG(Retrieval-Augmented Generation)와 Agent 기반 접근법의
+
+📋 Planner: Generated 4 queries
+   └─ Queries:
+      [1] RAG vs Agent based approach
+      [2] Retrieval Augmented Generation vs Agent
+      [3] When to use RAG vs Agent
+      [4] RAG and Agent comparison
+   └─ Focus: RAG, Agents, Comparison, Use cases
+
+🚀 ParallelResearcher [Phase 7]: Executing 3 queries in parallel
+   └─ Max workers: 3
+   └─ [1] RAG vs Agent based approach
+   └─ [2] Retrieval Augmented Generation vs Agent
+   └─ [3] When to use RAG vs Agent
+📖 Read URL: https://www.pingcap.com/article/agentic-rag-vs-tra... (8015 chars)
+   ✓ Query 1 completed in 2.20s
+📖 Read URL: https://www.linkedin.com/posts/alexxubyte_systemde... (8015 chars)
+   ✓ Query 2 completed in 2.92s
+📖 Read URL: https://www.bitcot.com/rag-vs-agentic-rag-vs-mcp/... (8015 chars)
+   ✓ Query 3 completed in 3.28s
+
+   ⏱️ Parallel research completed: 3/3 queries in 3.28s
+   └─ Total results: 15
+   └─ Total contents: 6
+   └─ Total findings: 9
+   └─ Speedup: 2.6x (sequential would take 8.4s)
+🔬 Analyzer [1]: Analyzing 15 results, 6 contents
+
+🔬 Analyzer [1]: Analyzed 15 results, 6 contents
+   └─ New findings:
+      [1] Traditional RAG uses a static workflow and predefined queries, while Agentic RAG employs autonomous AI agents for dynamic decision-making and iterative reasoning.
+      [2] Traditional RAG is suitable for simple, query-based tasks, whereas Agentic RAG is better for complex, multi-step processes.
+      [3] RAG (Retrieval Augmented Generation) combines information retrieval with large language models to generate answers.
+      [4] Agentic RAG integrates RAG into its reasoning process, actively managing information retrieval.
+      [5] RAG is best for quick wins with static content and Agentic RAG is a smart bridge when goal-based reasoning is needed.
+   └─ Decision: Research complete (14 total findings)
+
+📦 Compress: Compressing 14 findings, 6 contents
+   └─ Compressed to 2275 chars (from ~5588 raw chars)
+   └─ Sources cited: 6
+   └─ Preview:
+      ## Key Findings
+      - Traditional RAG uses a static workflow, while Agentic RAG uses autonomous AI agents for dynamic decision-making [1].
+      - RAG is suitable for simple, query-based tasks, whereas Agentic RAG is better for complex, multi-step processes [1].
+      - RAG can be used as one of the AI Agent's tools [2].
+      - RAG is effective for quick tasks with static content, while Agentic RAG excels when goal-based reasoning is required [2].
+      
+      ## Detailed Information
+      - RAG (Retrieval Augmented Generation) combines information retrieval with large language models to generate answers [3], [6]. It connects LLMs to external data sources for context-aware information [2].
+      - In RAG, relevant data is retrieved from data sources and extracted to a vector database [6]. The prompts are then augmented by retrieving information and merging it with the query prompt [6].
+      - Traditional RAG employs a simple query, retrieve, and generate workflow and is typically faster and less expensive [3]. It is best for quick wins with static content [2]. Traditional RAG uses a static workflow and predefined queries [1].
+      - Agentic RAG integrates RAG into its reasoning process and actively manages information retrieval [1]. It is a dynamic approach where the agent queries, refines, uses RAG as a tool, and manages context over time [3]. It's a smart bridge when goal-based reasoning is needed [2]. Agentic RAG employs autonomous AI agents for dynamic decision-making and iterative reasoning [1].
+      - Use Agentic RAG when the problem demands complexity, multi-step reasoning, or action-taking beyond what a static retrieval provides [3].
+      - RAG is a retrieval-based augmentation technique, while AI Agents perform structured execution beyond retrieval [2].
+      
+      ## Sources
+      [1] https://www.pingcap.com/article/agentic-rag-vs-traditional-rag-key-differences-benefits/
+      [2] https://medium.com/olarry/understanding-the-difference-between-rag-and-ai-agents-10df56b35e02
+      [3] https://medium.com/@gaddam.rahul.kumar/agentic-rag-vs-traditional-rag-b1a156f72167
+      [4] https://medium.com/@datajournal/rag-vs-agentic-rag-a-comprehensive-guide-6711cce24037
+      [5] https://www.bitcot.com/rag-vs-agentic-rag-vs-mcp/
+      [6] https://www.linkedin.com/posts/alexxubyte_systemdesign-coding-interviewtips-activity-7344040591753678849-j-6J
+
+✍️ Writer: Composing response from 14 findings
+   └─ Using compressed notes (2275 chars)
+
+✍️ Writer: Generated response (3520 chars)
+   └─ Sources used:
+      [1] https://medium.com/olarry/understanding-the-difference-between-rag-and-ai-agents-10df56b35e02
+      [2] https://www.bitcot.com/rag-vs-agentic-rag-vs-mcp/
+      [3] https://medium.com/@gaddam.rahul.kumar/agentic-rag-vs-traditional-rag-b1a156f72167
+   └─ Response preview:
+      ## 핵심 요약
+      
+      RAG(Retrieval-Augmented Generation)는 정적인 워크플로우를 사용하는 반면, Agent 기반 RAG는 자율적인 AI 에이전트를 활용하여 동적인 의사 결정을 수행합니다 [1]. RAG는 단순 질의 응답에 적합하며, Agent 기반 RAG는 복잡한 다단계 프로세스에 더 효과적입니다 [1].
+      
+      ## 주요 발견 사항
+      
+      *   전통적인 RAG는 정적인 워크플로우를 사용하는 반면, Agent 기반 RAG는 자율적인 AI 에이전트를 사용하여 동적인 의사 결정을 내립니다 [1].
+      *   RAG는 간단한 질의 기반 작업에 적합하고, Agent 기반 RAG는 복잡하고 다단계 프로세스에 더 적합합니다 [1].
+      *   RAG는 AI 에이전트의 도구 중 하나로 사용될 수 있습니다 [2].
+      *   RAG는 정적인 콘텐츠를 이용한 빠른 작업에 효과적이며, Agent 기반 RAG는 목표 기반 추론이 필요한 경우에 뛰어납니다 [2].
+      *   RAG는 정보 검색과 대규모 언어 모델을 결합하여 답변을 생성합니다 [3], [6].
+      *   Agent 기반 RAG는 RAG를 추론 프로세스에 통합하고 정보 검색을 능동적으로 관리합니다 [1].
+      
+      ## 상세 분석
+      
+      RAG (Retrieval-Augmented Generation)는 검색 기반 증강 생성 기술로서, 대규모 언어 모델(LLM)을 외부 데이터 소스와 연결하여 컨텍스트 인식 정보를 제공합니다 [2], [3], [6]. RAG는 LLM에 단순히 학습된 정보 외에 실시간 또는 특정 도메인의 지식을 제공함으로써 응답의 정확성과 관련성을 높이는 데 기여합니다.  RAG는 일반적으로 사용자 쿼리를 받아 관련된 문서를 검색하고, 검색된 문서를 LLM의 프롬프트에 추가하여 최종 답변을 생성하는 방식으로 작동합니다 [6].  이 과정은 비교적 단순하고 직관적이며, 빠른 속도와 낮은 비용으로 효과적인 결과를 얻을 수 있다는 장점이 있습니다 [3]. 따라서 정적인 콘텐츠를 기반으로 빠른 답변을 제공해야 하는 경우에 RAG가 적합합니다 [2].
+      
+      반면, Agent 기반 RAG는 좀 더 발전된 형태의 접근 방식입니다.  여기서는 AI 에이전트가 RAG를 도구로 활용하여 복잡한 작업을 수행합니다 [1], [2].  Agent는 주어진 목표를 달성하기 위해 스스로 판단하고 계획을 수립하며, 필요한 정보를 검색하고 활용하는 과정을 반복합니다.  Agent 기반 RAG는 정적인 검색에 그치지 않고, 검색된 정보를 바탕으로 다음 단계를 결정하고, 필요에 따라 추가적인 검색을 수행하는 등 동적인 의사 결정을 수행할 수 있습니다 [3].  이러한 특징 덕분에 Agent 기반 RAG는 복잡한 추론 과정이 필요하거나, 여러 단계를 거쳐야 하는 작업에 효과적입니다 [3]. 예를 들어, 특정 주제에 대한 심층적인 조사를 수행하거나, 여러 출처의 정보를 종합하여 결론을 도출해야 하는 경우에 Agent 기반 RAG가 유용하게 사용될 수 있습니다.
+      
+      RAG와 Agent 기반 RAG의 주요 차이점은 워크플로우의 유연성입니다 [1].  전통적인 RAG는 미리 정의된 쿼리와 정적인 검색 결과를 사용하는 반면, Agent 기반 RAG는 Agent가 스스로 쿼리를 생성하고 검색 결과를 평가하여 다음 단계를 결정합니다.  이러한 동적인 의사 결정 능력은 Agent 기반 RAG가 복잡한 문제 해결에 더 적합하도록 만들어줍니다.  또한, RAG는 정보 검색을 위한 도구로 활용되는 반면, AI Agent는 검색을 넘어 구조화된 실행을 수행할 수 있다는 점도 중요한 차이점입니다 [2].
+      
+      ## 관련 자료 및 출처
+      
+      *   [1] PingCAP. (n.d.). Agentic RAG vs. Traditional RAG: Key Differences & Benefits. [https://www.pingcap.com/article/agentic-rag-vs-traditional-rag-key-differences-benefits/](https://www.pingcap.com/article/agentic-rag-vs-traditional-rag-key-differences-benefits/)
+      *   [2] Olarry. (n.d.). Understanding the difference between RAG and AI Agents. [https://medium.com/olarry/understanding-the-difference-between-rag-and-ai-agents-10df56b35e02](https://medium.com/olarry/understanding-the-difference-between-rag-and-ai-agents-10df56b35e02)
+      *   [3] Gaddam, R. K. (n.d.). Agentic RAG vs Traditional RAG. [https://medium.com/@gaddam.rahul.kumar/agentic-rag-vs-traditional-rag-b1a156f72167](https://medium.com/@gaddam.rahul.kumar/agentic-rag-vs-traditional-rag-b1a156f72167)
+      *   [4] DataJournal. (n.d.). RAG vs Agentic RAG: A Comprehensive Guide. [https://medium.com/@datajournal/rag-vs-agentic-rag-a-comprehensive-guide-6711cce24037](https://medium.com/@datajournal/rag-vs-agentic-rag-a-comprehensive-guide-6711cce24037)
+      *   [5] Bitcot. (n.d.). RAG vs Agentic RAG vs MCP. [https://www.bitcot.com/rag-vs-agentic-rag-vs-mcp/](https://www.bitcot.com/rag-vs-agentic-rag-vs-mcp/)
+      *   [6] Xu, A. (2024). Alex Xu on LinkedIn. [https://www.linkedin.com/posts/alexxubyte_systemdesign-coding-interviewtips-activity-7344040591753678849-j-6J](https://www.linkedin.com/posts/alexxubyte_systemdesign-coding-interviewtips-activity-7344040591753678849-j-6J)
+      
+      ## 결론 및 평가
+      
+      RAG와 Agent 기반 RAG는 각각 장단점을 가지고 있으며, 작업의 성격에 따라 적절한 접근 방식을 선택해야 합니다.  빠르고 간단한 질의 응답에는 RAG가 효과적이며, 복잡하고 다단계 추론이 필요한 경우에는 Agent 기반 RAG가 더 적합합니다. 또한, Agent 기반 RAG는 RAG를 도구로 활용할 수 있기 때문에, 필요에 따라 두 가지 접근 방식을 결합하여 사용할 수도 있습니다.  AI 기술의 발전과 함께 RAG와 Agent 기반 RAG는 더욱 다양하게 활용될 것으로 예상되며, 앞으로도 지속적인 연구와 개발이 필요합니다.
+
+🔍 Critique: CARC Quality Evaluation...
+   └─ CARC Scores: C=4.0 A=3.5 R=4.5 C=4.0
+   └─ Total: 16.0/20 ✅ Excellent
+   └─ Feedback: The response adequately explains the differences between RAG and Agent-based RAG and provides examples of when to use each. However, the accuracy of the information could be improved with more authoritative sources. Additionally, while the core question is well-addressed, a deeper dive into the limitations of each approach would enhance completeness.
+
+┌════════════════════════════════════════════════════════════════
+│ Phase 7 Parallel Benchmark Result
+├────────────────────────────────────────────────────────────────
+│ Query: RAG(Retrieval-Augmented Generation)와 Agent 기반 접근법의 차이점과 각각 언...
+│ Time: 22.81s
+│ LLM Calls: 2
+│ Search Calls: 3
+│ URLs Read: 6
+│ Iterations: 1
+│ Est. Tokens: 1261
+│ Response Length: 3520 chars
+│ Has Citations: ✅
+│ CARC Quality: C=4.0 A=3.5 R=4.5 C=4.0 → 16.0/20 👍 Good
+└────────────────────────────────────────────────────────────────
+
+
+======================================================================
+📄 FULL RESPONSE:
+======================================================================
+## 핵심 요약
+
+RAG(Retrieval-Augmented Generation)는 정적인 워크플로우를 사용하는 반면, Agent 기반 RAG는 자율적인 AI 에이전트를 활용하여 동적인 의사 결정을 수행합니다 [1]. RAG는 단순 질의 응답에 적합하며, Agent 기반 RAG는 복잡한 다단계 프로세스에 더 효과적입니다 [1].
+
+## 주요 발견 사항
+
+*   전통적인 RAG는 정적인 워크플로우를 사용하는 반면, Agent 기반 RAG는 자율적인 AI 에이전트를 사용하여 동적인 의사 결정을 내립니다 [1].
+*   RAG는 간단한 질의 기반 작업에 적합하고, Agent 기반 RAG는 복잡하고 다단계 프로세스에 더 적합합니다 [1].
+*   RAG는 AI 에이전트의 도구 중 하나로 사용될 수 있습니다 [2].
+*   RAG는 정적인 콘텐츠를 이용한 빠른 작업에 효과적이며, Agent 기반 RAG는 목표 기반 추론이 필요한 경우에 뛰어납니다 [2].
+*   RAG는 정보 검색과 대규모 언어 모델을 결합하여 답변을 생성합니다 [3], [6].
+*   Agent 기반 RAG는 RAG를 추론 프로세스에 통합하고 정보 검색을 능동적으로 관리합니다 [1].
+
+## 상세 분석
+
+RAG (Retrieval-Augmented Generation)는 검색 기반 증강 생성 기술로서, 대규모 언어 모델(LLM)을 외부 데이터 소스와 연결하여 컨텍스트 인식 정보를 제공합니다 [2], [3], [6]. RAG는 LLM에 단순히 학습된 정보 외에 실시간 또는 특정 도메인의 지식을 제공함으로써 응답의 정확성과 관련성을 높이는 데 기여합니다.  RAG는 일반적으로 사용자 쿼리를 받아 관련된 문서를 검색하고, 검색된 문서를 LLM의 프롬프트에 추가하여 최종 답변을 생성하는 방식으로 작동합니다 [6].  이 과정은 비교적 단순하고 직관적이며, 빠른 속도와 낮은 비용으로 효과적인 결과를 얻을 수 있다는 장점이 있습니다 [3]. 따라서 정적인 콘텐츠를 기반으로 빠른 답변을 제공해야 하는 경우에 RAG가 적합합니다 [2].
+
+반면, Agent 기반 RAG는 좀 더 발전된 형태의 접근 방식입니다.  여기서는 AI 에이전트가 RAG를 도구로 활용하여 복잡한 작업을 수행합니다 [1], [2].  Agent는 주어진 목표를 달성하기 위해 스스로 판단하고 계획을 수립하며, 필요한 정보를 검색하고 활용하는 과정을 반복합니다.  Agent 기반 RAG는 정적인 검색에 그치지 않고, 검색된 정보를 바탕으로 다음 단계를 결정하고, 필요에 따라 추가적인 검색을 수행하는 등 동적인 의사 결정을 수행할 수 있습니다 [3].  이러한 특징 덕분에 Agent 기반 RAG는 복잡한 추론 과정이 필요하거나, 여러 단계를 거쳐야 하는 작업에 효과적입니다 [3]. 예를 들어, 특정 주제에 대한 심층적인 조사를 수행하거나, 여러 출처의 정보를 종합하여 결론을 도출해야 하는 경우에 Agent 기반 RAG가 유용하게 사용될 수 있습니다.
+
+RAG와 Agent 기반 RAG의 주요 차이점은 워크플로우의 유연성입니다 [1].  전통적인 RAG는 미리 정의된 쿼리와 정적인 검색 결과를 사용하는 반면, Agent 기반 RAG는 Agent가 스스로 쿼리를 생성하고 검색 결과를 평가하여 다음 단계를 결정합니다.  이러한 동적인 의사 결정 능력은 Agent 기반 RAG가 복잡한 문제 해결에 더 적합하도록 만들어줍니다.  또한, RAG는 정보 검색을 위한 도구로 활용되는 반면, AI Agent는 검색을 넘어 구조화된 실행을 수행할 수 있다는 점도 중요한 차이점입니다 [2].
+
+## 관련 자료 및 출처
+
+*   [1] PingCAP. (n.d.). Agentic RAG vs. Traditional RAG: Key Differences & Benefits. [https://www.pingcap.com/article/agentic-rag-vs-traditional-rag-key-differences-benefits/](https://www.pingcap.com/article/agentic-rag-vs-traditional-rag-key-differences-benefits/)
+*   [2] Olarry. (n.d.). Understanding the difference between RAG and AI Agents. [https://medium.com/olarry/understanding-the-difference-between-rag-and-ai-agents-10df56b35e02](https://medium.com/olarry/understanding-the-difference-between-rag-and-ai-agents-10df56b35e02)
+*   [3] Gaddam, R. K. (n.d.). Agentic RAG vs Traditional RAG. [https://medium.com/@gaddam.rahul.kumar/agentic-rag-vs-traditional-rag-b1a156f72167](https://medium.com/@gaddam.rahul.kumar/agentic-rag-vs-traditional-rag-b1a156f72167)
+*   [4] DataJournal. (n.d.). RAG vs Agentic RAG: A Comprehensive Guide. [https://medium.com/@datajournal/rag-vs-agentic-rag-a-comprehensive-guide-6711cce24037](https://medium.com/@datajournal/rag-vs-agentic-rag-a-comprehensive-guide-6711cce24037)
+*   [5] Bitcot. (n.d.). RAG vs Agentic RAG vs MCP. [https://www.bitcot.com/rag-vs-agentic-rag-vs-mcp/](https://www.bitcot.com/rag-vs-agentic-rag-vs-mcp/)
+*   [6] Xu, A. (2024). Alex Xu on LinkedIn. [https://www.linkedin.com/posts/alexxubyte_systemdesign-coding-interviewtips-activity-7344040591753678849-j-6J](https://www.linkedin.com/posts/alexxubyte_systemdesign-coding-interviewtips-activity-7344040591753678849-j-6J)
+
+## 결론 및 평가
+
+RAG와 Agent 기반 RAG는 각각 장단점을 가지고 있으며, 작업의 성격에 따라 적절한 접근 방식을 선택해야 합니다.  빠르고 간단한 질의 응답에는 RAG가 효과적이며, 복잡하고 다단계 추론이 필요한 경우에는 Agent 기반 RAG가 더 적합합니다. 또한, Agent 기반 RAG는 RAG를 도구로 활용할 수 있기 때문에, 필요에 따라 두 가지 접근 방식을 결합하여 사용할 수도 있습니다.  AI 기술의 발전과 함께 RAG와 Agent 기반 RAG는 더욱 다양하게 활용될 것으로 예상되며, 앞으로도 지속적인 연구와 개발이 필요합니다.
+======================================================================
+
+
+╔═══════════════════════════════════════════
+║  Phase 7 Parallel Summary (3 tests)
+╠═══════════════════════════════════════════
+║  Average Time: 32.26s
+║  Average Tokens: 1434
+║  Citation Rate: 100%
+║  CARC Quality: C=4.0 A=3.5 R=4.5 C=4.0 → 16.0/20
+╚═══════════════════════════════════════════
+
+📁 Results saved to: benchmark_results/phase_7_parallel_20251221_004112.json

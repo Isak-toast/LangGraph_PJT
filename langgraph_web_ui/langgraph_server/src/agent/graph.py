@@ -20,7 +20,7 @@ graph.py - Deep Research 그래프 정의
        │
        ▼
   ┌──────────────┐
-  │ContentReader │ ← URL 내용 읽기
+  │ContentReader │ ← URL 내용 읽기 (병렬)
   └──────┬───────┘
          │
          ▼
@@ -91,7 +91,7 @@ def build_graph():
     # Clarify → Planner (현재는 항상 진행, 추후 Human-in-the-Loop 추가 가능)
     workflow.add_edge("Clarify", "Planner")
     
-    # 순차 흐름
+    # 순차 흐름: 깊이 있는 반복적 연구를 위해 유지
     workflow.add_edge("Planner", "Searcher")
     workflow.add_edge("Searcher", "ContentReader")
     workflow.add_edge("ContentReader", "Analyzer")

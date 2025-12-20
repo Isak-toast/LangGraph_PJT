@@ -67,9 +67,12 @@ def read_url_tool(url: str) -> str:
         read_url_tool("https://arxiv.org/html/2412.03801v1")
     """
     try:
-        # HTTP 요청으로 페이지 내용 가져오기
+        # HTTP 요청으로 페이지 내용 가져오기 (403 에러 방지를 위한 현실적인 헤더)
         headers = {
-            "User-Agent": "Mozilla/5.0 (compatible; ResearchBot/1.0)"
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+            "Accept-Language": "en-US,en;q=0.5",
+            "Connection": "keep-alive",
         }
         
         with httpx.Client(timeout=15.0, follow_redirects=True) as client:

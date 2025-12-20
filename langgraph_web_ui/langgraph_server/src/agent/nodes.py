@@ -309,11 +309,14 @@ def searcher_node(state: DeepResearchState) -> dict:
 
 
 # ================================================================
-# 3. ContentReader 노드 - URL 내용 읽기
+# 3. ContentReader 노드 - URL 내용 읽기 (Phase 7: 병렬 실행)
 # ================================================================
 
+import asyncio
+import concurrent.futures
+
 def content_reader_node(state: DeepResearchState) -> dict:
-    """본문 내용을 읽는 ContentReader 노드"""
+    """본문 내용을 병렬로 읽는 ContentReader 노드 (Phase 7)"""
     
     urls = state.get("urls_to_read", [])
     existing_contents = state.get("read_contents", [])
@@ -322,22 +325,59 @@ def content_reader_node(state: DeepResearchState) -> dict:
         print("📖 ContentReader: No URLs to read")
         return {"read_contents": existing_contents}
     
-    print(f"\n📖 ContentReader: Reading {len(urls[:3])} URLs")
+    urls_to_process = urls[:3]  # 상위 3개만 읽기 (토큰 절약)
+    print(f"\n📖 ContentReader: Reading {len(urls_to_process)} URLs in parallel 🚀")
     
-    new_contents = []
-    for url in urls[:3]:  # 상위 3개만 읽기 (토큰 절약)
+    # 병렬 URL 읽기 함수
+    def read_single_url(url: str) -> dict:
         try:
             content = read_url_tool.invoke(url)
-            new_contents.append({
+            return {
                 "url": url,
                 "content": content[:4000],  # 각 URL 4000자 제한
-                "title": url.split("/")[-1]
-            })
-            preview = truncate_text(content.replace('\n', ' '), 300)
-            print(f"   └─ [{truncate_text(url, 60)}]")
-            print(f"      Preview: {preview}")
+                "title": url.split("/")[-1],
+                "success": True
+            }
         except Exception as e:
-            print(f"   ✗ Failed: {truncate_text(url, 40)} ({e})")
+            return {
+                "url": url,
+                "content": "",
+                "title": "",
+                "success": False,
+                "error": str(e)
+            }
+    
+    # ThreadPoolExecutor로 병렬 실행 (Phase 7)
+    import time
+    start_time = time.time()
+    
+    with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
+        future_to_url = {executor.submit(read_single_url, url): url for url in urls_to_process}
+        results = []
+        for future in concurrent.futures.as_completed(future_to_url):
+            result = future.result()
+            results.append(result)
+    
+    elapsed = time.time() - start_time
+    
+    # 결과 처리
+    new_contents = []
+    success_count = 0
+    for result in results:
+        if result["success"]:
+            success_count += 1
+            new_contents.append({
+                "url": result["url"],
+                "content": result["content"],
+                "title": result["title"]
+            })
+            preview = truncate_text(result["content"].replace('\n', ' '), 200)
+            print(f"   ✓ [{truncate_text(result['url'], 50)}]")
+            print(f"      Preview: {preview}")
+        else:
+            print(f"   ✗ Failed: {truncate_text(result['url'], 40)} ({result.get('error', 'Unknown')})")
+    
+    print(f"   └─ ⏱️ Parallel read: {success_count}/{len(urls_to_process)} URLs in {elapsed:.2f}s")
     
     # 기존 내용 + 새 내용
     all_contents = existing_contents + new_contents
