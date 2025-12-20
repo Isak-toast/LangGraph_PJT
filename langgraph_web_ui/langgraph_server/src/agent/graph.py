@@ -2,7 +2,7 @@
 graph.py - Deep Research 그래프 정의
 =====================================
 
-7노드 Deep Research 아키텍처 그래프 (Phase 3: Clarify 추가):
+8노드 Deep Research 아키텍처 그래프 (Phase 5: Critique 추가):
 
   ┌─────────┐
   │ Clarify │ ← 질문 분석 (Phase 3)
@@ -39,6 +39,11 @@ graph.py - Deep Research 그래프 정의
   └────┬───┘
        │
        ▼
+  ┌──────────┐
+  │ Critique │ ← 응답 자체 평가 (Phase 5)
+  └────┬─────┘
+       │
+       ▼
      [END]
 """
 
@@ -52,6 +57,7 @@ from src.agent.nodes import (
     analyzer_node,
     compress_node,
     writer_node,
+    critique_node,     # Phase 5
     should_continue_research
 )
 
@@ -73,6 +79,7 @@ def build_graph():
     workflow.add_node("Analyzer", analyzer_node)
     workflow.add_node("Compress", compress_node)
     workflow.add_node("Writer", writer_node)
+    workflow.add_node("Critique", critique_node)  # Phase 5
     
     # ========================================
     # 엣지 정의 (흐름)
@@ -102,12 +109,14 @@ def build_graph():
     # Compress → Writer
     workflow.add_edge("Compress", "Writer")
     
-    # Writer → 종료
-    workflow.add_edge("Writer", END)
+    # Writer → Critique (Phase 5)
+    workflow.add_edge("Writer", "Critique")
+    
+    # Critique → 종료
+    workflow.add_edge("Critique", END)
     
     return workflow
 
 
 # 그래프 컴파일
 graph = build_graph().compile()
-

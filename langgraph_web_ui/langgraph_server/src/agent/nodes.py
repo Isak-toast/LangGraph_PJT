@@ -712,6 +712,122 @@ IMPORTANT: Preserve and include the citations [1], [2], etc. from the research c
 
 
 # ================================================================
+# 7. Critique 노드 - 응답 자체 평가 (Phase 5)
+# ================================================================
+
+CRITIQUE_PROMPT = """You are a RESPONSE CRITIC. Evaluate the research response quality.
+
+<Task>
+Analyze the response and provide a quality assessment on a scale of 1-10.
+</Task>
+
+<Evaluation_Criteria>
+1. **Completeness** (1-3 points): Does the response fully answer the question?
+2. **Accuracy** (1-3 points): Are the facts and citations correct?
+3. **Structure** (1-2 points): Is the response well-organized?
+4. **Clarity** (1-2 points): Is the language clear and professional?
+</Evaluation_Criteria>
+
+<Output_Format>
+{
+    "score": 8,
+    "feedback": "The response is comprehensive but lacks depth in X area.",
+    "needs_improvement": false,
+    "improvement_suggestions": ["Add more examples", "Clarify section Y"]
+}
+</Output_Format>
+
+<Decision>
+- Score >= 7: Good quality, no improvement needed
+- Score 5-6: Acceptable but could be better
+- Score < 5: Needs significant improvement
+</Decision>
+"""
+
+def critique_node(state: DeepResearchState) -> dict:
+    """응답 품질을 자체 평가하는 Critique 노드 (Phase 5)"""
+    
+    # 마지막 Writer 응답 찾기
+    messages = state.get("messages", [])
+    writer_response = ""
+    for msg in reversed(messages):
+        if hasattr(msg, 'name') and msg.name == "Writer":
+            writer_response = msg.content
+            break
+    
+    if not writer_response:
+        print("🔍 Critique: No Writer response found, skipping...")
+        return {
+            "critique_score": None,
+            "critique_feedback": None,
+            "needs_improvement": False
+        }
+    
+    # 원본 질문 찾기
+    user_query = ""
+    for msg in messages:
+        if isinstance(msg, HumanMessage):
+            user_query = msg.content
+            break
+    
+    print(f"\n🔍 Critique: Evaluating response quality...")
+    
+    try:
+        # 평가 요청
+        evaluation_request = f"""
+Original Question: {user_query}
+
+Response to Evaluate:
+{writer_response[:3000]}...
+
+Please evaluate this response according to the criteria.
+"""
+        
+        # JSON 출력을 위한 구조화된 응답 요청
+        from pydantic import BaseModel
+        from typing import List
+        
+        class CritiqueResult(BaseModel):
+            score: int
+            feedback: str
+            needs_improvement: bool
+            improvement_suggestions: List[str]
+        
+        critique_llm = llm.with_structured_output(CritiqueResult)
+        
+        result = critique_llm.invoke([
+            SystemMessage(content=CRITIQUE_PROMPT),
+            HumanMessage(content=evaluation_request)
+        ])
+        
+        # 결과 로깅
+        score = result.score
+        feedback = result.feedback
+        needs_improvement = result.needs_improvement
+        
+        status = "✅ Good" if score >= 7 else "⚠️ Acceptable" if score >= 5 else "❌ Needs work"
+        
+        print(f"   └─ Score: {score}/10 {status}")
+        print(f"   └─ Feedback: {truncate_text(feedback, 200)}")
+        if result.improvement_suggestions:
+            print(f"   └─ Suggestions: {', '.join(result.improvement_suggestions[:2])}")
+        
+        return {
+            "critique_score": score,
+            "critique_feedback": feedback,
+            "needs_improvement": needs_improvement
+        }
+        
+    except Exception as e:
+        print(f"❌ Critique error: {e}")
+        return {
+            "critique_score": None,
+            "critique_feedback": str(e),
+            "needs_improvement": False
+        }
+
+
+# ================================================================
 # 라우팅 함수
 # ================================================================
 
