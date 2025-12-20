@@ -112,6 +112,22 @@ class DeepResearchState(TypedDict):
     # 원본 질문의 분석 결과
     query_analysis: Optional[str]
 
+    # ========================================
+    # Self-Critique (Critique) - Phase 5
+    # ========================================
+    
+    # 응답 품질 점수 (1-10)
+    critique_score: Optional[int]
+    
+    # 비평 피드백
+    critique_feedback: Optional[str]
+    
+    # 개선 필요 여부
+    needs_improvement: bool
+    
+    # 개선된 응답 (필요시)
+    improved_response: Optional[str]
+
 
 # 초기 상태 생성 헬퍼
 def create_initial_state() -> dict:

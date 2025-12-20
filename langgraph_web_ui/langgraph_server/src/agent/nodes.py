@@ -165,23 +165,36 @@ def clarify_node(state: DeepResearchState) -> dict:
 
 PLANNER_PROMPT = """You are a RESEARCH PLANNER. Your job is to create a research strategy.
 
-Analyze the user's question and create a research plan with:
-1. Multiple search queries (in English for better results)
-2. Focus areas to explore
-3. Depth level (1=quick, 2=medium, 3=deep)
+<Task>
+Analyze the user's question and create a comprehensive research plan.
+</Task>
 
-OUTPUT FORMAT (JSON):
+<Requirements>
+1. Create multiple search queries (in English for better results)
+2. Identify focus areas to explore
+3. Determine appropriate depth level (1=quick, 2=medium, 3=deep)
+</Requirements>
+
+<Output_Format>
 {
     "search_queries": ["query1", "query2", "query3"],
     "focus_areas": ["area1", "area2"],
     "depth_level": 2
 }
 
-EXAMPLES:
+depth_level: 1=quick, 2=medium, 3=deep
+</Output_Format>
+
+<Examples>
 - "LangGraph Vision AI papers" → queries: ["LangGraph Vision AI paper", "LangGraph computer vision", "LangGraph image processing agent"]
 - "AI trends 2024" → queries: ["AI trends 2024", "machine learning trends 2024", "generative AI advances 2024"]
+</Examples>
 
-Create 2-4 diverse search queries to get comprehensive results.
+<Guidelines>
+- Create 2-4 diverse search queries to get comprehensive results
+- Use English for search queries for broader results
+- Ensure queries cover different aspects of the topic
+</Guidelines>
 """
 
 def planner_node(state: DeepResearchState) -> dict:
@@ -571,33 +584,41 @@ Now compress and organize this information with proper citations:
 
 WRITER_PROMPT = """You are a PROFESSIONAL WRITER. Write the FINAL RESPONSE based on research.
 
-INSTRUCTIONS:
-1. Synthesize ALL findings into a comprehensive response
-2. Write in Korean (한국어)
-3. Use proper markdown formatting
-4. Include analysis and insights
-5. Reference key sources
+<Task>
+Synthesize ALL research findings into a comprehensive, well-structured response.
+</Task>
 
-STRUCTURE:
+<Requirements>
+1. Write in Korean (한국어)
+2. Use proper markdown formatting
+3. Include analysis and insights, not just copied findings
+4. Reference key sources with inline citations
+</Requirements>
+
+<Output_Structure>
 ## 핵심 요약
-(1-2 sentences overview)
+(1-2 sentences overview of the main findings)
 
 ## 주요 발견 사항
-(Key findings from research)
+(Key bullet points from research with citations [1], [2]...)
 
 ## 상세 분석
-(Detailed analysis with structure)
+(Detailed analysis organized by topic or theme)
 
 ## 관련 자료 및 출처
-(List of relevant sources)
+(List of sources with URLs and references)
 
 ## 결론 및 평가
-(Conclusion and your assessment)
+(Your synthesis, assessment, and recommendations)
+</Output_Structure>
 
-IMPORTANT:
+<Quality_Guidelines>
 - Write clear, professional Korean
 - DO NOT just copy findings - synthesize and analyze
-- Provide valuable insights
+- Provide valuable insights and actionable conclusions
+- Ensure logical flow between sections
+- Use proper citation format [1], [2]...
+</Quality_Guidelines>
 """
 
 def writer_node(state: DeepResearchState) -> dict:
