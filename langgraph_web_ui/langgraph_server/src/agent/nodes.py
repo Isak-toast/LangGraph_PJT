@@ -61,6 +61,105 @@ def truncate_text(text: str, max_len: int = 200, force_full: bool = False) -> st
 
 
 # ================================================================
+# 0. Clarify 노드 - 질문 분석 및 명확화 (Phase 3)
+# ================================================================
+
+CLARIFY_PROMPT = """You are a QUERY ANALYZER. Assess if the user's question needs clarification.
+
+<Task>
+Analyze the user query for:
+1. Ambiguous terms or acronyms that might have multiple meanings
+2. Missing context (time period, scope, specific technology)
+3. Unclear intent (asking for comparison vs explanation vs tutorial)
+</Task>
+
+<Decision Criteria>
+NEEDS_CLARIFICATION when:
+- Contains acronyms without context (e.g., "RAG" could be Retrieval-Augmented Generation or other)
+- Timeframe is unclear for trending topics
+- Comparing items without specifying criteria
+- Very broad topics without focus
+
+CLEAR when:
+- Query is specific and well-defined
+- Context is sufficient for research
+- Intent is obvious
+
+Most queries are CLEAR. Only flag truly ambiguous ones.
+</Decision Criteria>
+
+<Output Format>
+{
+    "needs_clarification": boolean,
+    "clarification_question": "question to ask user (if needed)" or null,
+    "analysis": "brief analysis of the query",
+    "detected_topics": ["topic1", "topic2"]
+}
+</Output Format>
+"""
+
+def clarify_node(state: DeepResearchState) -> dict:
+    """질문을 분석하고 명확화 필요 여부를 판단하는 Clarify 노드"""
+    
+    messages = state.get("messages", [])
+    user_query = ""
+    for msg in messages:
+        if isinstance(msg, HumanMessage) or (hasattr(msg, 'type') and msg.type == 'human'):
+            user_query = msg.content
+            break
+    
+    print(f"\n🔎 Clarify: Analyzing query...")
+    print(f"   └─ Query: {truncate_text(user_query, 80)}")
+    
+    try:
+        # LLM에게 질문 분석 요청
+        structured_llm = llm.with_structured_output({
+            "type": "object",
+            "properties": {
+                "needs_clarification": {"type": "boolean"},
+                "clarification_question": {"type": "string"},
+                "analysis": {"type": "string"},
+                "detected_topics": {"type": "array", "items": {"type": "string"}}
+            },
+            "required": ["needs_clarification", "analysis", "detected_topics"]
+        })
+        
+        result = structured_llm.invoke([
+            SystemMessage(content=CLARIFY_PROMPT),
+            HumanMessage(content=f"Analyze this query: {user_query}")
+        ])
+        
+        needs_clarification = result.get("needs_clarification", False)
+        clarification_question = result.get("clarification_question")
+        analysis = result.get("analysis", "")
+        topics = result.get("detected_topics", [])
+        
+        # 로깅
+        status = "🟡 Needs clarification" if needs_clarification else "🟢 Clear"
+        print(f"   └─ Status: {status}")
+        print(f"   └─ Analysis: {truncate_text(analysis, 150)}")
+        print(f"   └─ Topics: {', '.join(topics[:5])}")
+        
+        if needs_clarification and clarification_question:
+            print(f"   └─ Suggested question: {clarification_question}")
+        
+        return {
+            "needs_clarification": needs_clarification,
+            "clarification_question": clarification_question if needs_clarification else None,
+            "query_analysis": analysis
+        }
+        
+    except Exception as e:
+        print(f"❌ Clarify error: {e}")
+        # 에러 시 명확화 불필요로 처리
+        return {
+            "needs_clarification": False,
+            "clarification_question": None,
+            "query_analysis": f"Analysis failed: {e}"
+        }
+
+
+# ================================================================
 # 1. Planner 노드 - 리서치 계획 수립
 # ================================================================
 

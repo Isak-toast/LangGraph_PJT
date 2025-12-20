@@ -99,6 +99,19 @@ class DeepResearchState(TypedDict):
     # 압축된 연구 노트 (중복 제거, 정리된 findings)
     compressed_notes: Optional[str]
 
+    # ========================================
+    # Clarification (Clarify) - Phase 3
+    # ========================================
+    
+    # 명확화 필요 여부
+    needs_clarification: bool
+    
+    # 명확화 질문 (사용자에게 물어볼 질문)
+    clarification_question: Optional[str]
+    
+    # 원본 질문의 분석 결과
+    query_analysis: Optional[str]
+
 
 # 초기 상태 생성 헬퍼
 def create_initial_state() -> dict:
