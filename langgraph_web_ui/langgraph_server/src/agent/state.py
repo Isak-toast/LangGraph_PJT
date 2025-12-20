@@ -148,4 +148,50 @@ def create_initial_state() -> dict:
         "needs_more_research": False,
         "next_search_query": None,
         "research_iteration": 0,
+        # Phase 8: 서브그래프 실행 추적
+        "subgraph_executions": 0,
     }
+
+
+# ========================================
+# Phase 8: Research Subgraph State
+# ========================================
+
+class ResearchSubgraphState(TypedDict):
+    """
+    Research Subgraph 전용 상태 (Phase 8)
+    
+    이 상태는 Searcher → ContentReader → Analyzer 루프 내에서만 사용됩니다.
+    메인 그래프와 독립적으로 연구를 수행하고 결과를 반환합니다.
+    """
+    
+    # 입력: 검색할 쿼리
+    query: str
+    
+    # 연구 반복 횟수 (서브그래프 내)
+    iteration: int
+    
+    # 최대 반복 횟수
+    max_iterations: int
+    
+    # 검색 결과
+    search_results: List[dict]
+    
+    # 읽어야 할 URL 목록
+    urls_to_read: List[str]
+    
+    # 읽은 URL 내용들
+    read_contents: List[ReadContent]
+    
+    # 발견된 주요 사실들
+    findings: List[str]
+    
+    # 추가 검색 필요 여부
+    needs_more_research: bool
+    
+    # 추가 검색 쿼리
+    next_search_query: Optional[str]
+    
+    # 연구 완료 여부
+    research_complete: bool
+
