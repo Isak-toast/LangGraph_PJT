@@ -1,8 +1,8 @@
 """
-graph.py - Deep Research 그래프 정의 (Phase 9: Supervisor 패턴)
+graph.py - Deep Research 그래프 정의 (Phase 10: 병렬 연구)
 =====================================
 
-Phase 9 아키텍처: Supervisor + Research Subgraph
+Phase 10 아키텍처: Parallel Research (병렬 연구)
 
   ┌─────────┐
   │ Clarify │ ← 질문 분석 (Phase 3)
@@ -15,20 +15,20 @@ Phase 9 아키텍처: Supervisor + Research Subgraph
        │
        ▼
   ┌────────────┐
-  │ Supervisor │ ← [Phase 9] 쿼리 복잡도 분석, 동적 전략 결정
+  │ Supervisor │ ← [Phase 9] 쿼리 복잡도 분석, 병렬 수 결정
   └──────┬─────┘
          │
          ▼
-  ┌──────────────────────────────────────────┐
-  │         RESEARCH SUBGRAPH (Phase 8)      │
-  │  Searcher → ContentReader → Analyzer     │
-  │       ↑              │                   │
-  │       └──────────────┘ (loop)            │
-  └──────────────────────────────────────────┘
+  ┌──────────────────────────────────────────────┐
+  │      PARALLEL RESEARCHER [Phase 10]           │
+  │  Query1 ─┐                                    │
+  │  Query2 ─┼─→ 병렬 검색+읽기 → 결과 병합       │
+  │  Query3 ─┘                                    │
+  └──────────────────────────────────────────────┘
          │
          ▼
   ┌──────────┐
-  │ Compress │ ← 연구 결과 압축 + 인용
+  │ Compress │ ← 병렬 결과 압축 (깊이 생성!)
   └────┬─────┘
        │
        ▼
@@ -51,97 +51,19 @@ from src.agent.nodes import (
     clarify_node,      # Phase 3
     planner_node,
     supervisor_node,   # Phase 9: 동적 전략 결정
-    searcher_node, 
-    content_reader_node,
-    analyzer_node,
+    parallel_researcher_node,  # Phase 10: 병렬 연구
     compress_node,
     writer_node,
     critique_node,     # Phase 5
-    should_continue_research
 )
 
 
 # ================================================================
-# Phase 8: Research Subgraph 빌드
-# ================================================================
-
-def build_research_subgraph():
-    """
-    연구 서브그래프 빌드 (Phase 8)
-    
-    Searcher → ContentReader → Analyzer 루프를 캡슐화합니다.
-    """
-    
-    research_workflow = StateGraph(DeepResearchState)
-    
-    research_workflow.add_node("Searcher", searcher_node)
-    research_workflow.add_node("ContentReader", content_reader_node)
-    research_workflow.add_node("Analyzer", analyzer_node)
-    
-    research_workflow.set_entry_point("Searcher")
-    
-    research_workflow.add_edge("Searcher", "ContentReader")
-    research_workflow.add_edge("ContentReader", "Analyzer")
-    
-    research_workflow.add_conditional_edges(
-        "Analyzer",
-        should_continue_research,
-        {
-            "continue": "Searcher",
-            "finish": END
-        }
-    )
-    
-    return research_workflow.compile()
-
-
-research_subgraph = build_research_subgraph()
-
-
-# ================================================================
-# Research Subgraph 래퍼 노드
-# ================================================================
-
-def research_subgraph_node(state: DeepResearchState) -> dict:
-    """
-    Research Subgraph를 실행하는 래퍼 노드 (Phase 8)
-    """
-    # Supervisor가 결정한 설정 확인
-    complexity = state.get("supervisor_complexity", "MEDIUM")
-    max_iter = state.get("max_research_iterations", 3)
-    strategy = state.get("supervisor_strategy", "targeted")
-    
-    print(f"\n🔬 Research Subgraph: Starting research loop...")
-    print(f"   └─ Supervisor config: {complexity}, max {max_iter} iterations, {strategy} strategy")
-    
-    # 서브그래프 실행
-    result = research_subgraph.invoke(state)
-    
-    # 실행 횟수 추적
-    executions = state.get("subgraph_executions", 0) + 1
-    
-    print(f"   └─ ✅ Research Subgraph completed (execution #{executions})")
-    print(f"   └─ Findings: {len(result.get('findings', []))} items")
-    print(f"   └─ Contents: {len(result.get('read_contents', []))} URLs read")
-    
-    return {
-        "search_results": result.get("search_results", []),
-        "urls_to_read": result.get("urls_to_read", []),
-        "read_contents": result.get("read_contents", []),
-        "findings": result.get("findings", []),
-        "needs_more_research": result.get("needs_more_research", False),
-        "next_search_query": result.get("next_search_query"),
-        "research_iteration": result.get("research_iteration", 0),
-        "subgraph_executions": executions
-    }
-
-
-# ================================================================
-# 메인 그래프 빌드 (Phase 9: Supervisor 추가)
+# 메인 그래프 빌드 (Phase 10: 병렬 연구)
 # ================================================================
 
 def build_graph():
-    """Deep Research 그래프 빌드 (Phase 9: Supervisor 패턴)"""
+    """Deep Research 그래프 빌드 (Phase 10: 병렬 연구)"""
     
     workflow = StateGraph(DeepResearchState)
     
@@ -152,7 +74,7 @@ def build_graph():
     workflow.add_node("Clarify", clarify_node)       # Phase 3
     workflow.add_node("Planner", planner_node)
     workflow.add_node("Supervisor", supervisor_node) # Phase 9: 동적 전략 결정
-    workflow.add_node("Research", research_subgraph_node)  # Phase 8: 서브그래프
+    workflow.add_node("ParallelResearch", parallel_researcher_node)  # Phase 10
     workflow.add_node("Compress", compress_node)
     workflow.add_node("Writer", writer_node)
     workflow.add_node("Critique", critique_node)     # Phase 5
@@ -167,14 +89,14 @@ def build_graph():
     # Clarify → Planner
     workflow.add_edge("Clarify", "Planner")
     
-    # Planner → Supervisor (Phase 9)
+    # Planner → Supervisor
     workflow.add_edge("Planner", "Supervisor")
     
-    # Supervisor → Research Subgraph
-    workflow.add_edge("Supervisor", "Research")
+    # Supervisor → ParallelResearch (Phase 10)
+    workflow.add_edge("Supervisor", "ParallelResearch")
     
-    # Research → Compress
-    workflow.add_edge("Research", "Compress")
+    # ParallelResearch → Compress (병렬 결과 압축으로 깊이 생성)
+    workflow.add_edge("ParallelResearch", "Compress")
     
     # Compress → Writer
     workflow.add_edge("Compress", "Writer")

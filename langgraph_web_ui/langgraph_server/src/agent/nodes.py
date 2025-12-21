@@ -326,10 +326,11 @@ def supervisor_node(state: DeepResearchState) -> dict:
                 "complexity": {"type": "string", "enum": ["SIMPLE", "MEDIUM", "COMPLEX"]},
                 "recommended_iterations": {"type": "integer", "minimum": 1, "maximum": 3},
                 "recommended_depth": {"type": "integer", "minimum": 1, "maximum": 3},
+                "urls_per_query": {"type": "integer", "minimum": 2, "maximum": 5},
                 "focus_strategy": {"type": "string", "enum": ["broad", "targeted", "deep"]},
                 "reasoning": {"type": "string"}
             },
-            "required": ["complexity", "recommended_iterations", "recommended_depth", "focus_strategy", "reasoning"]
+            "required": ["complexity", "recommended_iterations", "recommended_depth", "urls_per_query", "focus_strategy", "reasoning"]
         })
         
         analysis_context = f"""
@@ -346,6 +347,7 @@ Current plan depth: {plan.get('depth_level', 2)}
         complexity = result.get("complexity", "MEDIUM")
         recommended_iterations = result.get("recommended_iterations", 2)
         recommended_depth = result.get("recommended_depth", 2)
+        urls_per_query = result.get("urls_per_query", 3)
         focus_strategy = result.get("focus_strategy", "targeted")
         reasoning = result.get("reasoning", "")
         
@@ -353,6 +355,7 @@ Current plan depth: {plan.get('depth_level', 2)}
         complexity_emoji = {"SIMPLE": "🟢", "MEDIUM": "🟡", "COMPLEX": "🔴"}.get(complexity, "🟡")
         print(f"   └─ Complexity: {complexity_emoji} {complexity}")
         print(f"   └─ Recommended: {recommended_iterations} iterations, depth {recommended_depth}")
+        print(f"   └─ URLs per query: {urls_per_query}")
         print(f"   └─ Strategy: {focus_strategy}")
         print(f"   └─ Reasoning: {truncate_text(reasoning, 100)}")
         
@@ -367,16 +370,18 @@ Current plan depth: {plan.get('depth_level', 2)}
             "research_plan": updated_plan,
             "supervisor_complexity": complexity,
             "supervisor_iterations": recommended_iterations,
+            "supervisor_urls_per_query": urls_per_query,
             "supervisor_strategy": focus_strategy,
-            "max_research_iterations": max_iterations  # 동적 반복 횟수
+            "max_research_iterations": max_iterations
         }
         
     except Exception as e:
         print(f"   └─ ⚠️ Supervisor analysis failed: {e}")
-        print(f"   └─ Using default: MEDIUM complexity, 2 iterations")
+        print(f"   └─ Using default: MEDIUM complexity, 2 iterations, 3 URLs")
         return {
             "supervisor_complexity": "MEDIUM",
             "supervisor_iterations": 2,
+            "supervisor_urls_per_query": 3,  # 기본값
             "supervisor_strategy": "targeted",
             "max_research_iterations": 2
         }
@@ -1084,3 +1089,331 @@ def should_continue_research(state: DeepResearchState) -> str:
 def route_after_planner(state: DeepResearchState) -> str:
     """Planner 후 Searcher로 이동"""
     return "Searcher"
+
+
+# ================================================================
+# Phase 10: Parallel Research Nodes (병렬 연구 노드)
+# ================================================================
+
+import concurrent.futures
+import time as time_module
+
+def parallel_single_query_research(query: str, query_idx: int, urls_per_query: int = 3) -> dict:
+    """
+    단일 쿼리에 대한 검색 + 읽기 수행 (병렬 실행용)
+    
+    Open Deep Research 스타일: 여러 쿼리를 병렬로 실행하고
+    결과를 Compress에서 압축하여 깊이 생성
+    
+    Phase 9 스타일의 상세 로그 포함:
+    - URL 내용 Preview
+    - Think 스타일 분석
+    - 상세 findings 목록
+    
+    로그는 log_lines에 수집되고, parallel_researcher_node에서 순서대로 출력됨
+    """
+    import os
+    from datetime import datetime
+    
+    verbose = os.environ.get("VERBOSE_LOGGING", "").lower() == "true"
+    
+    results = {
+        "query": query,
+        "query_idx": query_idx,
+        "search_results": [],
+        "read_contents": [],
+        "findings": [],
+        "success": False,
+        "duration": 0,
+        "urls_attempted": 0,
+        "urls_success": 0,
+        "urls_failed": 0,
+        "url_details": [],
+        "log_lines": [],  # 로그 라인 수집 (나중에 순서대로 출력)
+        "start_time": None,  # 절대 시작 시간
+        "end_time": None,    # 절대 종료 시간
+    }
+    
+    def log(message: str):
+        """로그 메시지를 수집 (print 없이)"""
+        results["log_lines"].append(message)
+    
+    # 절대 시작 시간 기록
+    results["start_time"] = datetime.now().strftime("%H:%M:%S.%f")[:-3]
+    start = time_module.time()
+    
+    try:
+        # ================================================================
+        # 1. 검색 (Searcher 스타일 로그)
+        # ================================================================
+        log(f"🔍 Searcher [{query_idx+1}]: Searching for: {truncate_text(query, 60)}")
+        search_results = tavily_tool.invoke(query)
+        urls = [r.get("url", "") for r in search_results if r.get("url")]
+        results["search_results"] = search_results
+        
+        log(f"🔍 Searcher [{query_idx+1}]: Found {len(search_results)} results")
+        log(f"   └─ URLs found:")
+        for i, url in enumerate(urls[:5], 1):
+            url_short = url[:60] + "..." if len(url) > 60 else url
+            log(f"      [{i}] {url_short}")
+        
+        # 스니펫 미리보기 (Phase 9 스타일)
+        log(f"   └─ Snippets:")
+        snippets_for_think = []
+        for r in search_results[:3]:
+            snippet = r.get("content", "")[:200]
+            if snippet:
+                log(f"      • {snippet[:150]}...")
+                snippets_for_think.append(snippet[:80])
+        
+        # ================================================================
+        # 💭 Think 스타일 분석 로그 (Phase 9 스타일)
+        # ================================================================
+        think_summary = " | ".join(snippets_for_think[:3]) if snippets_for_think else "No snippets"
+        log(f"💭 Think: Query: {query[:40]}... | Found {len(search_results)} results, {len(urls)} URLs.")
+        log(f"   Key snippets: {think_summary[:120]}...")
+        log(f"   Assessment: Proceeding to read top URLs for detailed content.")
+        
+        # ================================================================
+        # 2. 상위 URL 읽기 (ContentReader 스타일 + Preview)
+        # Supervisor가 결정한 urls_per_query 사용
+        # ================================================================
+        read_contents = []
+        url_details = []
+        # Supervisor가 결정한 URL 수 사용
+        urls_to_read = urls[:urls_per_query]
+        results["urls_attempted"] = len(urls_to_read)
+        
+        log(f"📖 ContentReader [{query_idx+1}]: Reading {len(urls_to_read)} URLs in parallel 🚀")
+        
+        for url in urls_to_read:
+            url_short = url[:50] + "..." if len(url) > 50 else url
+            try:
+                content = read_url_tool.invoke(url)
+                content_len = len(content) if content else 0
+                read_contents.append({
+                    "url": url,
+                    "content": content[:4000],
+                    "query": query
+                })
+                results["urls_success"] += 1
+                url_details.append({
+                    "url": url,
+                    "status": "success",
+                    "chars": content_len,
+                    "preview": content[:600] if content else ""
+                })
+                log(f"   ✓ [{url}]")
+                
+                # URL 내용 Preview (Phase 9 스타일) - verbose 모드에서 더 길게
+                preview_len = 800 if verbose else 400
+                preview = content[:preview_len] if content else "No content"
+                log(f"      Preview: {preview}")
+                
+            except Exception as e:
+                results["urls_failed"] += 1
+                error_msg = str(e)[:80]
+                url_details.append({
+                    "url": url,
+                    "status": "failed",
+                    "error": error_msg
+                })
+                log(f"   ✓ [{url}]")
+                log(f"      Preview: Error: {error_msg}")
+        
+        results["read_contents"] = read_contents
+        results["url_details"] = url_details
+        
+        # 읽기 완료 요약
+        read_time = time_module.time() - start
+        log(f"   └─ ⏱️ Parallel read: {results['urls_success']}/{results['urls_attempted']} URLs in {read_time:.2f}s")
+        
+        # ================================================================
+        # 3. 분석 및 Findings 추출 (Analyzer 스타일)
+        # ================================================================
+        log(f"🔬 Analyzer [{query_idx+1}]: Analyzing {len(search_results)} results, {len(read_contents)} contents")
+        
+        # 검색 스니펫 + URL 내용에서 핵심 발견 추출
+        findings = []
+        
+        # 스니펫에서 발견 추출
+        for i, r in enumerate(search_results[:3], 1):
+            snippet = r.get("content", "")[:300]
+            if snippet:
+                findings.append(f"[{i}] {snippet[:200]}")
+        
+        # URL 내용에서 추가 발견 추출
+        for i, rc in enumerate(read_contents, len(findings)+1):
+            content_preview = rc.get("content", "")[:300]
+            if content_preview:
+                findings.append(f"[{i}] From {rc['url'][:40]}...: {content_preview[:150]}")
+        
+        results["findings"] = findings
+        
+        # 상세 findings 로그 (Phase 9 스타일)
+        log(f"🔬 Analyzer [{query_idx+1}]: Analyzed {len(search_results)} results, {len(read_contents)} contents")
+        log(f"   └─ New findings:")
+        for i, finding in enumerate(findings[:5], 1):
+            log(f"      [{i}] {finding[:120]}...")
+        
+        results["success"] = True
+        results["duration"] = time_module.time() - start
+        
+        log(f"   └─ Decision: Research complete ({len(findings)} findings)")
+        
+    except Exception as e:
+        results["error"] = str(e)
+        results["duration"] = time_module.time() - start
+        log(f"❌ Query {query_idx+1} FAILED: {str(e)[:100]}")
+    
+    # 절대 종료 시간 기록
+    results["end_time"] = datetime.now().strftime("%H:%M:%S.%f")[:-3]
+    
+    return results
+
+
+def parallel_researcher_node(state: DeepResearchState) -> dict:
+    """
+    병렬 연구 노드 (Phase 10)
+    
+    Supervisor가 결정한 수만큼 쿼리를 병렬로 실행합니다.
+    Open Deep Research 스타일: 넓게 수집 → Compress로 깊이 생성
+    
+    로그는 모든 병렬 연구 완료 후 query 순서대로 정렬되어 출력됩니다.
+    """
+    import os
+    from datetime import datetime
+    
+    verbose = os.environ.get("VERBOSE_LOGGING", "").lower() == "true"
+    
+    plan = state.get("research_plan", {})
+    queries = plan.get("search_queries", [])
+    supervisor_iterations = state.get("supervisor_iterations", 2)
+    urls_per_query = state.get("supervisor_urls_per_query", 3)  # Supervisor가 결정한 URL 수
+    
+    # 병렬 실행할 쿼리 수 결정 (Supervisor 기반)
+    MAX_PARALLEL = min(len(queries), supervisor_iterations + 1)  # 최소 2개, 최대 4개
+    queries_to_run = queries[:MAX_PARALLEL]
+    
+    # 전체 시작 시간
+    overall_start = datetime.now()
+    overall_start_str = overall_start.strftime("%H:%M:%S.%f")[:-3]
+    
+    print(f"\n🚀 ParallelResearcher [Phase 10]: Executing {len(queries_to_run)} queries in parallel")
+    print(f"   └─ Start time: {overall_start_str}")
+    print(f"   └─ URLs per query: {urls_per_query} (decided by Supervisor)")
+    for i, q in enumerate(queries_to_run, 1):
+        print(f"   └─ [{i}] {truncate_text(q, 60)}")
+    print(f"   └─ (로그는 완료 후 순서대로 출력됩니다...)")
+    
+    start_time = time_module.time()
+    
+    # ThreadPoolExecutor로 병렬 실행
+    all_results = []
+    with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_PARALLEL) as executor:
+        futures = {
+            executor.submit(parallel_single_query_research, query, idx, urls_per_query): (query, idx)
+            for idx, query in enumerate(queries_to_run)
+        }
+        
+        for future in concurrent.futures.as_completed(futures):
+            query, idx = futures[future]
+            try:
+                result = future.result()
+                all_results.append(result)
+            except Exception as e:
+                # 에러도 결과로 기록
+                all_results.append({
+                    "query": query,
+                    "query_idx": idx,
+                    "success": False,
+                    "error": str(e),
+                    "log_lines": [f"❌ Query {idx+1} FAILED: {str(e)[:100]}"],
+                    "start_time": "N/A",
+                    "end_time": "N/A",
+                    "duration": 0,
+                    "findings": [],
+                    "read_contents": [],
+                    "urls_attempted": 0,
+                    "urls_success": 0,
+                    "urls_failed": 0
+                })
+    
+    total_time = time_module.time() - start_time
+    overall_end = datetime.now()
+    overall_end_str = overall_end.strftime("%H:%M:%S.%f")[:-3]
+    
+    # ==========================================
+    # 순서대로 정렬하여 로그 출력
+    # ==========================================
+    all_results_sorted = sorted(all_results, key=lambda x: x.get("query_idx", 0))
+    
+    print(f"\n{'═'*70}")
+    print(f"📋 Parallel Research Results (sorted by query order)")
+    print(f"{'═'*70}")
+    
+    for res in all_results_sorted:
+        idx = res.get("query_idx", 0)
+        query = res.get("query", "")
+        start_t = res.get("start_time", "N/A")
+        end_t = res.get("end_time", "N/A")
+        duration = res.get("duration", 0)
+        success = res.get("success", False)
+        
+        status_icon = "✅" if success else "❌"
+        
+        print(f"\n{'─'*70}")
+        print(f"📌 Query {idx+1}: {truncate_text(query, 50)}")
+        print(f"   └─ Time: {start_t} → {end_t} ({duration:.2f}s) {status_icon}")
+        print(f"{'─'*70}")
+        
+        # 수집된 로그 라인 출력
+        for line in res.get("log_lines", []):
+            print(f"   {line}")
+    
+    # ==========================================
+    # 결과 병합 및 요약
+    # ==========================================
+    all_findings = []
+    all_contents = []
+    total_urls_attempted = 0
+    total_urls_success = 0
+    total_urls_failed = 0
+    
+    for res in all_results:
+        all_findings.extend(res.get("findings", []))
+        all_contents.extend(res.get("read_contents", []))
+        total_urls_attempted += res.get("urls_attempted", 0)
+        total_urls_success += res.get("urls_success", 0)
+        total_urls_failed += res.get("urls_failed", 0)
+    
+    # 요약 출력
+    success_count = sum(1 for r in all_results if r.get("success"))
+    
+    print(f"\n{'═'*70}")
+    print(f"📊 Parallel Research Summary")
+    print(f"{'═'*70}")
+    print(f"   ⏱️ Total time: {total_time:.2f}s ({overall_start_str} → {overall_end_str})")
+    print(f"   └─ Queries: {success_count}/{len(queries_to_run)} succeeded")
+    print(f"   └─ Findings: {len(all_findings)} extracted")
+    print(f"   └─ URLs read: {total_urls_success}/{total_urls_attempted}")
+    if total_urls_failed > 0:
+        print(f"   └─ ⚠️ Failed URLs: {total_urls_failed}")
+    
+    # 순차 대비 속도 개선 계산
+    if all_results:
+        total_sequential = sum(r.get("duration", 0) for r in all_results)
+        speedup = total_sequential / total_time if total_time > 0 else 1
+        print(f"   └─ Speedup: {speedup:.1f}x (sequential: {total_sequential:.1f}s)")
+    print(f"{'═'*70}\n")
+    
+    return {
+        "parallel_findings": all_findings,
+        "parallel_contents": all_contents,
+        "parallel_research_count": len(queries_to_run),
+        "parallel_research_completed": success_count,
+        "findings": all_findings,  # 기존 필드에도 전달
+        "read_contents": all_contents,  # 기존 필드에도 전달
+        "research_iteration": 1
+    }
+

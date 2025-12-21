@@ -15,6 +15,7 @@ from typing import Annotated, Sequence, Optional, List
 from typing_extensions import TypedDict
 from langchain_core.messages import BaseMessage
 from langgraph.graph.message import add_messages
+import operator  # Phase 10: 병렬 연구 결과 병합용
 
 
 class ResearchPlan(TypedDict):
@@ -142,11 +143,30 @@ class DeepResearchState(TypedDict):
     # 권장 반복 횟수 (1-3)
     supervisor_iterations: Optional[int]
     
+    # 쿼리당 읽을 URL 수 (2-5)
+    supervisor_urls_per_query: Optional[int]
+    
     # 연구 전략 (broad, targeted, deep)
     supervisor_strategy: Optional[str]
     
     # 동적 최대 반복 횟수
     max_research_iterations: Optional[int]
+
+    # ========================================
+    # Phase 10: Parallel Research (병렬 연구)
+    # ========================================
+    
+    # 병렬 연구 결과들 (각 쿼리별 결과를 리스트로 축적)
+    parallel_findings: Annotated[List[str], operator.add]
+    
+    # 병렬로 읽은 URL 내용들
+    parallel_contents: Annotated[List[dict], operator.add]
+    
+    # 병렬 연구 실행 수
+    parallel_research_count: Optional[int]
+    
+    # 병렬 연구 완료 수
+    parallel_research_completed: Optional[int]
 
 
 # 초기 상태 생성 헬퍼

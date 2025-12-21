@@ -95,7 +95,7 @@ def read_url_tool(url: str) -> str:
         if len(content) > 8000:
             content = content[:8000] + "... [truncated]"
         
-        print(f"📖 Read URL: {url[:50]}... ({len(content)} chars)")
+        # 로그는 parallel_researcher_node에서 정렬 후 출력됨
         return content
         
     except httpx.TimeoutException:
