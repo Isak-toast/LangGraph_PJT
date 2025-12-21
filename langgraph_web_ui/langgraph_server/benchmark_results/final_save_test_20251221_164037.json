@@ -1,0 +1,20 @@
+[
+  {
+    "phase": "Final Save Test",
+    "query": "What is machine learning?",
+    "timestamp": "2025-12-21T16:40:37.372863",
+    "total_time_sec": 31.21,
+    "llm_calls": 2,
+    "search_calls": 0,
+    "urls_read": 10,
+    "research_iterations": 1,
+    "estimated_tokens": 1144,
+    "quality_completeness": 4.0,
+    "quality_accuracy": 3.5,
+    "quality_relevance": 4.5,
+    "quality_clarity": 4.0,
+    "quality_total": 16.0,
+    "has_citations": true,
+    "response_length": 3012
+  }
+]

@@ -159,9 +159,38 @@ def think_tool(thought: str) -> str:
 # 사용 가능한 도구 목록
 # ================================================================
 # 
-# Researcher는 이 세 도구를 모두 사용할 수 있습니다:
+# 기본 도구 (Researcher가 사용):
 # 1. tavily_tool: 먼저 웹 검색으로 관련 URL 찾기
 # 2. read_url_tool: 찾은 URL의 상세 내용 읽기
 # 3. think_tool: 전략적 사고 (Phase 2)
 
 tools = [tavily_tool, read_url_tool, think_tool]
+
+
+# ================================================================
+# Phase 11: MCP 도구 통합
+# ================================================================
+# 
+# MCP_ENABLED=true 환경변수 설정 시 MCP 도구가 추가됩니다.
+# 외부 MCP 서버의 도구를 동적으로 로드합니다.
+
+def get_all_tools():
+    """
+    사용 가능한 모든 도구를 반환합니다.
+    
+    기본 도구 + MCP 도구 (활성화된 경우)
+    
+    Returns:
+        List[BaseTool]: 사용 가능한 도구 목록
+    """
+    from src.agent.mcp_client import get_mcp_tools_sync, MCP_ENABLED
+    
+    all_tools = list(tools)  # 기본 도구 복사
+    
+    if MCP_ENABLED:
+        mcp_tools = get_mcp_tools_sync()
+        all_tools.extend(mcp_tools)
+    print(f"📦 Total tools: {len(all_tools)} (base: {len(tools)}, MCP: {len(mcp_tools)})")
+    
+    return all_tools
+

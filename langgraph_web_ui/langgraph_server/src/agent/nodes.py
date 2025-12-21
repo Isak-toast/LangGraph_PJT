@@ -701,6 +701,7 @@ All relevant information should be preserved but in a cleaner, more organized fo
 
 def compress_node(state: DeepResearchState) -> dict:
     """연구 결과를 압축하고 정리하는 Compress 노드"""
+    import os
     
     findings = state.get("findings", [])
     read_contents = state.get("read_contents", [])
@@ -708,11 +709,149 @@ def compress_node(state: DeepResearchState) -> dict:
     
     print(f"\n📦 Compress: Compressing {len(findings)} findings, {len(read_contents)} contents")
     
+    # ================================================================
+    # Phase 11: MCP 도구 사용 (활성화된 경우)
+    # ================================================================
+    mcp_enabled = os.environ.get("MCP_ENABLED", "false").lower() == "true"
+    mcp_summary = ""
+    mcp_key_points = ""
+    
+    if mcp_enabled:
+        try:
+            from src.agent.mcp_client import get_mcp_tools_sync
+            mcp_tools = get_mcp_tools_sync()
+            
+            if mcp_tools:
+                print(f"   └─ 🔌 MCP: Using {len(mcp_tools)} MCP tools for enhanced compression")
+                
+                # 도구 찾기 (7개)
+                summarize_tool = next((t for t in mcp_tools if t.name == "summarize_text"), None)
+                key_points_tool = next((t for t in mcp_tools if t.name == "extract_key_points"), None)
+                count_words_tool = next((t for t in mcp_tools if t.name == "count_words"), None)
+                read_file_tool = next((t for t in mcp_tools if t.name == "read_file"), None)
+                list_files_tool = next((t for t in mcp_tools if t.name == "list_files"), None)
+                save_research_tool = next((t for t in mcp_tools if t.name == "save_research"), None)
+                search_wiki_tool = next((t for t in mcp_tools if t.name == "search_wikipedia"), None)
+                
+                # 압축할 원본 텍스트 준비
+                raw_text = "\n".join(findings[:10])
+                
+                # 첫 번째 finding에서 키워드 추출 (Wikipedia 검색용)
+                first_finding = findings[0] if findings else ""
+                wiki_keyword = first_finding.split()[0:3] if first_finding else []
+                wiki_query = " ".join(wiki_keyword) if wiki_keyword else "AI"
+                
+                # asyncio로 비동기 도구 호출
+                import asyncio
+                
+                async def run_mcp_tools():
+                    results = {
+                        "summary": "", "key_points": "", "word_stats": "",
+                        "wiki_info": "", "save_result": ""
+                    }
+                    
+                    # MCP 도구 1: summarize_text
+                    if summarize_tool and raw_text:
+                        try:
+                            results["summary"] = await summarize_tool.ainvoke({"text": raw_text, "max_length": 500})
+                        except Exception as e:
+                            print(f"   └─ ⚠️ MCP summarize_text failed: {e}")
+                    
+                    # MCP 도구 2: extract_key_points
+                    if key_points_tool and raw_text:
+                        try:
+                            results["key_points"] = await key_points_tool.ainvoke({"text": raw_text, "num_points": 5})
+                        except Exception as e:
+                            print(f"   └─ ⚠️ MCP extract_key_points failed: {e}")
+                    
+                    # MCP 도구 3: count_words
+                    if count_words_tool and raw_text:
+                        try:
+                            results["word_stats"] = await count_words_tool.ainvoke({"text": raw_text})
+                        except Exception as e:
+                            print(f"   └─ ⚠️ MCP count_words failed: {e}")
+                    
+                    # MCP 도구 4: search_wikipedia (추가 검색)
+                    if search_wiki_tool and wiki_query:
+                        try:
+                            results["wiki_info"] = await search_wiki_tool.ainvoke({"query": wiki_query, "sentences": 2})
+                        except Exception as e:
+                            print(f"   └─ ⚠️ MCP search_wikipedia failed: {e}")
+                    
+                    # MCP 도구 5: save_research (연구 결과 저장)
+                    if save_research_tool and raw_text:
+                        try:
+                            import time
+                            filename = f"research_{int(time.time())}.txt"
+                            results["save_result"] = await save_research_tool.ainvoke({
+                                "filename": filename,
+                                "content": f"Research Findings:\n\n{raw_text[:2000]}"
+                            })
+                        except Exception as e:
+                            print(f"   └─ ⚠️ MCP save_research failed: {e}")
+                    
+                    return results
+                
+                # 비동기 실행
+                try:
+                    loop = asyncio.get_running_loop()
+                except RuntimeError:
+                    loop = None
+                
+                if loop is None:
+                    mcp_results = asyncio.run(run_mcp_tools())
+                else:
+                    import nest_asyncio
+                    nest_asyncio.apply()
+                    mcp_results = asyncio.run(run_mcp_tools())
+                
+                # 결과 처리 및 로깅 (7개 도구)
+                print(f"   └─ 🔌 MCP Results:")
+                
+                if mcp_results["summary"]:
+                    mcp_summary = mcp_results["summary"]
+                    print(f"      └─ summarize_text: {len(str(mcp_summary))} chars")
+                    print(f"         └─ {str(mcp_summary)[:100]}...")
+                
+                if mcp_results["key_points"]:
+                    mcp_key_points = mcp_results["key_points"]
+                    lines = str(mcp_key_points).split('\n')[:3]
+                    print(f"      └─ extract_key_points: {len(lines)} points")
+                    for line in lines:
+                        if line.strip():
+                            print(f"         └─ {line[:80]}")
+                
+                if mcp_results["word_stats"]:
+                    stats = str(mcp_results["word_stats"])
+                    # 결과에서 text 부분만 추출
+                    if "text" in stats and "Stats:" in stats:
+                        stats = stats.split("Stats:")[1].split("'")[0] if "Stats:" in stats else stats
+                    print(f"      └─ count_words: Stats:{stats[:50]}")
+                
+                if mcp_results["wiki_info"]:
+                    wiki = str(mcp_results["wiki_info"])
+                    print(f"      └─ search_wikipedia: {wiki[:100]}...")
+                
+                if mcp_results["save_result"]:
+                    save = str(mcp_results["save_result"])
+                    print(f"      └─ save_research: {save[:80]}")
+                        
+        except Exception as e:
+            print(f"   └─ ⚠️ MCP tools failed: {e}")
+    
     # 소스 URL 수집
     source_urls = list(set([c.get("url", "") for c in read_contents if c.get("url")]))
     
     # 압축할 내용 준비
     content_to_compress = ""
+    
+    # MCP 결과 추가 (있는 경우)
+    if mcp_summary or mcp_key_points:
+        content_to_compress += "=== MCP ANALYSIS ===\n"
+        if mcp_summary:
+            content_to_compress += f"Summary: {mcp_summary}\n\n"
+        if mcp_key_points:
+            content_to_compress += f"{mcp_key_points}\n\n"
     
     # Findings
     content_to_compress += "=== FINDINGS ===\n"
@@ -1052,6 +1191,70 @@ Please evaluate this response using the CARC Framework.
         print(f"   └─ Total: {total}/20 {grade}")
         print(f"   └─ Feedback: {truncate_text(result.feedback, 150)}")
         
+        # ================================================================
+        # Phase 11: MCP save_research - 최종 응답 저장
+        # ================================================================
+        import os
+        mcp_enabled = os.environ.get("MCP_ENABLED", "false").lower() == "true"
+        
+        if mcp_enabled and writer_response:
+            try:
+                from src.agent.mcp_client import get_mcp_tools_sync
+                import asyncio
+                import time
+                
+                mcp_tools = get_mcp_tools_sync()
+                save_tool = next((t for t in mcp_tools if t.name == "save_research"), None)
+                
+                if save_tool:
+                    # 현재 시간으로 파일명 생성
+                    timestamp = time.strftime("%Y%m%d_%H%M%S")
+                    filename = f"final_research_{timestamp}.md"
+                    
+                    # 전체 응답 + 메타데이터 저장
+                    content = f"""# Deep Research Final Report
+Generated: {time.strftime("%Y-%m-%d %H:%M:%S")}
+Quality Score: {total}/20 ({grade})
+
+## Original Question
+{user_query}
+
+## Research Response
+{writer_response}
+
+## Quality Evaluation (CARC)
+- Completeness: {c}/5
+- Accuracy: {a}/5
+- Relevance: {r}/5
+- Clarity: {cl}/5
+- Total: {total}/20
+
+## Feedback
+{result.feedback}
+"""
+                    
+                    # 비동기 저장
+                    async def save_final():
+                        return await save_tool.ainvoke({"filename": filename, "content": content})
+                    
+                    try:
+                        loop = asyncio.get_running_loop()
+                    except RuntimeError:
+                        loop = None
+                    
+                    if loop is None:
+                        save_result = asyncio.run(save_final())
+                    else:
+                        import nest_asyncio
+                        nest_asyncio.apply()
+                        save_result = asyncio.run(save_final())
+                    
+                    print(f"   └─ 💾 MCP save_research: Final report saved")
+                    print(f"      └─ {save_result}")
+                    
+            except Exception as e:
+                print(f"   └─ ⚠️ MCP save_research failed: {e}")
+        
         return {
             "quality_completeness": c,
             "quality_accuracy": a,
@@ -1061,7 +1264,6 @@ Please evaluate this response using the CARC Framework.
             "critique_feedback": result.feedback,
             "needs_improvement": needs_improvement
         }
-        
     except Exception as e:
         print(f"❌ Critique error: {e}")
         return {

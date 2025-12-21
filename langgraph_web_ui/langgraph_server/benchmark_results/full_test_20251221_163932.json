@@ -1,0 +1,20 @@
+[
+  {
+    "phase": "Full Test",
+    "query": "What is AI?",
+    "timestamp": "2025-12-21T16:39:32.365006",
+    "total_time_sec": 25.18,
+    "llm_calls": 2,
+    "search_calls": 0,
+    "urls_read": 10,
+    "research_iterations": 1,
+    "estimated_tokens": 1016,
+    "quality_completeness": 4.0,
+    "quality_accuracy": 4.0,
+    "quality_relevance": 4.5,
+    "quality_clarity": 4.0,
+    "quality_total": 16.5,
+    "has_citations": true,
+    "response_length": 2635
+  }
+]
