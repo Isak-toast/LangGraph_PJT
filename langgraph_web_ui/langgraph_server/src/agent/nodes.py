@@ -254,6 +254,135 @@ def planner_node(state: DeepResearchState) -> dict:
 
 
 # ================================================================
+# Phase 9: Supervisor 노드 - 동적 연구 전략 결정
+# ================================================================
+
+SUPERVISOR_PROMPT = """You are a RESEARCH SUPERVISOR. Your job is to analyze the query and plan and decide the optimal research strategy.
+
+<Task>
+Analyze the query complexity and the generated research plan.
+Decide the optimal research configuration.
+</Task>
+
+<Complexity_Levels>
+1. SIMPLE: Factual questions, single topic
+   - "What is LangGraph?" → 1 research cycle, shallow depth
+   
+2. MEDIUM: Comparison, analysis, multiple aspects
+   - "Compare LangGraph and CrewAI" → 2 research cycles, medium depth
+   
+3. COMPLEX: Multi-faceted research, trends, deep analysis
+   - "Analyze 2024 AI agent trends and predict 2025" → 3 research cycles, deep
+</Complexity_Levels>
+
+<Output_Format>
+{
+    "complexity": "SIMPLE|MEDIUM|COMPLEX",
+    "recommended_iterations": 1-3,
+    "recommended_depth": 1-3,
+    "focus_strategy": "broad|targeted|deep",
+    "reasoning": "brief explanation"
+}
+</Output_Format>
+
+<Guidelines>
+- SIMPLE queries: 1 iteration, depth 1
+- MEDIUM queries: 2 iterations, depth 2  
+- COMPLEX queries: 3 iterations, depth 3
+- Be conservative - prefer fewer iterations if query is clear
+</Guidelines>
+"""
+
+
+def supervisor_node(state: DeepResearchState) -> dict:
+    """
+    Supervisor 노드 (Phase 9)
+    
+    쿼리 복잡도를 분석하고 연구 전략을 동적으로 결정합니다.
+    - SIMPLE: 1회 반복, 낮은 깊이
+    - MEDIUM: 2회 반복, 중간 깊이
+    - COMPLEX: 3회 반복, 높은 깊이
+    """
+    
+    messages = state.get("messages", [])
+    user_query = ""
+    for msg in messages:
+        if isinstance(msg, HumanMessage) or (hasattr(msg, 'type') and msg.type == 'human'):
+            user_query = msg.content
+            break
+    
+    plan = state.get("research_plan", {})
+    queries = plan.get("search_queries", [])
+    
+    print(f"\n🎯 Supervisor [Phase 9]: Analyzing query complexity")
+    print(f"   └─ Query: {truncate_text(user_query, 80)}")
+    print(f"   └─ Planned queries: {len(queries)}")
+    
+    try:
+        # LLM에게 복잡도 분석 요청
+        structured_llm = llm.with_structured_output({
+            "type": "object",
+            "properties": {
+                "complexity": {"type": "string", "enum": ["SIMPLE", "MEDIUM", "COMPLEX"]},
+                "recommended_iterations": {"type": "integer", "minimum": 1, "maximum": 3},
+                "recommended_depth": {"type": "integer", "minimum": 1, "maximum": 3},
+                "focus_strategy": {"type": "string", "enum": ["broad", "targeted", "deep"]},
+                "reasoning": {"type": "string"}
+            },
+            "required": ["complexity", "recommended_iterations", "recommended_depth", "focus_strategy", "reasoning"]
+        })
+        
+        analysis_context = f"""
+Query: {user_query}
+Planned search queries: {queries}
+Current plan depth: {plan.get('depth_level', 2)}
+"""
+        
+        result = structured_llm.invoke([
+            SystemMessage(content=SUPERVISOR_PROMPT),
+            HumanMessage(content=analysis_context)
+        ])
+        
+        complexity = result.get("complexity", "MEDIUM")
+        recommended_iterations = result.get("recommended_iterations", 2)
+        recommended_depth = result.get("recommended_depth", 2)
+        focus_strategy = result.get("focus_strategy", "targeted")
+        reasoning = result.get("reasoning", "")
+        
+        # 로깅
+        complexity_emoji = {"SIMPLE": "🟢", "MEDIUM": "🟡", "COMPLEX": "🔴"}.get(complexity, "🟡")
+        print(f"   └─ Complexity: {complexity_emoji} {complexity}")
+        print(f"   └─ Recommended: {recommended_iterations} iterations, depth {recommended_depth}")
+        print(f"   └─ Strategy: {focus_strategy}")
+        print(f"   └─ Reasoning: {truncate_text(reasoning, 100)}")
+        
+        # 연구 계획 업데이트
+        updated_plan = plan.copy()
+        updated_plan["depth_level"] = recommended_depth
+        
+        # MAX_ITERATIONS 동적 설정
+        max_iterations = recommended_iterations
+        
+        return {
+            "research_plan": updated_plan,
+            "supervisor_complexity": complexity,
+            "supervisor_iterations": recommended_iterations,
+            "supervisor_strategy": focus_strategy,
+            "max_research_iterations": max_iterations  # 동적 반복 횟수
+        }
+        
+    except Exception as e:
+        print(f"   └─ ⚠️ Supervisor analysis failed: {e}")
+        print(f"   └─ Using default: MEDIUM complexity, 2 iterations")
+        return {
+            "supervisor_complexity": "MEDIUM",
+            "supervisor_iterations": 2,
+            "supervisor_strategy": "targeted",
+            "max_research_iterations": 2
+        }
+
+
+# ================================================================
 # 2. Searcher 노드 - 웹 검색
 # ================================================================
 
@@ -469,10 +598,13 @@ def analyzer_node(state: DeepResearchState) -> dict:
     })
     
     try:
+        # Supervisor가 설정한 동적 반복 횟수 사용 (Phase 9)
+        max_iterations = state.get("max_research_iterations", 3)
+        
         prompt = f"""{ANALYZER_PROMPT}
 
 User Question: {user_query}
-Research Iteration: {iteration}/3
+Research Iteration: {iteration}/{max_iterations}
 
 Collected Information:
 {content_summary[:6000]}
@@ -485,13 +617,13 @@ Existing Findings: {existing_findings}
         needs_more = analysis.get("needs_more_research", False)
         next_query = analysis.get("next_search_query", "")
         
-        # 최대 3회 반복 제한
-        if iteration >= 3:
+        # Supervisor가 설정한 동적 반복 제한 적용 (Phase 9)
+        if iteration >= max_iterations:
             needs_more = False
-            print("\n🔬 Analyzer: Max iterations reached, proceeding to Writer")
+            print(f"\n🔬 Analyzer: Max iterations reached ({max_iterations}), proceeding to Writer")
         
         # 상세 로그 출력
-        print(f"\n🔬 Analyzer [{iteration}]: Analyzed {len(search_results)} results, {len(read_contents)} contents")
+        print(f"\n🔬 Analyzer [{iteration}/{max_iterations}]: Analyzed {len(search_results)} results, {len(read_contents)} contents")
         if analysis.get("findings"):
             print("   └─ New findings:")
             for i, finding in enumerate(analysis.get("findings", [])[:5], 1):

@@ -132,6 +132,22 @@ class DeepResearchState(TypedDict):
     # 개선된 응답 (필요시)
     improved_response: Optional[str]
 
+    # ========================================
+    # Supervisor (Phase 9)
+    # ========================================
+    
+    # 쿼리 복잡도 (SIMPLE, MEDIUM, COMPLEX)
+    supervisor_complexity: Optional[str]
+    
+    # 권장 반복 횟수 (1-3)
+    supervisor_iterations: Optional[int]
+    
+    # 연구 전략 (broad, targeted, deep)
+    supervisor_strategy: Optional[str]
+    
+    # 동적 최대 반복 횟수
+    max_research_iterations: Optional[int]
+
 
 # 초기 상태 생성 헬퍼
 def create_initial_state() -> dict:
