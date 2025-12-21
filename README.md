@@ -1,104 +1,104 @@
-# LangGraph 튜토리얼 및 예제
+# Deep Research Agent
 
-이 저장소는 다양한 LangGraph 예제와 튜토리얼을 포함하고 있습니다. 각 하위 폴더를 참고하세요.
-
-## 📚 학습 시작하기
-
-> **처음이신가요?** [LEARNING_GUIDE.md](./LEARNING_GUIDE.md)에서 추천 학습 순서를 확인하세요!
-
-## LangGraph란?
-
-**LangGraph**는 LangChain 팀에서 개발한 라이브러리로, **상태 기반의 순환 그래프 구조**를 통해 복잡한 AI 에이전트 시스템을 구축할 수 있게 해줍니다.
-
-### 핵심 개념
-
-| 개념 | 설명 |
-|------|------|
-| **StateGraph** | 상태를 정의하고 노드 간에 전달하는 그래프 |
-| **Node** | 특정 작업을 수행하는 함수 |
-| **Edge** | 노드 간의 연결 (조건부 분기 가능) |
-| **Checkpointer** | 상태 저장/복원 메커니즘 |
+> LangGraph 기반 AI 에이전트 - 복잡한 질문에 대해 다단계 연구를 수행하고 인용이 포함된 보고서를 생성
 
 ---
 
-## 프로젝트 목록
+## 📁 프로젝트 구조
 
-각 폴더의 README.md에서 **상세 코드 분석**과 **실행 예시**를 확인할 수 있습니다.
-
-### 🎯 기초 (Foundation)
-
-| 폴더 | 설명 | 핵심 개념 |
-|------|------|----------|
-| [`01_quickstart_calculator`](./01_quickstart_calculator) | LangGraph Quickstart | StateGraph, ToolNode, Conditional Edge |
-| [`single_agent_basic`](./single_agent_basic) | ReAct 에이전트 | create_react_agent, 도구 호출 |
-| [`02_streaming_patterns`](./02_streaming_patterns) | 스트리밍 패턴 | values vs updates 모드 |
-
-### 💾 상태 관리 (State Management)
-
-| 폴더 | 설명 | 핵심 개념 |
-|------|------|----------|
-| [`03_persistence`](./03_persistence) | 영속성/메모리 | Checkpointer, thread_id |
-| [`04_human_in_the_loop`](./04_human_in_the_loop) | 사람 승인 패턴 | interrupt_before, 실행 재개 |
-
-### 🚀 고급 패턴 (Advanced Patterns)
-
-| 폴더 | 설명 | 핵심 개념 |
-|------|------|----------|
-| [`05_hierarchical_subgraphs`](./05_hierarchical_subgraphs) | 서브그래프 | 그래프 합성, 상태 매핑 |
-| [`reflection`](./reflection) | 자기 검토 패턴 | Generate-Reflect 루프 |
-| [`plan_and_execute`](./plan_and_execute) | 계획-실행 | Planner, Executor, Replanner |
-| [`06_agentic_rag`](./06_agentic_rag) | Agentic RAG | 문서 평가, 조건부 생성 |
-
-### 🤖 멀티 에이전트 (Multi-Agent)
-
-| 폴더 | 설명 | 핵심 개념 |
-|------|------|----------|
-| [`multi_agent_supervisor`](./multi_agent_supervisor) | 슈퍼바이저 패턴 | 중앙 관제, 작업자 라우팅 |
-| [`multi_agent_network`](./multi_agent_network) | 네트워크 패턴 | Handoff, 탈중앙화 협업 |
-| [`lats`](./lats) | 트리 탐색 | Best-of-N, 후보 평가 |
-
-### 🔬 심화 프로젝트 (Capstone)
-
-| 폴더 | 설명 |
-|------|------|
-| [`open_deep_research`](./open_deep_research) | 심층 리서치 에이전트 (프로덕션 수준) |
+```
+LangGraph_PJT/
+├── docs/                   # 보고서 및 개발 문서 (28개)
+├── langgraph_server/       # Deep Research Agent 서버 코드
+├── _learning_materials/    # 튜토리얼, 예제, 학습 자료
+├── .env                    # 환경 변수
+└── README.md               # 이 문서
+```
 
 ---
 
-## ⚙️ 환경 설정
+## 🚀 빠른 시작
 
-### 필수 API 키
+### 1. 환경 설정
 
 ```bash
-# .env 파일 생성
+# 가상환경 활성화
+cd langgraph_server
+source .venv/bin/activate
+
+# 환경 변수 로드
+export $(grep -v '^#' .env | xargs)
+```
+
+### 2. 서버 실행
+
+```bash
+# LangGraph 서버 실행
+langgraph up
+
+# 또는 개발 모드
+python run_benchmark.py --phase "Test" --query "What is AI?"
+```
+
+---
+
+## 📖 주요 문서
+
+| 문서 | 설명 |
+|------|------|
+| [docs/TEMPLATE_deep_research_agent_description.md](./docs/TEMPLATE_deep_research_agent_description.md) | 에이전트 설명 문서 |
+| [docs/2025_12_21-deep_research_roadmap_v2.md](./docs/2025_12_21-deep_research_roadmap_v2.md) | 개발 로드맵 |
+| [docs/2025_12_21-phase11_mcp_report.md](./docs/2025_12_21-phase11_mcp_report.md) | 최신 보고서 |
+
+---
+
+## ✨ 주요 기능
+
+| 기능 | 설명 |
+|------|------|
+| 🔍 다중 검색 | Tavily API로 여러 쿼리 동시 검색 |
+| 📖 병렬 URL 읽기 | 웹페이지 내용 병렬 수집 |
+| 🧠 Think Tool | 추론 과정 명시화 |
+| 📝 인용 포함 보고서 | 출처 표시된 구조화 보고서 |
+| ⭐ CARC 품질 평가 | 완성도, 정확도, 관련성, 명확성 평가 |
+| 🔌 MCP 도구 | 외부 도구 확장 (7개) |
+| 💾 연구 결과 저장 | 최종 보고서 자동 저장 |
+
+---
+
+## 📊 성능 지표
+
+| 지표 | 값 |
+|------|------|
+| 평균 처리 시간 | 29.69s |
+| CARC 품질 | 16.2/20 (Good) |
+| 인용률 | 100% |
+| 병렬 Speedup | 2.4x~2.7x |
+
+---
+
+## 📚 학습 자료
+
+튜토리얼 및 예제는 `_learning_materials/` 폴더에서 확인하세요:
+
+```
+_learning_materials/
+├── tutorials/          # 01~06 단계별 튜토리얼
+├── examples/           # 에이전트 예제들
+└── LEARNING_GUIDE.md   # 학습 가이드
+```
+
+---
+
+## ⚙️ 환경 변수
+
+```bash
+# .env 파일
 GOOGLE_API_KEY=your_google_api_key
 TAVILY_API_KEY=your_tavily_api_key
-```
-
-### 공통 의존성
-
-```bash
-pip install langgraph langchain-google-genai langchain-community python-dotenv tavily-python
+MCP_ENABLED=true  # MCP 도구 활성화
 ```
 
 ---
 
-## 📖 추천 학습 순서
-
-```
-01_quickstart_calculator → single_agent_basic → 02_streaming_patterns
-                                    ↓
-03_persistence → 04_human_in_the_loop → 05_hierarchical_subgraphs
-                                    ↓
-reflection → plan_and_execute → 06_agentic_rag
-                                    ↓
-multi_agent_supervisor → multi_agent_network → lats
-                                    ↓
-                           open_deep_research
-```
-
-자세한 학습 가이드는 [LEARNING_GUIDE.md](./LEARNING_GUIDE.md)를 참고하세요.
-
----
-
-*Happy Learning! 🚀*
+*작성자: 김이삭*
